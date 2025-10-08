@@ -10,6 +10,9 @@ void GameInit()
 	imageID = X::LoadTexture("mario.png");
 	imagePos.x = X::GetScreenWidth() * 0.5f;
 	imagePos.y = X::GetScreenHeight() * 0.5f;
+
+	float spriteWidth = X::GetSpriteWidth(imageID);
+	float spriteHeight = X::GetSpriteHeight(imageID);
 }
 
 void GameRender()
