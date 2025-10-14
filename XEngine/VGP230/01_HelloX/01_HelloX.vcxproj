@@ -24,6 +24,7 @@
     <ProjectGuid>{627f6fba-ea04-4e48-b84d-d30243e7a95f}</ProjectGuid>
     <RootNamespace>My01HelloX</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>01_HelloX</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,15 +128,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="WinMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\X\X.vcxproj">
       <Project>{6682bfd4-c79f-49bd-a114-6ee8fb79e8c3}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="xconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WinMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BouncingSprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

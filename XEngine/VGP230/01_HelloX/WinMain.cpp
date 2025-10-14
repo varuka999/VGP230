@@ -1,54 +1,69 @@
 #include "XEngine.h"
+#include "BouncingSprite.h";
 
-X::TextureId imageID = 0;
-X::Math::Vector2 imagePos = { 0.0f, 0.0f };
-float imageRot = 0.0f;
+X::TextureId imageID1 = 0;
+X::Math::Vector2 image1Pos = { 100.0f, 100.0f };
+float screenWidth = 0.0f;
+float screenHeight = 0.0f;
+BouncingSprite* sprite1Ptr = nullptr;
+BouncingSprite* sprite2Ptr = nullptr;
+BouncingSprite* sprite3Ptr = nullptr;
 
 void GameInit()
 {
 	XLOG("Game Init");
-	imageID = X::LoadTexture("mario.png");
-	imagePos.x = X::GetScreenWidth() * 0.5f;
-	imagePos.y = X::GetScreenHeight() * 0.5f;
+	screenWidth = X::GetScreenWidth();
+	screenHeight = X::GetScreenHeight();
 
-	float spriteWidth = X::GetSpriteWidth(imageID);
-	float spriteHeight = X::GetSpriteHeight(imageID);
+	sprite1Ptr = new BouncingSprite("DVD_logo.png");
+	sprite2Ptr = new BouncingSprite("DVD_logo2.png");
+	sprite3Ptr = new BouncingSprite("DVD_logo3.png");
+	
 }
 
 void GameRender()
 {
-	X::DrawSprite(imageID, imagePos, imageRot);
+	X::DrawSprite(sprite1Ptr->imageID, sprite1Ptr->imagePos);
+	X::DrawSprite(sprite2Ptr->imageID, sprite2Ptr->imagePos);
+	X::DrawSprite(sprite3Ptr->imageID, sprite3Ptr->imagePos);
 }
 
 bool GameLoop(float deltaTime)
 {
-	//XLOG("Game Loop");
-	//std::cout << "Game Loop";
-	const float moveSpeed = 500.0f;
-	const float rotSpeed = 20.0f;
-	if (X::IsKeyDown(X::Keys::UP))
+	sprite1Ptr->imagePos.x += sprite1Ptr->moveSpeedX * deltaTime;
+	sprite1Ptr->imagePos.y += sprite1Ptr->moveSpeedY * deltaTime;
+
+	if (sprite1Ptr->imagePos.x + (sprite1Ptr->spriteWidth / 2) >= screenWidth || (sprite1Ptr->imagePos.x - sprite1Ptr->spriteWidth / 2) <= 0)
 	{
-		imagePos.y -= moveSpeed * deltaTime;
+		sprite1Ptr->moveSpeedX = -sprite1Ptr->moveSpeedX;
 	}
-	if (X::IsKeyDown(X::Keys::RIGHT))
+	if (sprite1Ptr->imagePos.y + (sprite1Ptr->spriteHeight / 2) >= screenHeight || (sprite1Ptr->imagePos.y - sprite1Ptr->spriteHeight / 2) <= 0)
 	{
-		imagePos.x += moveSpeed * deltaTime;
+		sprite1Ptr->moveSpeedY = -sprite1Ptr->moveSpeedY;
 	}
-	if (X::IsKeyDown(X::Keys::LEFT))
+
+	sprite2Ptr->imagePos.x += sprite2Ptr->moveSpeedX * deltaTime;
+	sprite2Ptr->imagePos.y += sprite2Ptr->moveSpeedY * deltaTime;
+
+	if (sprite2Ptr->imagePos.x + (sprite2Ptr->spriteWidth / 2) >= screenWidth || (sprite2Ptr->imagePos.x - sprite2Ptr->spriteWidth / 2) <= 0)
 	{
-		imagePos.x -= moveSpeed * deltaTime;
+		sprite2Ptr->moveSpeedX = -sprite2Ptr->moveSpeedX;
 	}
-	if (X::IsKeyDown(X::Keys::DOWN))
+	if (sprite2Ptr->imagePos.y + (sprite2Ptr->spriteHeight / 2) >= screenHeight || (sprite2Ptr->imagePos.y - sprite2Ptr->spriteHeight / 2) <= 0)
 	{
-		imagePos.y += moveSpeed * deltaTime;
+		sprite2Ptr->moveSpeedY = -sprite2Ptr->moveSpeedY;
 	}
-	if (X::IsKeyDown(X::Keys::E))
+
+	sprite3Ptr->imagePos.x += sprite3Ptr->moveSpeedX * deltaTime;
+	sprite3Ptr->imagePos.y += sprite3Ptr->moveSpeedY * deltaTime;
+
+	if (sprite3Ptr->imagePos.x + (sprite3Ptr->spriteWidth / 2) >= screenWidth || (sprite3Ptr->imagePos.x - sprite3Ptr->spriteWidth / 2) <= 0)
 	{
-		imageRot += rotSpeed * deltaTime;
+		sprite3Ptr->moveSpeedX = -sprite3Ptr->moveSpeedX;
 	}
-	if (X::IsKeyDown(X::Keys::Q))
+	if (sprite3Ptr->imagePos.y + (sprite3Ptr->spriteHeight / 2) >= screenHeight || (sprite3Ptr->imagePos.y - sprite3Ptr->spriteHeight / 2) <= 0)
 	{
-		imageRot -= rotSpeed * deltaTime;
+		sprite3Ptr->moveSpeedY = -sprite3Ptr->moveSpeedY;
 	}
 
 	GameRender();
@@ -58,11 +73,18 @@ bool GameLoop(float deltaTime)
 void GameCleanup()
 {
 	XLOG("Game Cleanup");
+	delete sprite1Ptr;
+	delete sprite2Ptr;
+	delete sprite3Ptr;
+	sprite1Ptr = nullptr;
+	sprite2Ptr = nullptr;
+	sprite3Ptr = nullptr;
 }
 
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+	srand(time(NULL));
 	X::Start("xconfig.json");
 	GameInit();
 
