@@ -1,0 +1,8 @@
+{
+  "AppName": "Hello Space Shooter",
+  "WinWidth": 1080,
+  "WinHeight": 1080,
+  "FullScreen": false,
+  "TexturePath": "../../Assets/Images",
+  "SoundPath": "../../Assets/Sounds"
+}

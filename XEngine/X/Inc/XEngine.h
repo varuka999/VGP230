@@ -82,8 +82,8 @@ namespace X
 
 	// Sprite Functions
 	void DrawSprite(TextureId textureId, const Math::Vector2& position, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
-	void DrawSprite(TextureId textureId, const Math::Vector2& position, float rotation, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
-	void DrawSprite(TextureId textureId, const Math::Rect& sourceRect, const Math::Vector2& position, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
+	void DrawSprite(TextureId textureId, const Math::Vector2& position, float rotation, float scale = 1.0f, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
+	void DrawSprite(TextureId textureId, const Math::Rect& sourceRect, const Math::Vector2& position, float scale = 1.0f, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
 	uint32_t GetSpriteWidth(TextureId textureId);
 	uint32_t GetSpriteHeight(TextureId textureId);
 	void* GetSprite(TextureId textureId);

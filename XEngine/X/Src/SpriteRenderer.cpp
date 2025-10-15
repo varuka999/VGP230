@@ -156,16 +156,16 @@ void SpriteRenderer::EndRender()
 }
 
 //----------------------------------------------------------------------------------------------------
-void SpriteRenderer::Draw(const Texture& texture, const Math::Vector2& pos, float rotation, Pivot pivot, Flip flip)
+void SpriteRenderer::Draw(const Texture& texture, const Math::Vector2& pos, float rotation, float scale, Pivot pivot, Flip flip)
 {
 	XASSERT(mSpriteBatch != nullptr, "[SpriteRenderer] Not initialized.");
 	DirectX::XMFLOAT2 origin = GetOrigin(texture.GetWidth(), texture.GetHeight(), pivot);
 	DirectX::SpriteEffects effects = GetSpriteEffects(flip);
-	mSpriteBatch->Draw(texture.mShaderResourceView, ToXMFLOAT2(pos), nullptr, DirectX::Colors::White, rotation, origin, 1.0f, effects);
+	mSpriteBatch->Draw(texture.mShaderResourceView, ToXMFLOAT2(pos), nullptr, DirectX::Colors::White, rotation, origin, scale, effects);
 }
 
 //----------------------------------------------------------------------------------------------------
-void SpriteRenderer::Draw(const Texture& texture, const Math::Rect& sourceRect, const Math::Vector2& pos, float rotation, Pivot pivot, Flip flip)
+void SpriteRenderer::Draw(const Texture& texture, const Math::Rect& sourceRect, const Math::Vector2& pos, float rotation, float scale, Pivot pivot, Flip flip)
 {
 	XASSERT(mSpriteBatch != nullptr, "[SpriteRenderer] Not initialized.");
 	RECT rect;
@@ -175,5 +175,5 @@ void SpriteRenderer::Draw(const Texture& texture, const Math::Rect& sourceRect, 
 	rect.bottom = static_cast<LONG>(sourceRect.bottom);
 	DirectX::XMFLOAT2 origin = GetOrigin(rect.right - rect.left, rect.bottom - rect.top, pivot);
 	DirectX::SpriteEffects effects = GetSpriteEffects(flip);
-	mSpriteBatch->Draw(texture.mShaderResourceView, ToXMFLOAT2(pos), &rect, DirectX::Colors::White, rotation, origin, 1.0f, effects);
+	mSpriteBatch->Draw(texture.mShaderResourceView, ToXMFLOAT2(pos), &rect, DirectX::Colors::White, rotation, origin, scale, effects);
 }

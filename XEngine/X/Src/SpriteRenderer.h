@@ -38,8 +38,8 @@ public:
 	void BeginRender();
 	void EndRender();
 
-	void Draw(const Texture& texture, const Math::Vector2& pos, float rotation = 0.0f, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
-	void Draw(const Texture& texture, const Math::Rect& sourceRect, const Math::Vector2& pos, float rotation = 0.0f, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
+	void Draw(const Texture& texture, const Math::Vector2& pos, float rotation = 0.0f, float scale = 1.0f, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
+	void Draw(const Texture& texture, const Math::Rect& sourceRect, const Math::Vector2& pos, float rotation = 0.0f, float scale = 1.0f, Pivot pivot = Pivot::Center, Flip flip = Flip::None);
 
 private:
 	friend class Font;
