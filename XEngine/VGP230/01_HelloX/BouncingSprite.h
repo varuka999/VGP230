@@ -10,6 +10,8 @@ struct BouncingSprite
 	float moveSpeedX = 0.0f;
 	float moveSpeedY = 0.0f;
 
+	struct BouncingSprite* next = nullptr;
+
 	BouncingSprite(const char* fileName)
 		: imageID(X::LoadTexture(fileName))
 	{
