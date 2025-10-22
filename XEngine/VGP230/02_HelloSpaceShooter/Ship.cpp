@@ -1,8 +1,9 @@
 #include "Ship.h";
 #include "Bullet.h"
+#include "BulletPool.h"
 
 Ship::Ship()
-	: Entity(), mImageID(0), mPosition(0.0f), mRotation(0.0f)
+	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mBulletPool(nullptr)
 {
 
 }
@@ -20,7 +21,7 @@ void Ship::Load()
 	mPosition.x = X::GetScreenWidth() * 0.5f;
 	mPosition.y = X::GetScreenHeight() * 0.5f;
 
-	mBulletPool.Load();
+	SetCollisionFilter(ET_BULLET_PLAYER);
 }
 
 void Ship::Update(float deltaTime)
@@ -48,20 +49,39 @@ void Ship::Update(float deltaTime)
 	if (X::IsKeyPressed(X::Keys::SPACE))
 	{
 		X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
-		Bullet* bullet = mBulletPool.GetBullet();
+		Bullet* bullet = mBulletPool->GetBullet();
+		bullet->SetCollisionFilter(ET_BULLET_PLAYER);
 		bullet->SetActive(spawnPosition, mRotation);
 	}
-
-	mBulletPool.Update(deltaTime);
 }
 
 void Ship::Render()
 {
 	X::DrawSprite(mImageID, mPosition, mRotation);
-	mBulletPool.Render();
+	X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DodgerBlue);
 }
 
 void Ship::Unload()
 {
-	mBulletPool.Unload();
+
+}
+
+int Ship::GetType() const
+{
+	return ET_SHIP;
+}
+
+const X::Math::Vector2& Ship::GetPosition() const
+{
+	return mPosition;
+}
+
+void Ship::OnCollision(Collidable* collidable)
+{
+	XLOG("Ship Hit Something");
+}
+
+void Ship::SetBulletPool(BulletPool* bulletPool)
+{
+	mBulletPool = bulletPool;
 }

@@ -1,8 +1,10 @@
 #pragma once
 #include "Entity.h"
-#include "BulletPool.h"
+#include "Collidable.h"
 
-class Ship : public Entity
+class BulletPool;
+
+class Ship : public Entity, public Collidable
 {
 public:
 	Ship();
@@ -13,10 +15,16 @@ public:
 	void Render() override;
 	void Unload() override;
 
+	int GetType() const override;
+	const X::Math::Vector2& GetPosition() const override;
+	void OnCollision(Collidable* collidable) override;
+
+	void SetBulletPool(BulletPool* bulletPool);
+
 private:
 	X::TextureId mImageID;
 	X::Math::Vector2 mPosition;
 	float mRotation;
 
-	BulletPool mBulletPool;
+	BulletPool* mBulletPool;
 };
