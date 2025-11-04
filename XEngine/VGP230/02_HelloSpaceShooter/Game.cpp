@@ -2,9 +2,10 @@
 #include "Ship.h"
 #include "BulletPool.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 Game::Game()
-    : Entity(), mPlayer(nullptr), mBulletPool(nullptr)
+    : Entity(), mPlayer(nullptr), mBulletPool(nullptr), mEnemy(nullptr)
 {
 
 }
@@ -16,12 +17,19 @@ Game::~Game()
 
 void Game::Load()
 {
-    mPlayer == new Ship();
+    mPlayer = new Ship();
     mBulletPool = new BulletPool();
 
     mPlayer->Load();
     mPlayer->SetBulletPool(mBulletPool);
     AddCollidable(mPlayer);
+
+    mEnemy = new Enemy();
+    mEnemy->Load();
+    mEnemy->SetBulletPool(mBulletPool);
+    mEnemy->SetShip(mPlayer);
+    mEnemy->SetPosition({100.0f, 100.0f});
+    AddCollidable(mEnemy);
 
     mBulletPool->Load();
     std::vector<Bullet*>& bullets = mBulletPool->GetBulletsPool();
@@ -34,13 +42,14 @@ void Game::Load()
 void Game::Update(float deltaTime)
 {
     mPlayer->Update(deltaTime);
+    mEnemy->Update(deltaTime);
 
     mBulletPool->Update(deltaTime);
 
     int numCollidables = mCollidables.size();
     for (int i = 0; i < numCollidables; ++i)
     {
-        for (int n = i + 1; n < numCollidables; n++)
+        for (int n = i + 1; n < numCollidables; ++n)
         {
             if (mCollidables[i]->DidCollide(mCollidables[n]))
             {
@@ -53,8 +62,9 @@ void Game::Update(float deltaTime)
 
 void Game::Render()
 {
-    mPlayer->Render();
+    mEnemy->Render();
     mBulletPool->Render();
+    mPlayer->Render();
 }
 
 void Game::Unload()
@@ -62,9 +72,14 @@ void Game::Unload()
     mBulletPool->Unload();
     delete mBulletPool;
     mBulletPool = nullptr;
+
     mPlayer->Unload();
     delete mPlayer;
-    mPlayer == nullptr;
+    mPlayer = nullptr;
+
+    mEnemy->Unload();
+    delete mEnemy;
+    mEnemy = nullptr;
 }
 
 void Game::AddCollidable(Collidable* collidable)

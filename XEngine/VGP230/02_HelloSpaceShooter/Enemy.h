@@ -1,0 +1,41 @@
+#pragma once
+#include "Entity.h"
+#include "Collidable.h"
+
+class BulletPool;
+class Ship;
+class AnimSpriteSheet;
+
+class Enemy : public Entity, public Collidable
+{
+public:
+	Enemy();
+	~Enemy() override;
+
+	void Load() override;
+	void Update(float deltaTime) override;
+	void Render() override;
+	void Unload() override;
+
+	int GetType() const override;
+	const X::Math::Vector2& GetPosition() const override;
+	void OnCollision(Collidable* collidable) override;
+
+	void SetBulletPool(BulletPool* bulletPool);
+	void SetShip(Ship* ship);
+	void SetPosition(const X::Math::Vector2& position);
+	void SetRotation(float rotation);
+
+	bool IsAlive() const;
+
+private:
+	BulletPool* mBulletPool;
+	Ship* mShip;
+	AnimSpriteSheet* mExplosion;
+
+	X::TextureId mImageID;
+	X::Math::Vector2 mPosition;
+	float mRotation;
+
+	int mHealth;
+};

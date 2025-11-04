@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include "AnimSpriteSheet.h"
 
 Bullet::Bullet()
 	: Entity(), Collidable(10.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mLifeTime(0), mBulletType(ET_ALL)

@@ -1,6 +1,7 @@
 #include "Ship.h";
 #include "Bullet.h"
 #include "BulletPool.h"
+#include "Enemy.h"
 
 Ship::Ship()
 	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mBulletPool(nullptr)
@@ -21,7 +22,7 @@ void Ship::Load()
 	mPosition.x = X::GetScreenWidth() * 0.5f;
 	mPosition.y = X::GetScreenHeight() * 0.5f;
 
-	SetCollisionFilter(ET_BULLET_PLAYER);
+	SetCollisionFilter(ET_ENEMY | ET_BULLET_PLAYER);
 }
 
 void Ship::Update(float deltaTime)

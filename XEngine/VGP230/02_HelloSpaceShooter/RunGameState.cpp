@@ -29,16 +29,20 @@ State RunGameState::Update(float deltaTime)
 	{
 		return State::End;
 	}
+
+	return State::RunGame;
 }
 
 void RunGameState::Render()
 {
-	const float textSize = 100.0f;
-	const char* text = "RUN SCREEN\n<PRESS ENTER>";
-	float textWidth = X::GetTextWidth(text, textSize);
-	float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
-	float screenY = X::GetScreenHeight() * 0.5f;
-	X::DrawScreenText(text, screenX, screenY, textSize, X::Colors::Yellow);
+	//const float textSize = 100.0f;
+	//const char* text = "RUN SCREEN\n<PRESS ENTER>";
+	//float textWidth = X::GetTextWidth(text, textSize);
+	//float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
+	//float screenY = X::GetScreenHeight() * 0.5f;
+	//X::DrawScreenText(text, screenX, screenY, textSize, X::Colors::Yellow);
+
+	mGame->Render();
 }
 
 void RunGameState::Unload()
