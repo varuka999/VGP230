@@ -38,7 +38,11 @@ void Bullet::Render()
 	if (IsActive() == true)
 	{
 		X::DrawSprite(mImageID, mPosition, mRotation);
-		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::HotPink);
+
+		if (mBulletType == ET_BULLET_ENEMY)
+		{
+			X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::HotPink);
+		}
 	}
 }
 
@@ -60,10 +64,12 @@ void Bullet::SetEntityType(EntityType entityType)
 
 	if (entityType == ET_BULLET_PLAYER)
 	{
+		mImageID = X::LoadTexture("bullet1.png");
 		SetCollisionFilter(ET_ENEMY);
 	}
 	else if (entityType == ET_BULLET_ENEMY)
 	{
+		mImageID = X::LoadTexture("bullet2.png");
 		SetCollisionFilter(ET_SHIP);
 	}
 	else

@@ -13,11 +13,11 @@ void AnimSpriteSheet::Load()
 {
 	mSpriteSheetID = X::LoadTexture("explosion_anim.png");
 	mSpriteRect.right = 100.0f;
-	mSpriteRect.left = 100.0f;
+	mSpriteRect.bottom = 100.0f;
 	mMaxFrames = 81;
 	mRows = 9;
 	mColumns = 9;
-	mFrameRate = 1.0f / 120.0f;
+	mFrameRate = 1.0f / 60.0f;
 	mIsLooping = false;
 	mCurrentIndex = -1;
 }
@@ -27,7 +27,8 @@ void AnimSpriteSheet::Update(float deltaTime)
 	if (IsActive() == true)
 	{
 		mCurrentFrameTime += deltaTime;
-		while (mCurrentFrameTime > mFrameRate)
+
+		while (mCurrentFrameTime > mFrameRate) 
 		{
 			mCurrentFrameTime -= mFrameRate;
 			++mCurrentIndex;

@@ -3,9 +3,10 @@
 #include "Bullet.h"
 #include "Ship.h"
 #include "AnimSpriteSheet.h"
+#include "AnimSpriteArray.h"
 
 Enemy::Enemy()
-	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImageID(0), mPosition(0.0f, 0.0f), mRotation(0.0f), 
+	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPosition(0.0f, 0.0f), mRotation(0.0f),
 	mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f)
 {
 }
@@ -16,8 +17,34 @@ Enemy::~Enemy()
 
 void Enemy::Load()
 {
-	mImageID = X::LoadTexture("carrier_01.png");
-	XASSERT(mImageID > 0, "Enemy image did not loard");
+	//mImageID = X::LoadTexture("carrier_01.png");
+	mImage = new AnimSpriteArray();
+	mImage->Load();
+
+	std::vector<std::string> sprites;
+	std::string textureName;
+	int numSprites = 32;
+	for (int i = 0; i < numSprites; ++i)
+	{
+		if (i < 9)
+		{
+			textureName = "carrier_0";
+		}
+		else
+		{
+			textureName = "carrier_";
+		}
+
+		textureName += std::to_string(i + 1) + ".png";
+		sprites.push_back(textureName);
+
+	}
+
+	mImage->LoadSprites(sprites);
+	XASSERT(mImage->GetFrameCount() > 0, "Enemy: Image did not load");
+	mImage->SetFrameRate(0.0f);
+
+	//XASSERT(mImageID > 0, "Enemy image did not loard");
 
 	mPosition = X::Math::Vector2::Zero();
 	mRotation = 0.0f;
@@ -40,6 +67,7 @@ void Enemy::Update(float deltaTime)
 		const float offsetDistance = 200.0f;
 
 		mTargetPositionUpdate -= deltaTime;
+
 		if (mTargetPositionUpdate <= 0.0f || X::Math::MagnitudeSqr(mTargetPosition - mPosition) <= 100.0f)
 		{
 			mTargetPosition = mCenterPoint + (X::RandomUnitCircle() * offsetDistance);
@@ -56,9 +84,10 @@ void Enemy::Update(float deltaTime)
 			mRotation = targetRotation;
 
 			mFireRate -= deltaTime;
+
 			if (mFireRate <= 0.0f)
 			{
-				Bullet* bullet = mBulletPool->GetBullet(); 
+				Bullet* bullet = mBulletPool->GetBullet();
 				if (bullet != nullptr)
 				{
 					X::Math::Vector2 spawnPos = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
@@ -67,7 +96,19 @@ void Enemy::Update(float deltaTime)
 					mFireRate = X::RandomFloat(3.0f, 5.0f);
 				}
 			}
+
+			mImage->SetPosition(mPosition);
+			mImage->Update(deltaTime);
+
+			const X::Math::Vector2 fwd = X::Math::Vector2::Forward(mRotation);
+			const float angle = atan2(-fwd.x, fwd.y) + X::Math::kPi;
+			const float percent = angle / X::Math::kTwoPi;
+			const float fframeCount = static_cast<float>(mImage->GetFrameCount());
+			const int currentFrame = static_cast<int>(percent * fframeCount) % mImage->GetFrameCount();
+			mImage->SetFrameIndex(currentFrame);
+		
 		}
+
 	}
 
 	mExplosion->Update(deltaTime);
@@ -77,7 +118,8 @@ void Enemy::Render()
 {
 	if (IsAlive() == true)
 	{
-		X::DrawSprite(mImageID, mPosition, mRotation);
+		//X::DrawSprite(mImageID, mPosition, mRotation);
+		mImage->Render();
 		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DarkRed);
 	}
 
@@ -86,6 +128,10 @@ void Enemy::Render()
 
 void Enemy::Unload()
 {
+	mImage->Unload();
+	delete mImage;
+	mImage = nullptr;
+
 	mExplosion->Unload();
 	delete mExplosion;
 	mExplosion = nullptr;

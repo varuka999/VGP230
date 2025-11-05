@@ -21,7 +21,7 @@ State RunGameState::Update(float deltaTime)
 {
 	if (X::IsKeyPressed(X::Keys::ENTER))
 	{
-		return State::Start;
+		return State::RunGame;
 	}
 
 	mGame->Update(deltaTime);

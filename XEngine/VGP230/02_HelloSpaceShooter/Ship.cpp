@@ -1,7 +1,6 @@
 #include "Ship.h"
 #include "Bullet.h"
 #include "BulletPool.h"
-//#include "Enemy.h"
 #include "AnimSpriteSheet.h"
 
 Ship::Ship()
@@ -36,25 +35,25 @@ void Ship::Update(float deltaTime)
 	{
 		const float speed = 300.0f;
 		const float turnSpeed = X::Math::kPiByTwo;
-		if (X::IsKeyDown(X::Keys::W))
+		if (X::IsKeyDown(X::Keys::W) || X::IsKeyDown(X::Keys::UP))
 		{
 			mPosition += X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
 		}
-		else if (X::IsKeyDown(X::Keys::S))
+		else if (X::IsKeyDown(X::Keys::S) || X::IsKeyDown(X::Keys::DOWN))
 		{
 			mPosition -= X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
 		}
 
-		if (X::IsKeyDown(X::Keys::A))
+		if (X::IsKeyDown(X::Keys::A) || X::IsKeyDown(X::Keys::LEFT))
 		{
 			mRotation -= turnSpeed * deltaTime;
 		}
-		else if (X::IsKeyDown(X::Keys::D))
+		else if (X::IsKeyDown(X::Keys::D) || X::IsKeyDown(X::Keys::RIGHT))
 		{
 			mRotation += turnSpeed * deltaTime;
 		}
 
-		if (X::IsKeyPressed(X::Keys::SPACE))
+		if (X::IsKeyPressed(X::Keys::SPACE) || X::IsMousePressed(0))
 		{
 			X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
 			Bullet* bullet = mBulletPool->GetBullet();

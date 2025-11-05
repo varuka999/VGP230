@@ -5,6 +5,7 @@
 class BulletPool;
 class Ship;
 class AnimSpriteSheet;
+class AnimSpriteArray;
 
 class Enemy : public Entity, public Collidable
 {
@@ -32,8 +33,9 @@ private:
 	BulletPool* mBulletPool;
 	Ship* mShip;
 	AnimSpriteSheet* mExplosion;
+	AnimSpriteArray* mImage;
 
-	X::TextureId mImageID;
+	//X::TextureId mImageID;
 	X::Math::Vector2 mPosition;
 	float mRotation;
 

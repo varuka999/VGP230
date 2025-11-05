@@ -16,7 +16,7 @@ void GameInit()
 	gGameStates[State::Start] = new StartState();
 	gGameStates[State::RunGame] = new RunGameState();
 	gGameStates[State::End] = new EndState();
-	gActiveState = State::RunGame;
+	gActiveState = State::Start; // <---------------------------------------------
 
 	//gGameStates[gActiveState]->Update()
 	gCurrentState = gGameStates[gActiveState];

@@ -30,7 +30,7 @@ void EndState::Render()
 	const char* text = "END SCREEN\n<PRESS ENTER>";
 	float textWidth = X::GetTextWidth(text, textSize);
 	float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
-	float screenY = X::GetScreenHeight() * 0.5f;
+	float screenY = X::GetScreenHeight() * 0.2f;
 	X::DrawScreenText(text, screenX, screenY, textSize, X::Colors::Red);
 }
 
