@@ -38,4 +38,9 @@ private:
 	float mRotation;
 
 	int mHealth;
+
+	X::Math::Vector2 mCenterPoint;
+	X::Math::Vector2 mTargetPosition;
+	float mTargetPositionUpdate;
+	float mFireRate;
 };

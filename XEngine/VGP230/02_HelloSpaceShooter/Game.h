@@ -6,6 +6,7 @@ class Ship;
 class BulletPool;
 class Collidable;
 class Enemy;
+class ProgressBar;
 
 class Game : public Entity
 {
@@ -27,5 +28,7 @@ private:
 	BulletPool* mBulletPool;
 	std::vector<Collidable*> mCollidables;
 
-	Enemy* mEnemy;
+	//Enemy* mEnemy;
+	std::vector<Enemy*> mEnemies;
+	ProgressBar* mHealthBar;
 };

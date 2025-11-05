@@ -3,6 +3,7 @@
 #include "Collidable.h"
 
 class BulletPool;
+class AnimSpriteSheet;
 
 class Ship : public Entity, public Collidable
 {
@@ -21,10 +22,17 @@ public:
 
 	void SetBulletPool(BulletPool* bulletPool);
 
+	int GetHealth() const;
+	int GetMaxHealth() const;
+	bool IsAlive() const;
+
 private:
 	X::TextureId mImageID;
 	X::Math::Vector2 mPosition;
 	float mRotation;
+	int mHealth;
+	int mMaxHealth;
 
+	AnimSpriteSheet* mExplosion;
 	BulletPool* mBulletPool;
 };

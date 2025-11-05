@@ -57,6 +57,19 @@ void Bullet::SetActive(const X::Math::Vector2& pos, float rotation, float lifeTi
 void Bullet::SetEntityType(EntityType entityType)
 {
 	mBulletType = entityType;
+
+	if (entityType == ET_BULLET_PLAYER)
+	{
+		SetCollisionFilter(ET_ENEMY);
+	}
+	else if (entityType == ET_BULLET_ENEMY)
+	{
+		SetCollisionFilter(ET_SHIP);
+	}
+	else
+	{
+		SetCollisionFilter(0);
+	}
 }
 
 bool Bullet::IsActive() const

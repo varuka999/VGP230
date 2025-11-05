@@ -1,10 +1,11 @@
-#include "Ship.h";
+#include "Ship.h"
 #include "Bullet.h"
 #include "BulletPool.h"
-#include "Enemy.h"
+//#include "Enemy.h"
+#include "AnimSpriteSheet.h"
 
 Ship::Ship()
-	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mBulletPool(nullptr)
+	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mHealth(0), mMaxHealth(100), mBulletPool(nullptr), mExplosion(nullptr)
 {
 
 }
@@ -22,49 +23,65 @@ void Ship::Load()
 	mPosition.x = X::GetScreenWidth() * 0.5f;
 	mPosition.y = X::GetScreenHeight() * 0.5f;
 
-	SetCollisionFilter(ET_ENEMY | ET_BULLET_PLAYER);
+	SetCollisionFilter(ET_ENEMY | ET_BULLET_ENEMY);
+
+	mHealth = mMaxHealth;
+	mExplosion = new AnimSpriteSheet();
+	mExplosion->Load();
 }
 
 void Ship::Update(float deltaTime)
 {
-	const float speed = 300.0f;
-	const float turnSpeed = X::Math::kPiByTwo;
-	if (X::IsKeyDown(X::Keys::W))
+	if (IsAlive() == true)
 	{
-		mPosition += X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
-	}
-	else if (X::IsKeyDown(X::Keys::S))
-	{
-		mPosition -= X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
+		const float speed = 300.0f;
+		const float turnSpeed = X::Math::kPiByTwo;
+		if (X::IsKeyDown(X::Keys::W))
+		{
+			mPosition += X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
+		}
+		else if (X::IsKeyDown(X::Keys::S))
+		{
+			mPosition -= X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
+		}
+
+		if (X::IsKeyDown(X::Keys::A))
+		{
+			mRotation -= turnSpeed * deltaTime;
+		}
+		else if (X::IsKeyDown(X::Keys::D))
+		{
+			mRotation += turnSpeed * deltaTime;
+		}
+
+		if (X::IsKeyPressed(X::Keys::SPACE))
+		{
+			X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
+			Bullet* bullet = mBulletPool->GetBullet();
+			bullet->SetEntityType(ET_BULLET_PLAYER);
+			bullet->SetActive(spawnPosition, mRotation);
+		}
 	}
 
-	if (X::IsKeyDown(X::Keys::A))
-	{
-		mRotation -= turnSpeed * deltaTime;
-	}
-	else if (X::IsKeyDown(X::Keys::D))
-	{
-		mRotation += turnSpeed * deltaTime;
-	}
-
-	if (X::IsKeyPressed(X::Keys::SPACE))
-	{
-		X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
-		Bullet* bullet = mBulletPool->GetBullet();
-		bullet->SetCollisionFilter(ET_BULLET_PLAYER);
-		bullet->SetActive(spawnPosition, mRotation);
-	}
+	mExplosion->Update(deltaTime);
 }
 
 void Ship::Render()
 {
-	X::DrawSprite(mImageID, mPosition, mRotation);
-	X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DodgerBlue);
+	if (IsAlive() == true)
+	{
+		X::DrawSprite(mImageID, mPosition, mRotation);
+		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DodgerBlue);
+	}
+
+	mExplosion->Render();
 }
 
 void Ship::Unload()
 {
-
+	mExplosion->Unload();
+	delete mExplosion;
+	mExplosion = nullptr;
 }
 
 int Ship::GetType() const
@@ -79,10 +96,45 @@ const X::Math::Vector2& Ship::GetPosition() const
 
 void Ship::OnCollision(Collidable* collidable)
 {
-	XLOG("Ship Hit Something");
+	if (IsAlive() == true)
+	{
+		int damage = 0;
+
+		if (collidable->GetType() == ET_ENEMY)
+		{
+			damage = 10;
+		}
+		else
+		{
+			damage = 2;
+		}
+
+		mHealth -= damage;
+
+		if (IsAlive() == false)
+		{
+			mExplosion->SetActive(mPosition);
+			SetCollisionFilter(0);
+		}
+	}
 }
 
 void Ship::SetBulletPool(BulletPool* bulletPool)
 {
 	mBulletPool = bulletPool;
+}
+
+int Ship::GetHealth() const
+{
+	return mHealth;
+}
+
+int Ship::GetMaxHealth() const
+{
+	return mMaxHealth;
+}
+
+bool Ship::IsAlive() const
+{
+	return mHealth > 0;
 }
