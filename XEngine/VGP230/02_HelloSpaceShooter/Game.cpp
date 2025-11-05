@@ -1,12 +1,14 @@
 #include "Game.h"
 #include "Ship.h"
 #include "BulletPool.h"
+#include "PowerUpPool.h"
 #include "Bullet.h"
+#include "PowerUp.h"
 #include "Enemy.h"
 #include "ProgressBar.h"
 
 Game::Game()
-	: Entity(), mPlayer(nullptr), mBulletPool(nullptr), mHealthBar(nullptr)
+	: Entity(), mPlayer(nullptr), mBulletPool(nullptr), mPowerUpPool(nullptr), mHealthBar(nullptr)
 {
 
 }
@@ -20,6 +22,7 @@ void Game::Load()
 {
 	mPlayer = new Ship();
 	mBulletPool = new BulletPool();
+	mPowerUpPool = new PowerUpPool();
 	mHealthBar = new ProgressBar();
 
 	mPlayer->Load();
@@ -56,6 +59,13 @@ void Game::Load()
 	for (Bullet* bullet : bullets)
 	{
 		AddCollidable(bullet);
+	}
+
+	mPowerUpPool->Load();
+	std::vector<PowerUp*>& powerUps = mPowerUpPool->GetPowerUpPool();
+	for (PowerUp* powerUp : powerUps)
+	{
+		AddCollidable(powerUp);
 	}
 }
 

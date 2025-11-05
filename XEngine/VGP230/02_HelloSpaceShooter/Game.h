@@ -4,6 +4,7 @@
 
 class Ship;
 class BulletPool;
+class PowerUpPool;
 class Collidable;
 class Enemy;
 class ProgressBar;
@@ -26,6 +27,7 @@ public:
 private:
 	Ship* mPlayer;
 	BulletPool* mBulletPool;
+	PowerUpPool* mPowerUpPool;
 	std::vector<Collidable*> mCollidables;
 
 	//Enemy* mEnemy;

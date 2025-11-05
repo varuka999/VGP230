@@ -2,12 +2,13 @@
 #include "BulletPool.h"
 #include "Bullet.h"
 #include "Ship.h"
+#include "PowerUp.h"
 #include "AnimSpriteSheet.h"
 #include "AnimSpriteArray.h"
 
 Enemy::Enemy()
-	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPosition(0.0f, 0.0f), mRotation(0.0f),
-	mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f)
+	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPowerUp(nullptr), 
+	mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f)
 {
 }
 
@@ -53,6 +54,10 @@ void Enemy::Load()
 
 	mExplosion = new AnimSpriteSheet();
 	mExplosion->Load();
+
+	// PowerUp
+	mPowerUp = new PowerUp();
+	mPowerUp->Load();
 
 	mTargetPositionUpdate = 0.0f;
 	mFireRate = 1.0f;
@@ -106,9 +111,7 @@ void Enemy::Update(float deltaTime)
 			const float fframeCount = static_cast<float>(mImage->GetFrameCount());
 			const int currentFrame = static_cast<int>(percent * fframeCount) % mImage->GetFrameCount();
 			mImage->SetFrameIndex(currentFrame);
-		
 		}
-
 	}
 
 	mExplosion->Update(deltaTime);
@@ -124,6 +127,7 @@ void Enemy::Render()
 	}
 
 	mExplosion->Render();
+	mPowerUp->Render();
 }
 
 void Enemy::Unload()
@@ -135,6 +139,10 @@ void Enemy::Unload()
 	mExplosion->Unload();
 	delete mExplosion;
 	mExplosion = nullptr;
+
+	mPowerUp->Unload();
+	delete mPowerUp;
+	mPowerUp = nullptr;
 }
 
 int Enemy::GetType() const
@@ -168,6 +176,7 @@ void Enemy::OnCollision(Collidable* collidable)
 		{
 			SetCollisionFilter(0);
 			mExplosion->SetActive(mPosition);
+			mPowerUp->SetActive(mPosition);
 		}
 	}
 }

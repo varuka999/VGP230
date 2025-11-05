@@ -97,6 +97,11 @@ void Ship::OnCollision(Collidable* collidable)
 {
 	if (IsAlive() == true)
 	{
+		if (collidable->GetType() == ET_POWER_UP)
+		{
+
+		}
+
 		int damage = 0;
 
 		if (collidable->GetType() == ET_ENEMY)

@@ -1,6 +1,5 @@
 #include "Collidable.h"
 #include <XEngine.h>
-//#include <XMath.h>
 
 Collidable::Collidable(float radius)
 	: mRadius(radius), mCollisionFilter(0)
