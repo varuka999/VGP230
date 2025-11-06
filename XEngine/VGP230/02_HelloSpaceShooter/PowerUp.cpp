@@ -44,11 +44,8 @@ void PowerUp::SetActive(const X::Math::Vector2& pos)
 
 void PowerUp::SetEntityType()
 {
-	if (mPowerUpType != ET_POWER_UP)
-	{
-		mPowerUpType = ET_POWER_UP;
-		SetCollisionFilter(mPowerUpType);
-	}
+	mPowerUpType = ET_POWER_UP;
+	SetCollisionFilter(ET_SHIP);
 }
 
 bool PowerUp::IsActive() const
@@ -68,10 +65,8 @@ const X::Math::Vector2& PowerUp::GetPosition() const
 
 void PowerUp::OnCollision(Collidable* collidable)
 {
-	if (collidable->GetType() == ET_SHIP)
-	{
-		mIsActive = false;
-		SetCollisionFilter(ET_NONE);
-	}
+	mIsActive = false;
+	SetCollisionFilter(ET_NONE);
+
 }
 

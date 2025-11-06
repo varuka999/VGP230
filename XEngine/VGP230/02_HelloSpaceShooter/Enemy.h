@@ -3,6 +3,7 @@
 #include "Collidable.h"
 
 class BulletPool;
+class PowerUpPool;
 class Ship;
 class AnimSpriteSheet;
 class AnimSpriteArray;
@@ -24,6 +25,7 @@ public:
 	void OnCollision(Collidable* collidable) override;
 
 	void SetBulletPool(BulletPool* bulletPool);
+	void SetPowerUpPool(PowerUpPool* powerUpPool);
 	void SetShip(Ship* ship);
 	void SetPosition(const X::Math::Vector2& position);
 	void SetRotation(float rotation);
@@ -32,6 +34,7 @@ public:
 
 private:
 	BulletPool* mBulletPool;
+	PowerUpPool* mPowerUpPool;
 	Ship* mShip;
 	AnimSpriteSheet* mExplosion;
 	AnimSpriteArray* mImage;

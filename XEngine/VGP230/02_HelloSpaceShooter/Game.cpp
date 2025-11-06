@@ -46,6 +46,7 @@ void Game::Load()
 		newEnemy = new Enemy();
 		newEnemy->Load();
 		newEnemy->SetBulletPool(mBulletPool);
+		newEnemy->SetPowerUpPool(mPowerUpPool);
 		newEnemy->SetShip(mPlayer);
 		newEnemy->SetPosition(spawnPosition);
 		newEnemy->SetRotation(X::RandomFloat() * X::Math::kTwoPi);
@@ -111,6 +112,10 @@ void Game::Unload()
 	mBulletPool->Unload();
 	delete mBulletPool;
 	mBulletPool = nullptr;
+
+	mPowerUpPool->Unload();
+	delete mPowerUpPool;
+	mPowerUpPool = nullptr;
 
 	mHealthBar->Unload();
 	delete mHealthBar;
