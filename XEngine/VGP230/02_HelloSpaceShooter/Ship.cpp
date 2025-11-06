@@ -4,7 +4,7 @@
 #include "AnimSpriteSheet.h"
 
 Ship::Ship()
-	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mHealth(0), mMaxHealth(100), mBulletPool(nullptr), mExplosion(nullptr)
+	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mScale(1.0f), mHealth(0), mMaxHealth(100), mDamage(10), mBulletPool(nullptr), mExplosion(nullptr), mIsPowerUp(false), mPowerUpTimer(5.0f)
 {
 
 }
@@ -35,6 +35,7 @@ void Ship::Update(float deltaTime)
 	{
 		const float speed = 300.0f;
 		const float turnSpeed = X::Math::kPiByTwo;
+
 		if (X::IsKeyDown(X::Keys::W) || X::IsKeyDown(X::Keys::UP))
 		{
 			mPosition += X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
@@ -62,6 +63,18 @@ void Ship::Update(float deltaTime)
 		}
 	}
 
+	if (mIsPowerUp == true)
+	{
+		mPowerUpTimer -= deltaTime;
+
+		if (mPowerUpTimer <= 0.0f)
+		{
+			mIsPowerUp = false;
+			mPowerUpTimer = 5;
+			mDamage = 10;
+		}
+	}
+
 	mExplosion->Update(deltaTime);
 }
 
@@ -69,8 +82,18 @@ void Ship::Render()
 {
 	if (IsAlive() == true)
 	{
-		X::DrawSprite(mImageID, mPosition, mRotation);
-		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DodgerBlue);
+		if (mIsPowerUp == true)
+		{
+			mScale = 1.5f;
+			X::DrawScreenDiamond(mPosition, GetRadius() * (mScale + 0.2f), X::Colors::OrangeRed);
+		}
+		else
+		{
+			mScale = 1.0f;
+		}
+
+		X::DrawSprite(mImageID, mPosition, mRotation, mScale);
+		X::DrawScreenCircle(mPosition, GetRadius() * mScale, X::Colors::DodgerBlue);
 	}
 
 	mExplosion->Render();
@@ -99,7 +122,8 @@ void Ship::OnCollision(Collidable* collidable)
 	{
 		if (collidable->GetType() == ET_POWER_UP)
 		{
-
+			mIsPowerUp = true;
+			mDamage = 20;
 		}
 
 		int damage = 0;
@@ -136,6 +160,11 @@ int Ship::GetHealth() const
 int Ship::GetMaxHealth() const
 {
 	return mMaxHealth;
+}
+
+int Ship::GetDamage() const
+{
+	return mDamage;
 }
 
 bool Ship::IsAlive() const

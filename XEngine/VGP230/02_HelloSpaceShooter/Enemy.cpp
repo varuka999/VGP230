@@ -164,7 +164,7 @@ void Enemy::OnCollision(Collidable* collidable)
 		}
 		else
 		{
-			damage = 10;
+			damage = mShip->GetDamage();
 		}
 
 		mHealth -= damage;

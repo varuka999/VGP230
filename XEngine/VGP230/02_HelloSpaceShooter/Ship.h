@@ -24,14 +24,19 @@ public:
 
 	int GetHealth() const;
 	int GetMaxHealth() const;
+	int GetDamage() const;
 	bool IsAlive() const;
 
 private:
 	X::TextureId mImageID;
 	X::Math::Vector2 mPosition;
 	float mRotation;
+	float mScale;
 	int mHealth;
 	int mMaxHealth;
+	int mDamage;
+	bool mIsPowerUp;
+	float mPowerUpTimer;
 
 	AnimSpriteSheet* mExplosion;
 	BulletPool* mBulletPool;
