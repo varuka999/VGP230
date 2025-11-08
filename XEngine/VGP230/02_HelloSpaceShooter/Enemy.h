@@ -43,6 +43,7 @@ private:
 	//X::TextureId mImageID;
 	X::Math::Vector2 mPosition;
 	float mRotation;
+	float mDistanceFromTarget;
 
 	int mHealth;
 

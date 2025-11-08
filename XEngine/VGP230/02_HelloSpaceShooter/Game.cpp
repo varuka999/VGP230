@@ -37,7 +37,7 @@ void Game::Load()
 	const float minOffset = 100.0f;
 	const float maxOffset = center.y;
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		spawnDirection = X::RandomUnitCircle();
 		spawnPosition = center + (spawnDirection * X::RandomFloat(minOffset, maxOffset));
@@ -53,7 +53,6 @@ void Game::Load()
 		AddCollidable(newEnemy);
 		mEnemies.push_back(newEnemy);
 	}
-
 
 	mBulletPool->Load();
 	std::vector<Bullet*>& bullets = mBulletPool->GetBulletsPool();

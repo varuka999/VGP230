@@ -9,7 +9,7 @@
 
 Enemy::Enemy()
 	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mPowerUpPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPowerUp(nullptr),
-	mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f)
+	mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f), mDistanceFromTarget(0.0f)
 {
 }
 
@@ -56,7 +56,7 @@ void Enemy::Load()
 	mExplosion = new AnimSpriteSheet();
 	mExplosion->Load();
 
-	mTargetPositionUpdate = 0.0f;
+	mTargetPositionUpdate = 0.1f;
 	mFireRate = 1.0f;
 }
 
@@ -64,16 +64,33 @@ void Enemy::Update(float deltaTime)
 {
 	if (IsAlive() == true)
 	{
-		const float speed = 70.0f;
+		const float speed = 100.0f;
 		const float rotationSpeed = X::Math::kPiByTwo;
 		const float offsetDistance = 200.0f;
 
 		mTargetPositionUpdate -= deltaTime;
 
-		if (mTargetPositionUpdate <= 0.0f || X::Math::MagnitudeSqr(mTargetPosition - mPosition) <= 100.0f)
+		mDistanceFromTarget = X::Math::Abs((mShip->GetPosition().x + mShip->GetPosition().y) - (mPosition.x + mPosition.y));
+		XLOG("Distance is: %f", mDistanceFromTarget);
+
+		// Something here is not working :(
+		// Ship is too far from enemy
+		if (mDistanceFromTarget >= 500.0f)
 		{
+			mTargetPosition = mShip->GetPosition();
+		}
+		// Ship is too close to enemy
+		else if (mDistanceFromTarget <= 300.0f)
+		{
+			X::Math::Vector2 newTarget = X::Math::Normalize(mPosition - mShip->GetPosition());
+			mTargetPosition = mShip->GetPosition() + (newTarget * 350.0);
+			//mTargetPositionUpdate = X::RandomFloat(0.5f, 1.0f);
+		}
+		else if (mTargetPositionUpdate <= 0.0f || X::Math::MagnitudeSqr(mTargetPosition - mPosition) <= 100.0f)
+		{
+			mCenterPoint = mPosition;
 			mTargetPosition = mCenterPoint + (X::RandomUnitCircle() * offsetDistance);
-			mTargetPositionUpdate = X::RandomFloat(3.0f, 5.0f);
+			mTargetPositionUpdate = X::RandomFloat(0.5f, 1.0f);
 		}
 
 		X::Math::Vector2 moveDirection = X::Math::Normalize(mTargetPosition - mPosition);
@@ -121,6 +138,13 @@ void Enemy::Render()
 		//X::DrawSprite(mImageID, mPosition, mRotation);
 		mImage->Render();
 		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DarkRed);
+
+		//const float textSize = 50.0f;
+		//const char* text = "DISTANCE";
+		//float textWidth = X::GetTextWidth(text, textSize);
+		//float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
+		//float screenY = X::GetScreenHeight() * 0.1f;
+		//X::DrawScreenText(text, screenX, screenY, textSize, X::Colors::Green);
 	}
 
 	mExplosion->Render();

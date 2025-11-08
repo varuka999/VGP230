@@ -125,19 +125,21 @@ void Ship::OnCollision(Collidable* collidable)
 			mIsPowerUp = true;
 			mDamage = 20;
 		}
-
-		int damage = 0;
-
-		if (collidable->GetType() == ET_ENEMY)
-		{
-			damage = 10;
-		}
 		else
 		{
-			damage = 2;
-		}
+			int damage = 0;
 
-		mHealth -= damage;
+			if (collidable->GetType() == ET_ENEMY)
+			{
+				damage = 10;
+			}
+			else
+			{
+				damage = 2;
+			}
+
+			mHealth -= damage;
+		}
 
 		if (IsAlive() == false)
 		{
