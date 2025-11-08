@@ -64,7 +64,7 @@ void Enemy::Update(float deltaTime)
 {
 	if (IsAlive() == true)
 	{
-		const float speed = 100.0f;
+		const float speed = 80.0f;
 		const float rotationSpeed = X::Math::kPiByTwo;
 		const float offsetDistance = 200.0f;
 
@@ -138,13 +138,6 @@ void Enemy::Render()
 		//X::DrawSprite(mImageID, mPosition, mRotation);
 		mImage->Render();
 		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DarkRed);
-
-		//const float textSize = 50.0f;
-		//const char* text = "DISTANCE";
-		//float textWidth = X::GetTextWidth(text, textSize);
-		//float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
-		//float screenY = X::GetScreenHeight() * 0.1f;
-		//X::DrawScreenText(text, screenX, screenY, textSize, X::Colors::Green);
 	}
 
 	mExplosion->Render();

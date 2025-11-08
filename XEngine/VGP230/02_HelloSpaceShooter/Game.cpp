@@ -8,7 +8,7 @@
 #include "ProgressBar.h"
 
 Game::Game()
-	: Entity(), mPlayer(nullptr), mBulletPool(nullptr), mPowerUpPool(nullptr), mHealthBar(nullptr)
+	: Entity(), mPlayer(nullptr), mBulletPool(nullptr), mPowerUpPool(nullptr), mHealthBar(nullptr), mWaveEnemies(1), mWaveCounter(0)
 {
 
 }
@@ -31,28 +31,7 @@ void Game::Load()
 
 	mHealthBar->Load();
 
-	X::Math::Vector2 spawnPosition = X::Math::Vector2::Zero();
-	X::Math::Vector2 spawnDirection = X::Math::Vector2::Zero();
-	X::Math::Vector2 center = { X::GetScreenWidth() * 0.5f, X::GetScreenHeight() * 0.5f };
-	const float minOffset = 100.0f;
-	const float maxOffset = center.y;
-
-	for (int i = 0; i < 1; ++i)
-	{
-		spawnDirection = X::RandomUnitCircle();
-		spawnPosition = center + (spawnDirection * X::RandomFloat(minOffset, maxOffset));
-
-		Enemy* newEnemy = new Enemy();
-		newEnemy = new Enemy();
-		newEnemy->Load();
-		newEnemy->SetBulletPool(mBulletPool);
-		newEnemy->SetPowerUpPool(mPowerUpPool);
-		newEnemy->SetShip(mPlayer);
-		newEnemy->SetPosition(spawnPosition);
-		newEnemy->SetRotation(X::RandomFloat() * X::Math::kTwoPi);
-		AddCollidable(newEnemy);
-		mEnemies.push_back(newEnemy);
-	}
+	SpawnNextWave();
 
 	mBulletPool->Load();
 	std::vector<Bullet*>& bullets = mBulletPool->GetBulletsPool();
@@ -92,7 +71,26 @@ void Game::Update(float deltaTime)
 		}
 	}
 
+	//If all enemies are dead
+	if (AreAllEnemiesDead() == true)
+	{
+		SpawnNextWave();
+	}
+
 	mHealthBar->SetBarValue(mPlayer->GetHealth(), mPlayer->GetMaxHealth());
+}
+
+bool Game::AreAllEnemiesDead()
+{
+	for (Enemy* enemy : mEnemies)
+	{
+		if (enemy->IsAlive() == true)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Game::Render()
@@ -139,7 +137,37 @@ void Game::AddCollidable(Collidable* collidable)
 	mCollidables.push_back(collidable);
 }
 
+void Game::SpawnNextWave()
+{
+	mWaveEnemies += 2;
+
+	X::Math::Vector2 spawnPosition = X::Math::Vector2::Zero();
+	X::Math::Vector2 spawnDirection = X::Math::Vector2::Zero();
+	X::Math::Vector2 center = { X::GetScreenWidth() * 0.5f, X::GetScreenHeight() * 0.5f };
+	const float minOffset = 100.0f;
+	const float maxOffset = center.y;
+
+	for (int i = 0; i < mWaveEnemies; ++i)
+	{
+		spawnDirection = X::RandomUnitCircle();
+		spawnPosition = center + (spawnDirection * X::RandomFloat(minOffset, maxOffset));
+
+		Enemy* newEnemy = new Enemy();
+		newEnemy = new Enemy();
+		newEnemy->Load();
+		newEnemy->SetBulletPool(mBulletPool);
+		newEnemy->SetPowerUpPool(mPowerUpPool);
+		newEnemy->SetShip(mPlayer);
+		newEnemy->SetPosition(spawnPosition);
+		newEnemy->SetRotation(X::RandomFloat() * X::Math::kTwoPi);
+		AddCollidable(newEnemy);
+		mEnemies.push_back(newEnemy);
+	}
+
+	++mWaveCounter;
+}
+
 bool Game::IsGameOver()
 {
-	return mPlayer->IsAlive() == false;
+	return mPlayer->IsAlive() == false || mWaveCounter >= 4;
 }

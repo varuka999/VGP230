@@ -22,6 +22,8 @@ public:
 
 	void AddCollidable(Collidable* collidable);
 	
+	bool AreAllEnemiesDead();
+	void SpawnNextWave();
 	bool IsGameOver();
 
 private:
@@ -33,4 +35,6 @@ private:
 	//Enemy* mEnemy;
 	std::vector<Enemy*> mEnemies;
 	ProgressBar* mHealthBar;
+	int mWaveEnemies;
+	int mWaveCounter;
 };

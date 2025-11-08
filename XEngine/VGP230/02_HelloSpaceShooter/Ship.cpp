@@ -131,7 +131,7 @@ void Ship::OnCollision(Collidable* collidable)
 
 			if (collidable->GetType() == ET_ENEMY)
 			{
-				damage = 10;
+				damage = 0;
 			}
 			else
 			{
