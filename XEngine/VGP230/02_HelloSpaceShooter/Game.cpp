@@ -95,10 +95,25 @@ bool Game::AreAllEnemiesDead()
 
 void Game::Render()
 {
+	if (mEnemies.empty() == false)
+	{
+		int enemiesDefeated = mEnemies[0]->GetEnemiesDefeated();
+		int enemiesRemaining = 15 - enemiesDefeated;
+		
+		std::string text = std::string("Enemies Remaining: ") + std::to_string(enemiesRemaining);
+
+		const float textSize = 30.0f;
+		float textWidth = X::GetTextWidth(text.c_str(), textSize);
+		float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
+		float screenY = 45.0f;
+		X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Green);
+	}
+
 	for (Enemy* enemy : mEnemies)
 	{
 		enemy->Render();
 	}
+
 	mBulletPool->Render();
 	mPlayer->Render();
 	mHealthBar->Render();
@@ -167,7 +182,12 @@ void Game::SpawnNextWave()
 	++mWaveCounter;
 }
 
-bool Game::IsGameOver()
+bool Game::IsGameOverWin()
 {
-	return mPlayer->IsAlive() == false || mWaveCounter >= 4;
+	return mWaveCounter >= 4;
+}
+
+bool Game::IsGameOverLoss()
+{
+	return mPlayer->IsAlive() == false;
 }

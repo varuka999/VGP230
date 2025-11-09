@@ -82,10 +82,20 @@ void Ship::Render()
 {
 	if (IsAlive() == true)
 	{
+		std::string text = std::string("Attack: ") + std::to_string(mDamage);
+		const float textSize = 30.0f;
+		float textWidth = X::GetTextWidth(text.c_str(), textSize);
+		float screenX = 20.0f;
+		float screenY = 20.0f;
+
 		if (mIsPowerUp == true)
 		{
 			mScale = 1.5f;
+			const char* powerText = "Powered Up!";
+			std::string powerTimerText = std::to_string(mPowerUpTimer);
 			X::DrawScreenDiamond(mPosition, GetRadius() * (mScale + 0.2f), X::Colors::OrangeRed);
+			X::DrawScreenText(powerText, X::GetScreenWidth() - 200, screenY, textSize, X::Colors::OrangeRed);
+			X::DrawScreenText(powerTimerText.c_str(), X::GetScreenWidth() - 200, screenY * 3, textSize, X::Colors::OrangeRed);
 		}
 		else
 		{
@@ -94,6 +104,7 @@ void Ship::Render()
 
 		X::DrawSprite(mImageID, mPosition, mRotation, mScale);
 		X::DrawScreenCircle(mPosition, GetRadius() * mScale, X::Colors::DodgerBlue);
+		X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Green);
 	}
 
 	mExplosion->Render();
@@ -123,6 +134,7 @@ void Ship::OnCollision(Collidable* collidable)
 		if (collidable->GetType() == ET_POWER_UP)
 		{
 			mIsPowerUp = true;
+			mPowerUpTimer = 5;
 			mDamage = 20;
 		}
 		else
@@ -131,7 +143,7 @@ void Ship::OnCollision(Collidable* collidable)
 
 			if (collidable->GetType() == ET_ENEMY)
 			{
-				damage = 0;
+				damage = 10;
 			}
 			else
 			{

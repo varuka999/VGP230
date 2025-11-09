@@ -2,7 +2,7 @@
 #include <XEngine.h>
 
 EndState::EndState()
-	: GameState(State::End)
+	: GameState(State::EndLoss)
 {
 }
 
@@ -26,8 +26,8 @@ State EndState::Update(float deltaTime)
 
 void EndState::Render()
 {
-	const float textSize = 100.0f;
-	const char* text = "END SCREEN\n<PRESS ENTER>";
+	const float textSize = 70.0f;
+	const char* text = "	YOU LOST\nENTER TO RESTART";
 	float textWidth = X::GetTextWidth(text, textSize);
 	float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
 	float screenY = X::GetScreenHeight() * 0.2f;

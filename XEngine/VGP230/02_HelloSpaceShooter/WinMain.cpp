@@ -2,6 +2,7 @@
 #include "StartState.h"
 #include "RunGameState.h"
 #include "EndState.h"
+#include "WinEndState.h"
 //#include "Ship.h"
 
 //Ship mShip;
@@ -15,8 +16,9 @@ void GameInit()
 
 	gGameStates[State::Start] = new StartState();
 	gGameStates[State::RunGame] = new RunGameState();
-	gGameStates[State::End] = new EndState();
-	gActiveState = State::Start; // <---------------------------------------------
+	gGameStates[State::EndLoss] = new EndState();
+	gGameStates[State::EndWin] = new WinEndState();
+	gActiveState = State::Start; // <------ Starting State
 
 	//gGameStates[gActiveState]->Update()
 	gCurrentState = gGameStates[gActiveState];

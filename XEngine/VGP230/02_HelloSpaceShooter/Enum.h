@@ -15,7 +15,8 @@ enum class State
 {
 	Start,
 	RunGame,
-	End,
+	EndWin,
+	EndLoss,
 };
 
 // enum => ET_NONE

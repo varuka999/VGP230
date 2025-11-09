@@ -24,7 +24,8 @@ public:
 	
 	bool AreAllEnemiesDead();
 	void SpawnNextWave();
-	bool IsGameOver();
+	bool IsGameOverWin();
+	bool IsGameOverLoss();
 
 private:
 	Ship* mPlayer;

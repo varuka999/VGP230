@@ -60,6 +60,9 @@
     <ClCompile Include="PowerUpPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WinEndState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xconfig.json">
@@ -119,6 +122,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PowerUpPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinEndState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

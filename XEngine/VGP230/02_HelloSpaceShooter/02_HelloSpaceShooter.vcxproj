@@ -146,6 +146,7 @@
     <ClCompile Include="RunGameState.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="StartState.cpp" />
+    <ClCompile Include="WinEndState.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="RunGameState.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="StartState.h" />
+    <ClInclude Include="WinEndState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,15 +2,18 @@
 #include "BulletPool.h"
 #include "Bullet.h"
 #include "Ship.h"
-#include "PowerUpPool.h";
+#include "PowerUpPool.h"
 #include "PowerUp.h"
 #include "AnimSpriteSheet.h"
 #include "AnimSpriteArray.h"
+
+int Enemy::mEnemiesDefeated = 0;
 
 Enemy::Enemy()
 	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mPowerUpPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPowerUp(nullptr),
 	mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f), mDistanceFromTarget(0.0f)
 {
+
 }
 
 Enemy::~Enemy()
@@ -39,7 +42,6 @@ void Enemy::Load()
 
 		textureName += std::to_string(i + 1) + ".png";
 		sprites.push_back(textureName);
-
 	}
 
 	mImage->LoadSprites(sprites);
@@ -73,7 +75,6 @@ void Enemy::Update(float deltaTime)
 		mDistanceFromTarget = X::Math::Abs((mShip->GetPosition().x + mShip->GetPosition().y) - (mPosition.x + mPosition.y));
 		XLOG("Distance is: %f", mDistanceFromTarget);
 
-		// Something here is not working :(
 		// Ship is too far from enemy
 		if (mDistanceFromTarget >= 500.0f)
 		{
@@ -84,13 +85,12 @@ void Enemy::Update(float deltaTime)
 		{
 			X::Math::Vector2 newTarget = X::Math::Normalize(mPosition - mShip->GetPosition());
 			mTargetPosition = mShip->GetPosition() + (newTarget * 350.0);
-			//mTargetPositionUpdate = X::RandomFloat(0.5f, 1.0f);
 		}
 		else if (mTargetPositionUpdate <= 0.0f || X::Math::MagnitudeSqr(mTargetPosition - mPosition) <= 100.0f)
 		{
 			mCenterPoint = mPosition;
 			mTargetPosition = mCenterPoint + (X::RandomUnitCircle() * offsetDistance);
-			mTargetPositionUpdate = X::RandomFloat(0.5f, 1.0f);
+			mTargetPositionUpdate = X::RandomFloat(1.0f, 2.0f);
 		}
 
 		X::Math::Vector2 moveDirection = X::Math::Normalize(mTargetPosition - mPosition);
@@ -188,6 +188,8 @@ void Enemy::OnCollision(Collidable* collidable)
 
 		if (IsAlive() == false)
 		{
+			++mEnemiesDefeated;
+			
 			SetCollisionFilter(0);
 			mExplosion->SetActive(mPosition);
 
@@ -232,6 +234,11 @@ void Enemy::SetPosition(const X::Math::Vector2& position)
 void Enemy::SetRotation(float rotation)
 {
 	mRotation = rotation;
+}
+
+int Enemy::GetEnemiesDefeated()
+{
+	return mEnemiesDefeated;
 }
 
 bool Enemy::IsAlive() const

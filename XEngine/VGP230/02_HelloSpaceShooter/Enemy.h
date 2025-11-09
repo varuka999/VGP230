@@ -30,6 +30,8 @@ public:
 	void SetPosition(const X::Math::Vector2& position);
 	void SetRotation(float rotation);
 
+	int GetEnemiesDefeated();
+
 	bool IsAlive() const;
 
 private:
@@ -41,6 +43,8 @@ private:
 	PowerUp* mPowerUp;
 
 	//X::TextureId mImageID;
+	static int mEnemiesDefeated;
+
 	X::Math::Vector2 mPosition;
 	float mRotation;
 	float mDistanceFromTarget;
