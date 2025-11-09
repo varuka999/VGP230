@@ -3,33 +3,24 @@
 #include "RunGameState.h"
 #include "EndState.h"
 #include "WinEndState.h"
-//#include "Ship.h"
-
-//Ship mShip;
 
 State gActiveState = State::Start;
 GameState* gCurrentState = nullptr;
 std::map<State, GameState*> gGameStates;
 void GameInit()
 {
-	//mShip.Load();
-
 	gGameStates[State::Start] = new StartState();
 	gGameStates[State::RunGame] = new RunGameState();
 	gGameStates[State::EndLoss] = new EndState();
 	gGameStates[State::EndWin] = new WinEndState();
 	gActiveState = State::Start; // <------ Starting State
 
-	//gGameStates[gActiveState]->Update()
 	gCurrentState = gGameStates[gActiveState];
 	gCurrentState->Load();
 }
 
 bool GameLoop(float deltaTime)
 {
-	//mShip.Update(deltaTime);
-	//mShip.Render();
-
 	State newState = gGameStates[gActiveState]->Update(deltaTime);
 	gCurrentState->Render();
 	if (newState != gActiveState)
@@ -45,8 +36,6 @@ bool GameLoop(float deltaTime)
 
 void GameCleanup()
 {
-	//mShip.Unload();
-
 	gCurrentState->Unload();
 
 	for (auto& state : gGameStates)

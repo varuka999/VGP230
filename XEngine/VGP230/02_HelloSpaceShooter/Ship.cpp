@@ -34,7 +34,7 @@ void Ship::Update(float deltaTime)
 	if (IsAlive() == true)
 	{
 		const float speed = 300.0f;
-		const float turnSpeed = X::Math::kPiByTwo;
+		const float turnSpeed = X::Math::kPiByTwo * 1.5f;
 
 		if (X::IsKeyDown(X::Keys::W) || X::IsKeyDown(X::Keys::UP))
 		{

@@ -1,8 +1,6 @@
 #pragma once
 #include "GameState.h"
 
-class AnimSpriteArray;
-
 class StartState : public GameState
 {
 public:
@@ -15,5 +13,5 @@ public:
 	void Unload() override;
 
 private:
-	AnimSpriteArray* mAnimSpriteArray;
+
 };
