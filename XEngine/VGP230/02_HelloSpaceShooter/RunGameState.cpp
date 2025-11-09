@@ -25,9 +25,14 @@ State RunGameState::Update(float deltaTime)
 	}
 
 	mGame->Update(deltaTime);
-	if (mGame->IsGameOver())
+
+	if (mGame->IsGameOverLoss())
 	{
-		return State::End;
+		return State::EndLoss;
+	}
+	else if (mGame->IsGameOverWin())
+	{
+		return State::EndWin;
 	}
 
 	return State::RunGame;

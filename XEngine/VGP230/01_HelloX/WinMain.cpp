@@ -60,6 +60,7 @@ bool GameLoop(float deltaTime)
 	current = head;
 
 	GameRender();
+
 	return X::IsKeyPressed(X::Keys::ESCAPE);
 }
 

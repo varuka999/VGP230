@@ -2,13 +2,18 @@
 #include "BulletPool.h"
 #include "Bullet.h"
 #include "Ship.h"
+#include "PowerUpPool.h"
+#include "PowerUp.h"
 #include "AnimSpriteSheet.h"
 #include "AnimSpriteArray.h"
 
+int Enemy::mEnemiesDefeated = 0;
+
 Enemy::Enemy()
-	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPosition(0.0f, 0.0f), mRotation(0.0f),
-	mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f)
+	: Entity(), Collidable(30.0f), mBulletPool(nullptr), mPowerUpPool(nullptr), mShip(nullptr), mExplosion(nullptr), mImage(nullptr), mPowerUp(nullptr),
+	mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mCenterPoint(0.0f, 0.0f), mTargetPosition(0.0f, 0.0f), mTargetPositionUpdate(0.0f), mFireRate(0.0f), mDistanceFromTarget(0.0f)
 {
+
 }
 
 Enemy::~Enemy()
@@ -37,7 +42,6 @@ void Enemy::Load()
 
 		textureName += std::to_string(i + 1) + ".png";
 		sprites.push_back(textureName);
-
 	}
 
 	mImage->LoadSprites(sprites);
@@ -54,7 +58,7 @@ void Enemy::Load()
 	mExplosion = new AnimSpriteSheet();
 	mExplosion->Load();
 
-	mTargetPositionUpdate = 0.0f;
+	mTargetPositionUpdate = 0.1f;
 	mFireRate = 1.0f;
 }
 
@@ -62,16 +66,31 @@ void Enemy::Update(float deltaTime)
 {
 	if (IsAlive() == true)
 	{
-		const float speed = 70.0f;
+		const float speed = 80.0f;
 		const float rotationSpeed = X::Math::kPiByTwo;
 		const float offsetDistance = 200.0f;
 
 		mTargetPositionUpdate -= deltaTime;
 
-		if (mTargetPositionUpdate <= 0.0f || X::Math::MagnitudeSqr(mTargetPosition - mPosition) <= 100.0f)
+		mDistanceFromTarget = X::Math::Abs((mShip->GetPosition().x + mShip->GetPosition().y) - (mPosition.x + mPosition.y));
+		XLOG("Distance is: %f", mDistanceFromTarget);
+
+		// Ship is too far from enemy
+		if (mDistanceFromTarget >= 500.0f)
 		{
+			mTargetPosition = mShip->GetPosition();
+		}
+		// Ship is too close to enemy
+		else if (mDistanceFromTarget <= 300.0f)
+		{
+			X::Math::Vector2 newTarget = X::Math::Normalize(mPosition - mShip->GetPosition());
+			mTargetPosition = mShip->GetPosition() + (newTarget * 350.0);
+		}
+		else if (mTargetPositionUpdate <= 0.0f || X::Math::MagnitudeSqr(mTargetPosition - mPosition) <= 100.0f)
+		{
+			mCenterPoint = mPosition;
 			mTargetPosition = mCenterPoint + (X::RandomUnitCircle() * offsetDistance);
-			mTargetPositionUpdate = X::RandomFloat(3.0f, 5.0f);
+			mTargetPositionUpdate = X::RandomFloat(1.0f, 2.0f);
 		}
 
 		X::Math::Vector2 moveDirection = X::Math::Normalize(mTargetPosition - mPosition);
@@ -106,9 +125,7 @@ void Enemy::Update(float deltaTime)
 			const float fframeCount = static_cast<float>(mImage->GetFrameCount());
 			const int currentFrame = static_cast<int>(percent * fframeCount) % mImage->GetFrameCount();
 			mImage->SetFrameIndex(currentFrame);
-		
 		}
-
 	}
 
 	mExplosion->Update(deltaTime);
@@ -124,6 +141,11 @@ void Enemy::Render()
 	}
 
 	mExplosion->Render();
+
+	if (mPowerUp != nullptr)
+	{
+		mPowerUp->Render();
+	}
 }
 
 void Enemy::Unload()
@@ -159,15 +181,29 @@ void Enemy::OnCollision(Collidable* collidable)
 		}
 		else
 		{
-			damage = 10;
+			damage = mShip->GetDamage();
 		}
 
 		mHealth -= damage;
 
 		if (IsAlive() == false)
 		{
+			++mEnemiesDefeated;
+			
 			SetCollisionFilter(0);
 			mExplosion->SetActive(mPosition);
+
+			if (mPowerUp != nullptr)
+			{
+				mPowerUp = nullptr;
+			}
+
+			mPowerUp = mPowerUpPool->GetPowerUp();
+
+			if (mPowerUp != nullptr)
+			{
+				mPowerUp->SetActive(mPosition);
+			}
 		}
 	}
 }
@@ -175,6 +211,11 @@ void Enemy::OnCollision(Collidable* collidable)
 void Enemy::SetBulletPool(BulletPool* bulletPool)
 {
 	mBulletPool = bulletPool;
+}
+
+void Enemy::SetPowerUpPool(PowerUpPool* powerUpPool)
+{
+	mPowerUpPool = powerUpPool;
 }
 
 void Enemy::SetShip(Ship* ship)
@@ -193,6 +234,11 @@ void Enemy::SetPosition(const X::Math::Vector2& position)
 void Enemy::SetRotation(float rotation)
 {
 	mRotation = rotation;
+}
+
+int Enemy::GetEnemiesDefeated()
+{
+	return mEnemiesDefeated;
 }
 
 bool Enemy::IsAlive() const

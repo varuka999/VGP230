@@ -8,13 +8,15 @@ enum EntityType : int
 	ET_BULLET_PLAYER = 1 << 1,	// 0000 0010 Value 1 pushed over to the 1 index (bit)
 	ET_BULLET_ENEMY = 1 << 2,	// 0000 0100 Value 1 pushed over to the 2 index (bit)
 	ET_ENEMY = 1 << 3,			// 0000 1000 Value 1 pushed over to the 3 index (bit)
+	ET_POWER_UP = 1 << 4,		// 0001 0000 Value 1 pushed over to the 4 index (bit)
 };
 
 enum class State
 {
 	Start,
 	RunGame,
-	End,
+	EndWin,
+	EndLoss,
 };
 
 // enum => ET_NONE

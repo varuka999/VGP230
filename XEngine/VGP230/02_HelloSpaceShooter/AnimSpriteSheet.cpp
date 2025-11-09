@@ -1,4 +1,5 @@
 #include "AnimSpriteSheet.h"
+#include "PowerUp.h"
 
 AnimSpriteSheet::AnimSpriteSheet()
 	: Entity(), mSpriteSheetID(0), mSpriteRect(), mPosition(0.0f, 0.0f), mFrameRate(0.0f), mCurrentFrameTime(0.0f), mRows(0), mColumns(0), mMaxFrames(0), mCurrentIndex(0), mIsLooping(false)

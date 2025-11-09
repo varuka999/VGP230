@@ -1,12 +1,14 @@
 #include "Game.h"
 #include "Ship.h"
 #include "BulletPool.h"
+#include "PowerUpPool.h"
 #include "Bullet.h"
+#include "PowerUp.h"
 #include "Enemy.h"
 #include "ProgressBar.h"
 
 Game::Game()
-	: Entity(), mPlayer(nullptr), mBulletPool(nullptr), mHealthBar(nullptr)
+	: Entity(), mPlayer(nullptr), mBulletPool(nullptr), mPowerUpPool(nullptr), mHealthBar(nullptr), mWaveEnemies(1), mWaveCounter(0)
 {
 
 }
@@ -20,6 +22,7 @@ void Game::Load()
 {
 	mPlayer = new Ship();
 	mBulletPool = new BulletPool();
+	mPowerUpPool = new PowerUpPool();
 	mHealthBar = new ProgressBar();
 
 	mPlayer->Load();
@@ -28,34 +31,20 @@ void Game::Load()
 
 	mHealthBar->Load();
 
-	X::Math::Vector2 spawnPosition = X::Math::Vector2::Zero();
-	X::Math::Vector2 spawnDirection = X::Math::Vector2::Zero();
-	X::Math::Vector2 center = { X::GetScreenWidth() * 0.5f, X::GetScreenHeight() * 0.5f };
-	const float minOffset = 100.0f;
-	const float maxOffset = center.y;
-
-	for (int i = 0; i < 10; ++i)
-	{
-		spawnDirection = X::RandomUnitCircle();
-		spawnPosition = center + (spawnDirection * X::RandomFloat(minOffset, maxOffset));
-
-		Enemy* newEnemy = new Enemy();
-		newEnemy = new Enemy();
-		newEnemy->Load();
-		newEnemy->SetBulletPool(mBulletPool);
-		newEnemy->SetShip(mPlayer);
-		newEnemy->SetPosition(spawnPosition);
-		newEnemy->SetRotation(X::RandomFloat() * X::Math::kTwoPi);
-		AddCollidable(newEnemy);
-		mEnemies.push_back(newEnemy);
-	}
-
+	SpawnNextWave();
 
 	mBulletPool->Load();
 	std::vector<Bullet*>& bullets = mBulletPool->GetBulletsPool();
 	for (Bullet* bullet : bullets)
 	{
 		AddCollidable(bullet);
+	}
+
+	mPowerUpPool->Load();
+	std::vector<PowerUp*>& powerUps = mPowerUpPool->GetPowerUpPool();
+	for (PowerUp* powerUp : powerUps)
+	{
+		AddCollidable(powerUp);
 	}
 }
 
@@ -82,15 +71,49 @@ void Game::Update(float deltaTime)
 		}
 	}
 
+	//If all enemies are dead
+	if (AreAllEnemiesDead() == true)
+	{
+		SpawnNextWave();
+	}
+
 	mHealthBar->SetBarValue(mPlayer->GetHealth(), mPlayer->GetMaxHealth());
+}
+
+bool Game::AreAllEnemiesDead()
+{
+	for (Enemy* enemy : mEnemies)
+	{
+		if (enemy->IsAlive() == true)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Game::Render()
 {
+	if (mEnemies.empty() == false)
+	{
+		int enemiesDefeated = mEnemies[0]->GetEnemiesDefeated();
+		int enemiesRemaining = 15 - enemiesDefeated;
+		
+		std::string text = std::string("Enemies Remaining: ") + std::to_string(enemiesRemaining);
+
+		const float textSize = 30.0f;
+		float textWidth = X::GetTextWidth(text.c_str(), textSize);
+		float screenX = (X::GetScreenWidth() - textWidth) * 0.5f;
+		float screenY = 45.0f;
+		X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Green);
+	}
+
 	for (Enemy* enemy : mEnemies)
 	{
 		enemy->Render();
 	}
+
 	mBulletPool->Render();
 	mPlayer->Render();
 	mHealthBar->Render();
@@ -101,6 +124,10 @@ void Game::Unload()
 	mBulletPool->Unload();
 	delete mBulletPool;
 	mBulletPool = nullptr;
+
+	mPowerUpPool->Unload();
+	delete mPowerUpPool;
+	mPowerUpPool = nullptr;
 
 	mHealthBar->Unload();
 	delete mHealthBar;
@@ -125,7 +152,42 @@ void Game::AddCollidable(Collidable* collidable)
 	mCollidables.push_back(collidable);
 }
 
-bool Game::IsGameOver()
+void Game::SpawnNextWave()
+{
+	mWaveEnemies += 2;
+
+	X::Math::Vector2 spawnPosition = X::Math::Vector2::Zero();
+	X::Math::Vector2 spawnDirection = X::Math::Vector2::Zero();
+	X::Math::Vector2 center = { X::GetScreenWidth() * 0.5f, X::GetScreenHeight() * 0.5f };
+	const float minOffset = 100.0f;
+	const float maxOffset = center.y;
+
+	for (int i = 0; i < mWaveEnemies; ++i)
+	{
+		spawnDirection = X::RandomUnitCircle();
+		spawnPosition = center + (spawnDirection * X::RandomFloat(minOffset, maxOffset));
+
+		Enemy* newEnemy = new Enemy();
+		newEnemy = new Enemy();
+		newEnemy->Load();
+		newEnemy->SetBulletPool(mBulletPool);
+		newEnemy->SetPowerUpPool(mPowerUpPool);
+		newEnemy->SetShip(mPlayer);
+		newEnemy->SetPosition(spawnPosition);
+		newEnemy->SetRotation(X::RandomFloat() * X::Math::kTwoPi);
+		AddCollidable(newEnemy);
+		mEnemies.push_back(newEnemy);
+	}
+
+	++mWaveCounter;
+}
+
+bool Game::IsGameOverWin()
+{
+	return mWaveCounter >= 4;
+}
+
+bool Game::IsGameOverLoss()
 {
 	return mPlayer->IsAlive() == false;
 }

@@ -4,7 +4,7 @@
 #include "AnimSpriteSheet.h"
 
 Ship::Ship()
-	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mHealth(0), mMaxHealth(100), mBulletPool(nullptr), mExplosion(nullptr)
+	: Entity(), Collidable(30.0f), mImageID(0), mPosition(0.0f), mRotation(0.0f), mScale(1.0f), mHealth(0), mMaxHealth(100), mDamage(10), mBulletPool(nullptr), mExplosion(nullptr), mIsPowerUp(false), mPowerUpTimer(5.0f)
 {
 
 }
@@ -34,7 +34,8 @@ void Ship::Update(float deltaTime)
 	if (IsAlive() == true)
 	{
 		const float speed = 300.0f;
-		const float turnSpeed = X::Math::kPiByTwo;
+		const float turnSpeed = X::Math::kPiByTwo * 1.5f;
+
 		if (X::IsKeyDown(X::Keys::W) || X::IsKeyDown(X::Keys::UP))
 		{
 			mPosition += X::Math::Vector2::Forward(mRotation) * speed * deltaTime;
@@ -62,6 +63,18 @@ void Ship::Update(float deltaTime)
 		}
 	}
 
+	if (mIsPowerUp == true)
+	{
+		mPowerUpTimer -= deltaTime;
+
+		if (mPowerUpTimer <= 0.0f)
+		{
+			mIsPowerUp = false;
+			mPowerUpTimer = 5;
+			mDamage = 10;
+		}
+	}
+
 	mExplosion->Update(deltaTime);
 }
 
@@ -69,8 +82,29 @@ void Ship::Render()
 {
 	if (IsAlive() == true)
 	{
-		X::DrawSprite(mImageID, mPosition, mRotation);
-		X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::DodgerBlue);
+		std::string text = std::string("Attack: ") + std::to_string(mDamage);
+		const float textSize = 30.0f;
+		float textWidth = X::GetTextWidth(text.c_str(), textSize);
+		float screenX = 20.0f;
+		float screenY = 20.0f;
+
+		if (mIsPowerUp == true)
+		{
+			mScale = 1.5f;
+			const char* powerText = "Powered Up!";
+			std::string powerTimerText = std::to_string(mPowerUpTimer);
+			X::DrawScreenDiamond(mPosition, GetRadius() * (mScale + 0.2f), X::Colors::OrangeRed);
+			X::DrawScreenText(powerText, X::GetScreenWidth() - 200, screenY, textSize, X::Colors::OrangeRed);
+			X::DrawScreenText(powerTimerText.c_str(), X::GetScreenWidth() - 200, screenY * 3, textSize, X::Colors::OrangeRed);
+		}
+		else
+		{
+			mScale = 1.0f;
+		}
+
+		X::DrawSprite(mImageID, mPosition, mRotation, mScale);
+		X::DrawScreenCircle(mPosition, GetRadius() * mScale, X::Colors::DodgerBlue);
+		X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Green);
 	}
 
 	mExplosion->Render();
@@ -97,18 +131,27 @@ void Ship::OnCollision(Collidable* collidable)
 {
 	if (IsAlive() == true)
 	{
-		int damage = 0;
-
-		if (collidable->GetType() == ET_ENEMY)
+		if (collidable->GetType() == ET_POWER_UP)
 		{
-			damage = 10;
+			mIsPowerUp = true;
+			mPowerUpTimer = 5;
+			mDamage = 20;
 		}
 		else
 		{
-			damage = 2;
-		}
+			int damage = 0;
 
-		mHealth -= damage;
+			if (collidable->GetType() == ET_ENEMY)
+			{
+				damage = 10;
+			}
+			else
+			{
+				damage = 2;
+			}
+
+			mHealth -= damage;
+		}
 
 		if (IsAlive() == false)
 		{
@@ -131,6 +174,11 @@ int Ship::GetHealth() const
 int Ship::GetMaxHealth() const
 {
 	return mMaxHealth;
+}
+
+int Ship::GetDamage() const
+{
+	return mDamage;
 }
 
 bool Ship::IsAlive() const

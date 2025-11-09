@@ -140,10 +140,13 @@
     <ClCompile Include="EndState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="PowerUpPool.cpp" />
     <ClCompile Include="ProgressBar.cpp" />
     <ClCompile Include="RunGameState.cpp" />
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="StartState.cpp" />
+    <ClCompile Include="WinEndState.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,14 +160,18 @@
     <ClInclude Include="Collidable.h" />
     <ClInclude Include="EndState.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="PowerUpPool.h" />
     <ClInclude Include="ProgressBar.h" />
     <ClInclude Include="RunGameState.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="StartState.h" />
+    <ClInclude Include="WinEndState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

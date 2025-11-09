@@ -4,6 +4,7 @@
 
 class Ship;
 class BulletPool;
+class PowerUpPool;
 class Collidable;
 class Enemy;
 class ProgressBar;
@@ -21,14 +22,20 @@ public:
 
 	void AddCollidable(Collidable* collidable);
 	
-	bool IsGameOver();
+	bool AreAllEnemiesDead();
+	void SpawnNextWave();
+	bool IsGameOverWin();
+	bool IsGameOverLoss();
 
 private:
 	Ship* mPlayer;
 	BulletPool* mBulletPool;
+	PowerUpPool* mPowerUpPool;
 	std::vector<Collidable*> mCollidables;
 
 	//Enemy* mEnemy;
 	std::vector<Enemy*> mEnemies;
 	ProgressBar* mHealthBar;
+	int mWaveEnemies;
+	int mWaveCounter;
 };
