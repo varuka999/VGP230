@@ -52,7 +52,7 @@ void TileMap::LoadMap(const std::vector<int>& tiles, int columns, float size)
 	XASSERT(tiles.size() % columns == 0, "TileMap Tiles don't line up with columns");
 
 	X::Math::Vector2 position = X::Math::Vector2::Zero();
-	for (int i = 0; i < tiles.size(); i++)
+	for (int i = 0; i < tiles.size(); ++i)
 	{
 
 		if (i > 0 && i % columns == 0)
