@@ -26,7 +26,7 @@ TileMap* TileMap::Get()
 
 void TileMap::Load()
 {
-
+    ReloadMap();
 }
 
 void TileMap::Update(float deltaTime)
@@ -60,6 +60,99 @@ void TileMap::Unload()
     }
 
     mTiles.clear();
+}
+
+const Tile* TileMap::GetFirstWalkableTile()
+{
+    Tile* walkableTile = nullptr;
+
+    for (Tile* tile : mTiles)
+    {
+        if (!tile->IsCollidable())
+        {
+            walkableTile = tile;
+            break;
+        }
+    }
+
+    return walkableTile;
+}
+
+void TileMap::ObtainAllWalkableTiles(std::vector<Tile*>& outWalkableTiles)
+{
+    for (Tile* tile : mTiles)
+    {
+        if (tile->IsCollidable() == false)
+        {
+            outWalkableTiles.push_back(tile);
+        }
+    }
+}
+
+bool TileMap::HasCollision(const X::Math::Rect& objRect, const X::Math::Vector2& maxDisplacement, X::Math::Vector2& outDisplacement) const
+{
+    // AABB
+    // check x left/right
+    // check y up/down
+
+    bool hasCollision = false;
+    const float offset = 0.5f;
+
+    for (int d = 0; d < 2; ++d)
+    {
+        X::Math::Rect targetRect(objRect);
+        X::Math::Vector2 testDirection = X::Math::Vector2::Zero();
+
+        if (d == 0)
+        {
+            testDirection.x = maxDisplacement.x;
+        }
+        else
+        {
+            testDirection.y = maxDisplacement.y;
+        }
+
+        targetRect.min += testDirection;
+        targetRect.max += testDirection;
+
+        for (const Tile* tile : mTiles)
+        {
+            if (tile->IsCollidable() == true && tile->HasCollision(targetRect))
+            {
+                hasCollision = true;
+                const X::Math::Rect& tileRect = tile->GetRect();
+
+                if (d == 0)
+                {
+                    if (maxDisplacement.x > 0.0f && targetRect.right > tileRect.left)
+                    {
+                        outDisplacement.x = X::Math::Min(maxDisplacement.x - (targetRect.right - tileRect.left) - offset, outDisplacement.x);
+                        outDisplacement.x = X::Math::Max(outDisplacement.x, 0.0f);
+                    }
+                    else if (maxDisplacement.x < 0.0f && targetRect.left < targetRect.right)
+                    {
+                        outDisplacement.x = X::Math::Max(maxDisplacement.x + (tileRect.right - targetRect.left) + offset, outDisplacement.x);
+                        outDisplacement.x = X::Math::Min(outDisplacement.x, 0.0f);
+                    }
+                }
+                else
+                {
+                    if (maxDisplacement.y < 0.0f && targetRect.top < tileRect.bottom)
+                    {
+                        outDisplacement.y = X::Math::Max(maxDisplacement.y + (tileRect.bottom - targetRect.top) + offset, outDisplacement.y);
+                        outDisplacement.y = X::Math::Min(outDisplacement.y, 0.0f);
+                    }
+                    else
+                    {
+                        outDisplacement.y = X::Math::Min(maxDisplacement.y - (targetRect.bottom - tileRect.top) - offset, outDisplacement.y);
+                        outDisplacement.y = X::Math::Max(outDisplacement.y, 0.0f);
+                    }
+                }
+            }
+        }
+    }
+
+    return hasCollision;
 }
 
 void TileMap::ReloadMap()

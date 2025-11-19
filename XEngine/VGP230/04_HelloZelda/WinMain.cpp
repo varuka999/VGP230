@@ -1,27 +1,22 @@
 #include <XEngine.h>
-#include "TileMap.h"
+#include "GameController.h"
 
 void GameInit()
 {
-    TileMap::Get()->Load();
-}
-
-void GameRender()
-{
-    TileMap::Get()->Render();
+    GameController::Get()->Load();
 }
 
 bool GameUpdate(float deltaTime)
 {
-    TileMap::Get()->Update(deltaTime);
-    GameRender();
+    GameController::Get()->Update(deltaTime);
+    GameController::Get()->Render();
 
     return X::IsKeyPressed(X::Keys::ESCAPE);
 }
 
 void GameCleanup()
 {
-
+    GameController::Get()->Unload();
 }
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
