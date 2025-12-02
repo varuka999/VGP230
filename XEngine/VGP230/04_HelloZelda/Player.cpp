@@ -1,9 +1,11 @@
 #include "Player.h"
+#include "BulletPool.h"
+#include "Bullet.h"
 #include "CollisionManager.h"
 #include "TileMap.h"
 
 Player::Player()
-    : Entity(), Collidable(), mImageID(0), mPosition(0.0f, 0.0f), mHealth(100), mRemoveCollider(false)
+    : Entity(), Collidable(), mImageID(0), mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mRemoveCollider(false)
 {
 
 }
@@ -65,6 +67,14 @@ void Player::Update(float deltaTime)
     else if (X::IsKeyDown(X::Keys::D))
     {
         direction.x = 1.0f;
+    }
+
+    if (X::IsKeyPressed(X::Keys::SPACE) || X::IsMousePressed(0))
+    {
+        X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
+        Bullet* bullet = BulletPool::Get()->GetBullet();
+        bullet->SetEntityType(ET_BULLET_PLAYER);
+        bullet->SetActive(mPosition, mRotation, 2.0f);
     }
 
     if (X::Math::MagnitudeSqr(direction) > 0.0f)

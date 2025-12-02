@@ -109,6 +109,16 @@ void Enemy::OnCollision(Collidable* collidable)
             mHealth = -1;
             mRemoveCollider = true;
         }
+        else if (collidable->GetType() == ET_BULLET_PLAYER)
+        {
+            mHealth -= 2;
+
+            if (mHealth <= 0)
+            {
+                mHealth = -1;
+                mRemoveCollider = true;
+            }
+        }
     }
 }
 

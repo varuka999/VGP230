@@ -2,11 +2,12 @@
 
 enum EntityType : int
 {
-    ET_NONE     = 0,
-    ET_PLAYER   = 1 << 0,
-    ET_TITLE    = 1 << 1,
-    ET_ENEMY    = 1 << 2,
-    ET_PICKUP   = 1 << 3,
+    ET_NONE             = 0,
+    ET_PLAYER           = 1 << 0,
+    ET_TITLE            = 1 << 1,
+    ET_ENEMY            = 1 << 2,
+    ET_PICKUP           = 1 << 3,
+    ET_BULLET_PLAYER    = 1 << 4,
 };
 
 enum TileType : int
