@@ -134,6 +134,8 @@
   <ItemGroup>
     <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PickupManager.cpp" />
@@ -149,6 +151,8 @@
   <ItemGroup>
     <ClInclude Include="Collidable.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="GameController.h" />
