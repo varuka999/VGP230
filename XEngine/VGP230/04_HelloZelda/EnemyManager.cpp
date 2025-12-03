@@ -43,7 +43,7 @@ void EnemyManager::Load()
 void EnemyManager::Update(float deltaTime)
 {
     mEnemyWaveTimer -= deltaTime;
-    if (mEnemyWaveTimer <= 0.0f && mWave < 3)
+    if (mEnemyWaveTimer <= 0.0f && mWave < 4)
     {
         ++mWave;
         SpawnEnemies(3 * mWave);
@@ -63,6 +63,25 @@ void EnemyManager::Update(float deltaTime)
 
 void EnemyManager::Render()
 {
+    int enemiesDefeated = mEnemies[0]->GetEnemiesDefeated();
+    int enemiesRemaining = 15 - enemiesDefeated;
+
+    std::string text = std::string("Enemies Remaining: ") + std::to_string(enemiesRemaining);
+
+    X::TextureId dummyTile = X::LoadTexture("white.jpg");
+    const float tileWidth = X::GetSpriteWidth(dummyTile);
+    const float tileHeight = X::GetSpriteHeight(dummyTile);
+    //X::Math::Vector2 offset = { tileWidth * 0.5f, tileHeight * 0.5f };
+
+
+    const float textSize = 30.0f;
+    float textWidth = X::GetTextWidth(text.c_str(), textSize);
+    X::Math::Vector2 offset = { -textWidth * 0.5f, tileHeight * 0.5f };
+    float screenX = tileWidth * (TileMap::Get()->GetWidth() / 2) + offset.x;
+    //float screenX = (X::GetScreenWidth()) * 0.5f;
+    float screenY = 20.0f;
+    X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Orange);
+
 	for (Enemy* enemy : mEnemies)
 	{
 		enemy->Render();

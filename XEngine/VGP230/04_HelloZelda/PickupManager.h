@@ -20,4 +20,5 @@ private:
 
     std::vector<Pickup*> mPickups;
     int mNextAvailableIndex;
+    float mPickupSpawnTimer;
 };

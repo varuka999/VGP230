@@ -4,7 +4,7 @@
 PickupManager* PickupManager::mInstance = nullptr;
 
 PickupManager::PickupManager()
-    : Entity(), mNextAvailableIndex(0)
+    : Entity(), mNextAvailableIndex(0), mPickupSpawnTimer(0.0f)
 {
 
 }
@@ -36,10 +36,18 @@ void PickupManager::Load()
     }
 
     mNextAvailableIndex = 0;
+    mPickupSpawnTimer = 5.0f;
 }
 
 void PickupManager::Update(float deltaTime)
 {
+    mPickupSpawnTimer -= deltaTime;
+
+    if (mPickupSpawnTimer <= 0.0f)
+    {
+        SpawnPickup(2);
+        mPickupSpawnTimer = 5.0f;
+    }
 
     //if (X::IsKeyPressed(X::Keys::P))
     //{

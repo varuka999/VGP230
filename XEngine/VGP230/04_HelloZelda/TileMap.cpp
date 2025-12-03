@@ -2,7 +2,6 @@
 
 TileMap* TileMap::mInstance = nullptr;
 
-
 TileMap::TileMap()
     : Entity(), mColumns(0), mRows(0)
 {
@@ -155,6 +154,11 @@ bool TileMap::HasCollision(const X::Math::Rect& objRect, const X::Math::Vector2&
     return hasCollision;
 }
 
+int TileMap::GetWidth()
+{
+    return mColumns;
+}
+
 void TileMap::ReloadMap()
 {
     // File Map Generation
@@ -178,17 +182,17 @@ void TileMap::ReloadMap()
     int y = 0;
 
     // Randomizer Map Generation
-    int width = X::Random(20, 25);
-    int height = X::Random(10, 15);
+    mColumns = X::Random(20, 25);
+    mRows = X::Random(10, 15);
 
-    for (int i = 0; i < height; ++i)
+    for (int i = 0; i < mRows; ++i)
     {
         X::Math::Vector2 position = X::Math::Vector2::Zero();
         TileType tileType = (TileType)0;
 
-        for (int j = 0; j < width; j++)
+        for (int j = 0; j < mColumns; j++)
         {
-            if (i == 0 || i == height - 1 || j == 0 || j == width - 1) // Wall
+            if (i == 0 || i == mRows - 1 || j == 0 || j == mColumns - 1) // Wall
             {
                 tileType = (TileType)TT_WALL;
             }
