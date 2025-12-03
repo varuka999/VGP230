@@ -157,12 +157,13 @@ bool TileMap::HasCollision(const X::Math::Rect& objRect, const X::Math::Vector2&
 
 void TileMap::ReloadMap()
 {
-    const char fileName[255] = "./level.lvl";
-    std::fstream inputStream;
-    inputStream.open(fileName);
+    // File Map Generation
+    //const char fileName[255] = "./level.lvl";
+    //std::fstream inputStream;
+    //inputStream.open(fileName);
 
-    inputStream >> mColumns;
-    inputStream >> mRows;
+    //inputStream >> mColumns;
+    //inputStream >> mRows;
 
     X::TextureId dummyTile = X::LoadTexture("white.jpg");
     const float tileWidth = X::GetSpriteWidth(dummyTile);
@@ -176,18 +177,61 @@ void TileMap::ReloadMap()
     int x = 0;
     int y = 0;
 
-    while (inputStream >> dataType)
+    // Randomizer Map Generation
+    int width = X::Random(20, 25);
+    int height = X::Random(10, 15);
+
+    for (int i = 0; i < height; ++i)
     {
         X::Math::Vector2 position = X::Math::Vector2::Zero();
-        TileType tileType = (TileType)dataType;
-        x = tileIndex % mColumns;
-        y = tileIndex / mColumns;
-        position.x = tileWidth * x + offset.x;
-        position.y = tileHeight * y + offset.y;
+        TileType tileType = (TileType)0;
 
-        Tile* newTile = new Tile(tileType, position);
-        newTile->Load();
-        mTiles.push_back(newTile);
-        ++tileIndex;
+        for (int j = 0; j < width; j++)
+        {
+            if (i == 0 || i == height - 1 || j == 0 || j == width - 1) // Wall
+            {
+                tileType = (TileType)TT_WALL;
+            }
+            else
+            {
+                int type = X::Random(0, 100);
+                if (type < 75)
+                {
+                    type = TT_GROUND;
+                }
+                else if (type < 95)
+                {
+                    type = TT_WATER;
+                }
+                else
+                {
+                    type = TT_MAGMA;
+                }
+
+                tileType = (TileType)type;
+            }
+
+            position.x = tileWidth * j + offset.x;
+            position.y = tileHeight * i + offset.y;
+            Tile* newTile = new Tile(tileType, position);
+            newTile->Load();
+            mTiles.push_back(newTile);
+        }
     }
+
+    // File Map Generation
+    //while (inputStream >> dataType)
+    //{
+    //    X::Math::Vector2 position = X::Math::Vector2::Zero();
+    //    TileType tileType = (TileType)dataType;
+    //    x = tileIndex % mColumns;
+    //    y = tileIndex / mColumns;
+    //    position.x = tileWidth * x + offset.x;
+    //    position.y = tileHeight * y + offset.y;
+
+    //    Tile* newTile = new Tile(tileType, position);
+    //    newTile->Load();
+    //    mTiles.push_back(newTile);
+    //    ++tileIndex;
+    //}
 }
