@@ -17,6 +17,8 @@ public:
     void ObtainAllWalkableTiles(std::vector<Tile*>& outWalkableTiles);
     bool HasCollision(const X::Math::Rect& objRect, const X::Math::Vector2& maxDisplacement, X::Math::Vector2& outDisplacement) const;
 
+    int GetWidth();
+
 private:
     TileMap();
     static TileMap* mInstance;

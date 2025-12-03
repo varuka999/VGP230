@@ -21,6 +21,7 @@ private:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     X::Math::Rect mPlayerRect;
+    float mRotation;
 
     int mHealth;
     bool mRemoveCollider;

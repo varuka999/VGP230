@@ -1,7 +1,7 @@
 {
   "AppName": "Hello Zelda",
-  "WinWidth": 1280,
-  "WinHeight": 1080,
+  "WinWidth": 1680,
+  "WinHeight": 1050,
   "FullScreen": false,
   "TexturePath": "../../Assets/Images",
   "SoundPath": "../../Assets/Sounds"

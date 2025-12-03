@@ -2,6 +2,8 @@
 #include "CollisionManager.h"
 #include "PickupManager.h"
 #include "TileMap.h"
+#include "EnemyManager.h"
+#include "BulletPool.h"
 
 GameController* GameController::mInstance = nullptr;
 
@@ -30,6 +32,8 @@ void GameController::Load()
     CollisionManager::Get()->Load();
     TileMap::Get()->Load();
     PickupManager::Get()->Load();
+    EnemyManager::Get()->Load();
+    BulletPool::Get()->Load();
     mPlayer.Load();
 }
 
@@ -37,6 +41,8 @@ void GameController::Update(float deltaTime)
 {
     TileMap::Get()->Update(deltaTime);
     PickupManager::Get()->Update(deltaTime);
+    EnemyManager::Get()->Update(deltaTime);
+    BulletPool::Get()->Update(deltaTime);
     mPlayer.Update(deltaTime);
 
     CollisionManager::Get()->Update(deltaTime);
@@ -46,6 +52,8 @@ void GameController::Render()
 {
     TileMap::Get()->Render();
     PickupManager::Get()->Render();
+    EnemyManager::Get()->Render();
+    BulletPool::Get()->Render();
     mPlayer.Render();
 
     CollisionManager::Get()->Render();
@@ -54,6 +62,8 @@ void GameController::Render()
 void GameController::Unload()
 {
     mPlayer.Unload();
+    BulletPool::Get()->Unload();
+    EnemyManager::Get()->Unload();
     PickupManager::Get()->Unload();
     TileMap::Get()->Unload();
     CollisionManager::Get()->Unload();

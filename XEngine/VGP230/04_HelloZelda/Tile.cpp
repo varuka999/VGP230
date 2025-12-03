@@ -17,11 +17,15 @@ void Tile::Load()
     {
     case TT_NONE:
         break;
-    case TT_GROUND: mImageID = X::LoadTexture("green.jpg");
+    case TT_GROUND: mImageID = X::LoadTexture("grass64.png");
         break;
-    case TT_WALL:   mImageID = X::LoadTexture("purple.jpg");
+    case TT_WALL:   mImageID = X::LoadTexture("wallrock64.png");
         break;
-    case TT_WATER:  mImageID = X::LoadTexture("cyan.jpg");
+    case TT_WATER:  mImageID = X::LoadTexture("water64.png");
+        break;
+    case TT_VINE: mImageID = X::LoadTexture("vine64.png");
+        break;
+    case TT_MAGMA:  mImageID = X::LoadTexture("magma64.png");
         break;
     default:
         XASSERT(false, "Tile: Invalid Tile Type");
@@ -57,7 +61,7 @@ const X::Math::Vector2& Tile::GetPosition() const
 
 bool Tile::IsCollidable() const
 {
-    return mTileType == TT_WALL;
+    return mTileType != TT_GROUND;
 }
 
 bool Tile::HasCollision(const X::Math::Rect& objRect) const

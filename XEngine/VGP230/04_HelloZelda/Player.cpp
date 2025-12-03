@@ -1,9 +1,11 @@
 #include "Player.h"
+#include "BulletPool.h"
+#include "Bullet.h"
 #include "CollisionManager.h"
 #include "TileMap.h"
 
 Player::Player()
-    : Entity(), Collidable(), mImageID(0), mPosition(0.0f, 0.0f), mHealth(100), mRemoveCollider(false)
+    : Entity(), Collidable(), mImageID(0), mPosition(0.0f, 0.0f), mRotation(0.0f), mHealth(100), mRemoveCollider(false)
 {
 
 }
@@ -53,18 +55,30 @@ void Player::Update(float deltaTime)
     if (X::IsKeyDown(X::Keys::W))
     {
         direction.y = -1.0f;
+        mRotation = 0.0f;
     }
     else if (X::IsKeyDown(X::Keys::S))
     {
         direction.y = 1.0f;
+        mRotation = X::Math::kPi;
     }
     if (X::IsKeyDown(X::Keys::A))
     {
         direction.x = -1.0f;
+        mRotation = (-X::Math::kPi) / 2;
     }
     else if (X::IsKeyDown(X::Keys::D))
     {
         direction.x = 1.0f;
+        mRotation = X::Math::kPi / 2;
+    }
+
+    if (X::IsKeyPressed(X::Keys::SPACE) || X::IsMousePressed(0))
+    {
+        XLOG("PULLED TRIGGER");
+        X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation);
+        Bullet* bullet = BulletPool::Get()->GetBullet();
+        bullet->SetActive(mPosition, mRotation);
     }
 
     if (X::Math::MagnitudeSqr(direction) > 0.0f)
@@ -97,6 +111,13 @@ void Player::Render()
     if (mHealth > 0.0f)
     {
         X::DrawSprite(mImageID, mPosition);
+
+        std::string text = std::string("Health: ") + std::to_string(mHealth) + "/100";
+        const float textSize = 30.0f;
+        float textWidth = X::GetTextWidth(text.c_str(), textSize);
+        float screenX = 20.0f;
+        float screenY = 20.0f;
+        X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Red);
     }
 }
 
@@ -123,9 +144,14 @@ void Player::OnCollision(Collidable* collidable)
     {
         mHealth -= 10;
     }
-    else if (collidable->GetType() == ET_ENEMY)
+    else if (collidable->GetType() == ET_PICKUP)
     {
         mHealth += 20;
+
+        if (mHealth >= 100)
+        {
+            mHealth = 100;
+        }
     }
 
     mHealth = X::Math::Clamp(mHealth, 0, 100);
