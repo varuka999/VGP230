@@ -13,7 +13,7 @@ public:
 	void Render() override;
 	void Unload() override;
 
-	void SetActive(const X::Math::Vector2& pos, float rotation, float lifeTime = 2.0f);
+	void SetActive(const X::Math::Vector2& pos, float rotation, float lifeTime = 0.5f);
 	void SetEntityType(EntityType entityType);
 	bool IsActive() const;
 

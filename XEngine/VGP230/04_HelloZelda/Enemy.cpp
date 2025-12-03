@@ -22,8 +22,8 @@ void Enemy::Load()
     mHealth = -1;
     mRemoveCollider = false;
 
-    float halfWidth = X::GetSpriteWidth(mImageID) * 0.05f;
-    float halfHeight = X::GetSpriteHeight(mImageID) * 0.05f;
+    float halfWidth = X::GetSpriteWidth(mImageID) * 0.5f;
+    float halfHeight = X::GetSpriteHeight(mImageID) * 0.5f;
     mEnemyRect.left = -halfWidth;
     mEnemyRect.right = halfWidth;
     mEnemyRect.top = -halfHeight;
@@ -34,6 +34,12 @@ void Enemy::Update(float deltaTime)
 {
     if (!IsActive())
     {
+        if (mRemoveCollider)
+        {
+            CollisionManager::Get()->RemoveCollidable(this);
+            mRemoveCollider = false;
+        }
+
         return;
     }
 
@@ -111,6 +117,8 @@ void Enemy::OnCollision(Collidable* collidable)
         }
         else if (collidable->GetType() == ET_BULLET_PLAYER)
         {
+            XLOG("ENEMY HIT BY BULLET");
+
             mHealth -= 2;
 
             if (mHealth <= 0)

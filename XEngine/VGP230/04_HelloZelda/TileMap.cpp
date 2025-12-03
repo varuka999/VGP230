@@ -117,7 +117,7 @@ bool TileMap::HasCollision(const X::Math::Rect& objRect, const X::Math::Vector2&
 
         for (const Tile* tile : mTiles)
         {
-            if (tile->IsCollidable() == true && tile->HasCollision(targetRect))
+            if (tile->IsCollidable() && tile->HasCollision(targetRect))
             {
                 hasCollision = true;
                 const X::Math::Rect& tileRect = tile->GetRect();

@@ -53,7 +53,7 @@ void CollisionManager::Update(float deltaTime)
 
 void CollisionManager::Render()
 {
-    if (mShowCollidables == true)
+    if (mShowCollidables)
     {
         for (Collidable* collidable : mCollidables)
         {

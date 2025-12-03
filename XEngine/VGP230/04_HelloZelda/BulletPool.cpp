@@ -64,6 +64,7 @@ void BulletPool::Unload()
 
 Bullet* BulletPool::GetBullet()
 {
+	XLOG("GOT BULLET");
 	Bullet* bullet = mBulletsPool[mNextAvailableIndex];
 	mNextAvailableIndex = (mNextAvailableIndex + 1) % mBulletsPool.size();
 

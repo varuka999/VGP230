@@ -55,26 +55,30 @@ void Player::Update(float deltaTime)
     if (X::IsKeyDown(X::Keys::W))
     {
         direction.y = -1.0f;
+        mRotation = 0.0f;
     }
     else if (X::IsKeyDown(X::Keys::S))
     {
         direction.y = 1.0f;
+        mRotation = X::Math::kPi;
     }
     if (X::IsKeyDown(X::Keys::A))
     {
         direction.x = -1.0f;
+        mRotation = (-X::Math::kPi) / 2;
     }
     else if (X::IsKeyDown(X::Keys::D))
     {
         direction.x = 1.0f;
+        mRotation = X::Math::kPi / 2;
     }
 
     if (X::IsKeyPressed(X::Keys::SPACE) || X::IsMousePressed(0))
     {
-        X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
+        XLOG("PULLED TRIGGER");
+        X::Math::Vector2 spawnPosition = mPosition + X::Math::Vector2::Forward(mRotation);
         Bullet* bullet = BulletPool::Get()->GetBullet();
-        bullet->SetEntityType(ET_BULLET_PLAYER);
-        bullet->SetActive(mPosition, mRotation, 2.0f);
+        bullet->SetActive(mPosition, mRotation);
     }
 
     if (X::Math::MagnitudeSqr(direction) > 0.0f)
@@ -133,7 +137,7 @@ void Player::OnCollision(Collidable* collidable)
     {
         mHealth -= 10;
     }
-    else if (collidable->GetType() == ET_ENEMY)
+    else if (collidable->GetType() == ET_PICKUP)
     {
         mHealth += 20;
     }

@@ -48,6 +48,7 @@ void Ship::Update(float deltaTime)
 		if (X::IsKeyDown(X::Keys::A) || X::IsKeyDown(X::Keys::LEFT))
 		{
 			mRotation -= turnSpeed * deltaTime;
+			
 		}
 		else if (X::IsKeyDown(X::Keys::D) || X::IsKeyDown(X::Keys::RIGHT))
 		{
