@@ -111,6 +111,13 @@ void Player::Render()
     if (mHealth > 0.0f)
     {
         X::DrawSprite(mImageID, mPosition);
+
+        std::string text = std::string("Health: ") + std::to_string(mHealth) + "/100";
+        const float textSize = 30.0f;
+        float textWidth = X::GetTextWidth(text.c_str(), textSize);
+        float screenX = 20.0f;
+        float screenY = 20.0f;
+        X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Red);
     }
 }
 
@@ -140,6 +147,11 @@ void Player::OnCollision(Collidable* collidable)
     else if (collidable->GetType() == ET_PICKUP)
     {
         mHealth += 20;
+
+        if (mHealth >= 100)
+        {
+            mHealth = 100;
+        }
     }
 
     mHealth = X::Math::Clamp(mHealth, 0, 100);

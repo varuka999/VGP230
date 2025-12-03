@@ -40,10 +40,11 @@ void PickupManager::Load()
 
 void PickupManager::Update(float deltaTime)
 {
-    if (X::IsKeyPressed(X::Keys::P))
-    {
-        SpawnPickup(10);
-    }
+
+    //if (X::IsKeyPressed(X::Keys::P))
+    //{
+    //    SpawnPickup(10);
+    //}
 
     for (Pickup* pickup : mPickups)
     {

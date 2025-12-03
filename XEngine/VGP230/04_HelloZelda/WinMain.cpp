@@ -1,5 +1,6 @@
 #include <XEngine.h>
 #include "GameController.h"
+#include "EnemyManager.h"
 
 void GameInit()
 {
@@ -10,6 +11,11 @@ bool GameUpdate(float deltaTime)
 {
     GameController::Get()->Update(deltaTime);
     GameController::Get()->Render();
+
+    if (EnemyManager::Get()->IsGameOver())
+    {
+        return true;
+    }
 
     return X::IsKeyPressed(X::Keys::ESCAPE);
 }

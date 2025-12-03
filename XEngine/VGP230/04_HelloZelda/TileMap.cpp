@@ -195,17 +195,17 @@ void TileMap::ReloadMap()
             else
             {
                 int type = X::Random(0, 100);
-                if (type < 75)
+                if (type < 80)
                 {
                     type = TT_GROUND;
                 }
-                else if (type < 95)
+                else if (type < 98)
                 {
-                    type = TT_WATER;
+                    type = TT_VINE;
                 }
                 else
                 {
-                    type = TT_MAGMA;
+                    type = TT_WATER;
                 }
 
                 tileType = (TileType)type;

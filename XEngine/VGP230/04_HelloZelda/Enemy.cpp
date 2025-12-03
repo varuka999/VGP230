@@ -3,6 +3,8 @@
 #include "TileMap.h"
 #include "CollisionManager.h"
 
+int Enemy::mEnemiesDefeated = 0;
+
 Enemy::Enemy()
     : Entity(), Collidable(), mImageID(0), mPosition(0.0f, 0.0f), mCenterPoint(0.0f, 0.0f), mTargetPoint(0.0f, 0.0f),
     mTargetPointUpdate(0.0f), mEnemyRect(0.0f, 0.0f, 0.0f, 0.0f), mHealth(0), mRemoveCollider(false)
@@ -114,6 +116,8 @@ void Enemy::OnCollision(Collidable* collidable)
         {
             mHealth = -1;
             mRemoveCollider = true;
+
+            ++mEnemiesDefeated;
         }
         else if (collidable->GetType() == ET_BULLET_PLAYER)
         {
@@ -125,6 +129,8 @@ void Enemy::OnCollision(Collidable* collidable)
             {
                 mHealth = -1;
                 mRemoveCollider = true;
+
+                ++mEnemiesDefeated;
             }
         }
     }
@@ -151,4 +157,9 @@ void Enemy::SetActive(const X::Math::Vector2 position, int health)
 
     CollisionManager::Get()->AddCollidable(this);
     mRemoveCollider = false;
+}
+
+int Enemy::GetEnemiesDefeated()
+{
+    return mEnemiesDefeated;
 }

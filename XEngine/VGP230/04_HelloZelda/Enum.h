@@ -16,6 +16,6 @@ enum TileType : int
     TT_GROUND,
     TT_WALL,
     TT_WATER,
-    TT_DIRT,
+    TT_VINE,
     TT_MAGMA,
 };

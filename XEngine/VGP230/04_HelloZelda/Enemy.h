@@ -20,7 +20,11 @@ public:
     bool IsActive() const;
     void SetActive(const X::Math::Vector2 position, int health);
 
+    int GetEnemiesDefeated();
+
 private:
+    static int mEnemiesDefeated;
+
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     X::Math::Vector2 mCenterPoint;

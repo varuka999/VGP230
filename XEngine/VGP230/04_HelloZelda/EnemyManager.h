@@ -13,6 +13,7 @@ public:
     void Unload() override;
 
     void SpawnEnemies(int amount);
+    bool IsGameOver();
 
 private:
     EnemyManager();
@@ -20,4 +21,6 @@ private:
 
     std::vector<Enemy*> mEnemies;
     int mNextAvailableIndex;
+    int mWave;
+    float mEnemyWaveTimer;
 };

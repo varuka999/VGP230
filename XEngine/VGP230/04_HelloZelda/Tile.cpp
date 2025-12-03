@@ -23,7 +23,7 @@ void Tile::Load()
         break;
     case TT_WATER:  mImageID = X::LoadTexture("water64.png");
         break;
-    case TT_DIRT: mImageID = X::LoadTexture("dirtroad64.png");
+    case TT_VINE: mImageID = X::LoadTexture("vine64.png");
         break;
     case TT_MAGMA:  mImageID = X::LoadTexture("magma64.png");
         break;

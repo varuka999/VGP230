@@ -4,7 +4,7 @@
 EnemyManager* EnemyManager::mInstance = nullptr;
 
 EnemyManager::EnemyManager()
-    : Entity(), mNextAvailableIndex(0)
+    : Entity(), mNextAvailableIndex(0), mWave(0), mEnemyWaveTimer(0.0f)
 {
 
 }
@@ -36,14 +36,24 @@ void EnemyManager::Load()
 	}
 
 	mNextAvailableIndex = 0;
+    mWave = 0;
+    mEnemyWaveTimer = 1.0f;
 }
 
 void EnemyManager::Update(float deltaTime)
 {
-	if (X::IsKeyPressed(X::Keys::RCONTROL))
-	{
-		SpawnEnemies(3);
-	}
+    mEnemyWaveTimer -= deltaTime;
+    if (mEnemyWaveTimer <= 0.0f && mWave < 3)
+    {
+        ++mWave;
+        SpawnEnemies(3 * mWave);
+
+        mEnemyWaveTimer = 3 * mWave;
+    }
+	//if (X::IsKeyPressed(X::Keys::RCONTROL))
+	//{
+	//	SpawnEnemies(3);
+	//}
 
 	for (Enemy* enemy : mEnemies)
 	{
@@ -133,4 +143,9 @@ void EnemyManager::SpawnEnemies(int amount)
             }
         }
     }
+}
+
+bool EnemyManager::IsGameOver()
+{
+    return mEnemies[0]->GetEnemiesDefeated() >= 15;
 }
