@@ -32,8 +32,25 @@ void Unit::Unload()
 {
 }
 
+void Unit::Action()
+{
+}
+
+void Unit::Move()
+{
+}
+
+void Unit::Attack()
+{
+}
+
 void Unit::TakeDamage(int value)
 {
+}
+
+void Unit::SetAttackCastleCallback(std::function<void(int)> callback)
+{
+    mAttackCastle = callback;
 }
 
 bool Unit::IsActive()

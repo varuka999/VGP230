@@ -2,9 +2,6 @@
 #include "Entity.h"
 #include "Unit.h"
 
-class ZoneLane;
-class RangedDefender;
-
 class Zone : public Entity
 {
 public:
@@ -17,10 +14,9 @@ public:
     void Unload() override;
 
     void SpawnDefenders();
-
-    ZoneLane* GetZone() const;
+    void SpawnAttackers();
 
 private:
-    std::vector<RangedDefender*> mRangedDefenders;
-    ZoneLane* mZoneLane;
+    std::vector<Unit*> mAttackers;
+    std::vector<Unit*> mDefenders;
 };

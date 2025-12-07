@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h";
+#include "functional"
 
 class Unit : public Entity
 {
@@ -12,7 +13,11 @@ public:
     virtual void Render() override;
     virtual void Unload() override;
 
+    virtual void Action();
+    virtual void Move();
+    virtual void Attack();
     virtual void TakeDamage(int value);
+    virtual void SetAttackCastleCallback(std::function<void(int)> callback);
     virtual bool IsActive();
 
 protected:
@@ -23,4 +28,6 @@ protected:
     int mMoveSpeed;
     float mAttackInterval;
     float mAttackTimer;
+
+    std::function<void(int)> mAttackCastle;
 };

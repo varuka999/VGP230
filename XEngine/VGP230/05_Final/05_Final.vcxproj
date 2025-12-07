@@ -132,15 +132,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\04_HelloZelda\BulletPool.cpp" />
+    <ClCompile Include="Attacker.cpp" />
+    <ClCompile Include="Castle.cpp" />
+    <ClCompile Include="Unit.cpp" />
     <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="Zone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="xconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attacker.h" />
+    <ClInclude Include="BulletPool.h" />
     <ClInclude Include="Castle.h" />
-    <ClInclude Include="DefenseZone.h" />
+    <ClInclude Include="Zone.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
