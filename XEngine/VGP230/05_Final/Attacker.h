@@ -14,8 +14,14 @@ public:
     void Unload() override;
 
     void Action() override;
+    void IsMoveAvailable();
     void Move() override;
     void Attack() override;
     void TakeDamage(int value) override;
+
+    void SetActive(const X::Math::Vector2 position, std::string image, int health);
     bool IsActive() override;
+
+private:
+    X::Math::Vector2 mDestination;
 };

@@ -26,6 +26,10 @@ void Unit::Update(float deltaTime)
 
 void Unit::Render()
 {
+    if (IsActive())
+    {
+
+    }
 }
 
 void Unit::Unload()
@@ -51,6 +55,11 @@ void Unit::TakeDamage(int value)
 void Unit::SetAttackCastleCallback(std::function<void(int)> callback)
 {
     mAttackCastle = callback;
+}
+
+void Unit::SetActive(const X::Math::Vector2 position, int health)
+{
+
 }
 
 bool Unit::IsActive()

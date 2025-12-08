@@ -146,6 +146,7 @@
     <ClInclude Include="Attacker.h" />
     <ClInclude Include="BulletPool.h" />
     <ClInclude Include="Castle.h" />
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Unit.h" />

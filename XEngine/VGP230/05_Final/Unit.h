@@ -18,6 +18,8 @@ public:
     virtual void Attack();
     virtual void TakeDamage(int value);
     virtual void SetAttackCastleCallback(std::function<void(int)> callback);
+
+    virtual void SetActive(const X::Math::Vector2 position, int health);
     virtual bool IsActive();
 
 protected:

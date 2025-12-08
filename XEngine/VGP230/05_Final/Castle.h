@@ -22,4 +22,5 @@ private:
 
     std::vector<Zone*> mZones;
     int mHealth;
+    int mTotalZones;
 };

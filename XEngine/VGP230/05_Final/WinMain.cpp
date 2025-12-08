@@ -9,6 +9,7 @@ void GameInit()
 bool GameUpdate(float deltaTime)
 {
     Castle::Get()->Update(deltaTime);
+    Castle::Get()->Render();
 
     return X::IsKeyPressed(X::Keys::ESCAPE);
 }
