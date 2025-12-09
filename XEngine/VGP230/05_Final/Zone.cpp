@@ -28,22 +28,23 @@ void Zone::Load()
 
 void Zone::Update(float deltaTime)
 {
-    //Test
-    //for (Unit* attacker : mAttackers)
-    //{
-    //    attacker->Attack();
-    //}
+    for (Unit* attacker : mAttackers)
+    {
+        attacker->Update(deltaTime);
+    }
+
+    // Timer between attacker load/spawn
 }
 
 void Zone::Render()
 {
     X::DrawSprite(mImageID, mPosition);
 
-    for (Attacker* attacker : mAttackers)
+    for (Unit* attacker : mAttackers)
     {
         attacker->Render();
     }
-    //for (Unit* defender : mDefenders)
+    //for (Defender* defender : mDefenders)
     //{
     //    defender->Render();
     //}
@@ -68,18 +69,33 @@ void Zone::SpawnAttackers()
     newAttacker->SetAttackCastleCallback(attackCallback);
     mAttackers.push_back(newAttacker);
 
-    newAttacker->SetActive(mPosition.y - 500.0f, "white.jpg", 5);
+    // Position
+    float screenOffset = X::GetScreenHeight() - 50.0f;
+    X::Math::Vector2 enemyPosition = mPosition;
+    enemyPosition.y = screenOffset;
+
+    // Enemy Stats
+    // Based on something?
+    std::string enemyTexture = "scv_09.png"; // Use Switch later or something??
+
+    // Destination
+    X::Math::Vector2 enemyDestination = mPosition;
+    enemyDestination.y += 32.f; //Temp
+    // Give the enemy the correct destination later. More tweaks and stuff.
+
+    newAttacker->SetActive(enemyPosition, enemyDestination, enemyTexture, 5, 5, 100.0f); // change the values to some kind of database later
 }
 
 void Zone::SetActive()
 {
     X::Math::Vector2 zonePosition = X::Math::Vector2::Zero();
-    float zoneOffset = (float)X::GetScreenWidth() / (float)mTotalZones;
-    float screenOffset = zoneOffset * 0.5f;
+    float zoneXOffset = (float)X::GetScreenWidth() / (float)mTotalZones;
+    float screenXOffset = zoneXOffset * 0.5f;
 
-    zonePosition.x = zoneOffset * mZoneID - screenOffset;
-    zonePosition.y = 250;
+    zonePosition.x = zoneXOffset * mZoneID - screenXOffset;
+    zonePosition.y = (float)X::GetScreenHeight() * 0.2f;
     mPosition = zonePosition;
 
+    SpawnDefenders();
     SpawnAttackers();
 }

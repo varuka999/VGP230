@@ -13,18 +13,19 @@ public:
     virtual void Render() override;
     virtual void Unload() override;
 
-    virtual void Action();
-    virtual void Move();
+    virtual bool IsMoveAvailable() const;
+    virtual void Move(float deltaTime);
     virtual void Attack();
-    virtual void TakeDamage(int value);
+    virtual void UpdateHealth(int value);
     virtual void SetAttackCastleCallback(std::function<void(int)> callback);
 
-    virtual void SetActive(const X::Math::Vector2 position, int health);
-    virtual bool IsActive();
+    virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed);
+    virtual bool IsActive() const;
 
 protected:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
+    X::Math::Vector2 mDestination;
     int mHealth;
     int mAttack;
     int mMoveSpeed;

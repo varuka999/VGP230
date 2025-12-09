@@ -1,8 +1,9 @@
 #pragma once
 #include "Entity.h"
-#include "Unit.h"
 
+class Unit;
 class Attacker;
+class Defender;
 
 class Zone : public Entity
 {
@@ -23,7 +24,7 @@ public:
 private:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
-    std::vector<Attacker*> mAttackers;
+    std::vector<Unit*> mAttackers;
     std::vector<Unit*> mDefenders;
     //int mHealth; (FUTURE: Zone takes damage, then castle takes damage from the zone. If zone is 'destroyed', castle takes double damage from this zone)
 

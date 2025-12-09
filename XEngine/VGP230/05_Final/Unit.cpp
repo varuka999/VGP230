@@ -4,6 +4,7 @@ Unit::Unit()
     : Entity(),
     mImageID(0),
     mPosition(0.0f, 0.0f),
+    mDestination(0.0f, 0.0f),
     mHealth(0),
     mAttack(0),
     mMoveSpeed(0),
@@ -18,17 +19,26 @@ Unit::~Unit()
 
 void Unit::Load()
 {
+    mImageID = X::LoadTexture("scv_09.png");
 }
 
 void Unit::Update(float deltaTime)
 {
+    if (IsMoveAvailable())
+    {
+        Move(deltaTime);
+    }
+    else
+    {
+        Attack();
+    }
 }
 
 void Unit::Render()
 {
     if (IsActive())
     {
-
+        X::DrawSprite(mImageID, mPosition);
     }
 }
 
@@ -36,20 +46,30 @@ void Unit::Unload()
 {
 }
 
-void Unit::Action()
+bool Unit::IsMoveAvailable() const
 {
+    return X::Math::Distance(mDestination, mPosition) > 1.0f;
 }
 
-void Unit::Move()
+void Unit::Move(float deltaTime)
 {
+    X::Math::Vector2 direction = X::Math::Normalize(mDestination - mPosition);
+    mPosition += direction * mMoveSpeed * deltaTime;
 }
 
 void Unit::Attack()
 {
+    XLOG("Default Unit Attack: ERROR MISSING ATTACK");
 }
 
-void Unit::TakeDamage(int value)
+void Unit::UpdateHealth(int value)
 {
+    mHealth += value;
+
+    if (mHealth <= 0.0f)
+    {
+        mHealth = 0.0f;
+    }
 }
 
 void Unit::SetAttackCastleCallback(std::function<void(int)> callback)
@@ -57,12 +77,20 @@ void Unit::SetAttackCastleCallback(std::function<void(int)> callback)
     mAttackCastle = callback;
 }
 
-void Unit::SetActive(const X::Math::Vector2 position, int health)
+void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed)
 {
-
+    mPosition = position;
+    mDestination = destination;
+    mImageID = X::LoadTexture(image.c_str());
+    mHealth = health;
+    mAttack = attack;
+    mMoveSpeed = moveSpeed;
+    mAttackInterval = 1.0f;
+    mAttackTimer = 0.0f;
 }
 
-bool Unit::IsActive()
+bool Unit::IsActive() const
 {
-    return mHealth > 0;
+    return mHealth > 0.0f;
+    //return true; // for testing purposes
 }

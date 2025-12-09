@@ -65,4 +65,5 @@ void Castle::Unload()
 void Castle::UpdateHP(int value)
 {
     mHealth += value;
+    //XLOG("Castle HP: %i", mHealth);
 }
