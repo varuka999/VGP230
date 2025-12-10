@@ -37,8 +37,9 @@ private:
     std::vector<Unit*> mDefenders;
     std::vector<Attacker*> mAttackersInRange;
     int mHealth;
-    int mAttackerInSpawnQueue;
+    int mAttackersInSpawnQueue;
     float mAttackerSpawnTimer;
+    bool mSpawnAllAttackersInQueue;
 
     static int mTotalZones;
     int mZoneID;

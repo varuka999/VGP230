@@ -22,7 +22,6 @@ void Defender::Attack()
 {
     mAttack(-1, mPosition);
 
-    // Randomize attack interval
     mAttackInterval = (float)X::Random(5, 15) / 10.0f; // 0.5-1.5s
     mAttackTimer = mAttackInterval;
 }

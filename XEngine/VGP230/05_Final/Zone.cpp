@@ -11,8 +11,9 @@ Zone::Zone()
     mState(WALL_STATE_INACTIVE),
     mZoneID(0),
     mHealth(0),
-    mAttackerInSpawnQueue(0),
-    mAttackerSpawnTimer(0.0f)
+    mAttackersInSpawnQueue(0),
+    mAttackerSpawnTimer(0.0f),
+    mSpawnAllAttackersInQueue(false)
 {
     ++mTotalZones;
 }
@@ -33,26 +34,68 @@ void Zone::Load()
 
 void Zone::Update(float deltaTime)
 {
-    if (X::IsKeyPressed(X::Keys::SPACE))
+    if (X::IsKeyPressed(X::Keys::SPACE) && !mSpawnAllAttackersInQueue)
     {
-        XLOG("Attacker Queued");
-        ++mAttackerInSpawnQueue;
+        mSpawnAllAttackersInQueue = true;
+        mAttackerSpawnTimer = 0.0f;
     }
 
-    if (mAttackerSpawnTimer > 0.0f)
+    if (mSpawnAllAttackersInQueue)
     {
-        mAttackerSpawnTimer -= deltaTime;
+        if (mAttackersInSpawnQueue <= 0)
+        {
+            mAttackersInSpawnQueue = 0;
+            mSpawnAllAttackersInQueue = false;
+        }
+        else if (mAttackerSpawnTimer <= 0.0f)
+        {
+            SpawnAttacker();
+            --mAttackersInSpawnQueue;
+            mAttackerSpawnTimer = 0.1f;
+        }
+        else if (mAttackerSpawnTimer > 0.0f)
+        {
+            mAttackerSpawnTimer -= deltaTime;
+        }
     }
     else
     {
-        mAttackerSpawnTimer = 0.2f;
+        mAttackerSpawnTimer -= deltaTime;
 
-        if (mAttackerInSpawnQueue > 0)
+        if (mAttackerSpawnTimer <= 0)
         {
-            SpawnAttacker();
-            --mAttackerInSpawnQueue;
+            mAttackersInSpawnQueue = mAttackersInSpawnQueue > 5 ? 5 : ++mAttackersInSpawnQueue; // Caps to 5 for now
+            mAttackerSpawnTimer = 1.0f;
         }
     }
+
+    // Steps
+    // If key is pressed, allow all attackers to be spawned (disabled timer for adding enemy to queue) and set timer to 0
+    // If spawns are supposed to be on, check if there are any attackers to spawn,
+    // , if not disabled attackers spawning
+    // , otherwise && if timer is <= 0 spawn
+    // , otherwise, -= timer
+    // -= timer to add enemy to queue (if spawns arent happening)
+
+    //if (mSpawnAllAttackersInQueue && mAttackerSpawnTimer <= 0.0f && mAttackersInSpawnQueue > 0)
+    //{
+    //    SpawnAttacker();
+    //    mAttackerSpawnTimer = 0.1f;
+    //    --mAttackersInSpawnQueue;
+    //}
+    //else if (mAttackerSpawnTimer > 0.0f)
+    //{
+    //    mAttackerSpawnTimer -= deltaTime;
+    //}
+    //else if (mAttackersInSpawnQueue <= 0)
+    //{
+    //    mSpawnAllAttackersInQueue = false;
+    //}
+    //else
+    //{
+    //    XLOG("Attacker Queued");
+    //    ++mAttackersInSpawnQueue;
+    //}
 
     for (Unit* attacker : mAttackers)
     {
