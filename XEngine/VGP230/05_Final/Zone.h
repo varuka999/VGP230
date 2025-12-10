@@ -29,13 +29,12 @@ public:
 private:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
-    //WallState mState;
     std::vector<Unit*> mAttackers;
     std::vector<Unit*> mDefenders;
-    int mHealth; //(FUTURE: Zone takes damage, then castle takes damage from the zone. If zone is 'destroyed', castle takes double damage from this zone)
+    int mHealth;
 
     static int mTotalZones;
     int mZoneID;
 
-    std::function<void(int)> mAttackCastleWall;
+    std::function<void(int)> mAttackCastle;
 };

@@ -43,7 +43,7 @@ void Castle::Load()
 
     for (Zone* zone : mZones)
     {
-        zone->SetActive();
+        zone->SetActive(mHealth);
     }
 }
 
