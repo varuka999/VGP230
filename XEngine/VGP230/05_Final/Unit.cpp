@@ -24,13 +24,20 @@ void Unit::Load()
 
 void Unit::Update(float deltaTime)
 {
-    if (IsMoveAvailable())
+    if (IsMoveAvailable()) // Implement States to make it so we dont need to check this every frame
     {
         Move(deltaTime);
     }
     else
     {
-        Attack();
+        if (mAttackTimer > 0.0f)
+        {
+            mAttackTimer -= deltaTime;
+        }
+        else
+        {
+            Attack();
+        }
     }
 }
 
@@ -92,5 +99,4 @@ void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 des
 bool Unit::IsActive() const
 {
     return mHealth > 0.0f;
-    //return true; // for testing purposes
 }

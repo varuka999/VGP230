@@ -1,10 +1,8 @@
 #pragma once
-//enum ZoneType : int
-//{
-//    NONE = 0,
-//    ZONE1,
-//    ZONE2,
-//    ZONE3,
-//    ZONE4,
-//    ZONE5,
-//};
+
+enum UnitState
+{
+    UNIT_STATE_INACTIVE = 0,
+    UNIT_STATE_MOVING,
+    UNIT_STATE_ATTACKING
+};

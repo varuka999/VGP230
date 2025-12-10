@@ -23,6 +23,7 @@ public:
     virtual bool IsActive() const;
 
 protected:
+    //UnitState mState; WORK ON STATE LATER
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     X::Math::Vector2 mDestination;
