@@ -28,7 +28,7 @@ Castle* Castle::Get()
 void Castle::Load()
 {
     mHealth = 1000;
-    mTotalZones = 1;
+    mTotalZones = 25;
 
     for (int i = 0; i < mTotalZones; ++i)
     {

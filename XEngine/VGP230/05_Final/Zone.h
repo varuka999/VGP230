@@ -23,7 +23,7 @@ public:
     Attacker* ReturnRandomAttackerInRange() const;
 
     void SpawnDefenders(int value);
-    void SpawnAttackers(int value);
+    void SpawnAttacker();
 
     void SetActive(int castleHP);
 
@@ -37,6 +37,8 @@ private:
     std::vector<Unit*> mDefenders;
     std::vector<Attacker*> mAttackersInRange;
     int mHealth;
+    int mAttackerInSpawnQueue;
+    float mAttackerSpawnTimer;
 
     static int mTotalZones;
     int mZoneID;

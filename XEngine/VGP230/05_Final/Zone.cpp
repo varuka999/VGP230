@@ -10,7 +10,9 @@ Zone::Zone()
     mPosition(0.0f, 0.0f),
     mState(WALL_STATE_INACTIVE),
     mZoneID(0),
-    mHealth(0)
+    mHealth(0),
+    mAttackerInSpawnQueue(0),
+    mAttackerSpawnTimer(0.0f)
 {
     ++mTotalZones;
 }
@@ -31,6 +33,27 @@ void Zone::Load()
 
 void Zone::Update(float deltaTime)
 {
+    if (X::IsKeyPressed(X::Keys::SPACE))
+    {
+        XLOG("Attacker Queued");
+        ++mAttackerInSpawnQueue;
+    }
+
+    if (mAttackerSpawnTimer > 0.0f)
+    {
+        mAttackerSpawnTimer -= deltaTime;
+    }
+    else
+    {
+        mAttackerSpawnTimer = 0.2f;
+
+        if (mAttackerInSpawnQueue > 0)
+        {
+            SpawnAttacker();
+            --mAttackerInSpawnQueue;
+        }
+    }
+
     for (Unit* attacker : mAttackers)
     {
         attacker->Update(deltaTime);
@@ -96,7 +119,6 @@ Attacker* Zone::ReturnRandomAttackerInRange() const
 
 void Zone::UpdateHP(int value)
 {
-    // For when states are implemented
     switch (mState)
     {
     case WALL_STATE_INTACT:
@@ -148,7 +170,7 @@ void Zone::SpawnDefenders(int value)
     newDefender->SetActive(defenderPosition, defenderDestination, enemyTexture, 5, 5, 10.0f); // change the values to some kind of database later
 }
 
-void Zone::SpawnAttackers(int value)
+void Zone::SpawnAttacker()
 {
     // Creation
     Attacker* newAttacker = new Attacker();
@@ -164,9 +186,12 @@ void Zone::SpawnAttackers(int value)
     mAttackers.push_back(newAttacker);
 
     // Position
+    X::Math::Vector2 attackerPosition = mPosition;
+    float rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
+    float rangeXOffset = rangeX * 0.5f;
+
     float screenOffset = X::GetScreenHeight() - 50.0f;
-    X::Math::Vector2 enemyPosition = mPosition;
-    enemyPosition.y = screenOffset;
+    attackerPosition.y = screenOffset;
 
     // Enemy Stats
     // Based on something?
@@ -177,12 +202,13 @@ void Zone::SpawnAttackers(int value)
     enemyDestination.y += 32.f; //Temp
     // Give the enemy the correct destination later. More tweaks and stuff.
 
-    newAttacker->SetActive(enemyPosition, enemyDestination, enemyTexture, 5, 5, 300.0f); // change the values to some kind of database later
+    newAttacker->SetActive(attackerPosition, enemyDestination, enemyTexture, 5, 5, 300.0f); // change the values to some kind of database later
 }
 
 void Zone::SetActive(int castleHP)
 {
     mHealth = castleHP / mTotalZones * 0.75f; // Total HP of all walls is less than total castle HP
+    mAttackerSpawnTimer = 1.0f;
 
     mState = WALL_STATE_INTACT;
 
@@ -195,7 +221,7 @@ void Zone::SetActive(int castleHP)
     mPosition = zonePosition;
 
     SpawnDefenders(1);
-    SpawnAttackers(1);
+    //SpawnAttacker();
 }
 
 void Zone::SetAttackCastleCallback(std::function<void(int)> callback)
