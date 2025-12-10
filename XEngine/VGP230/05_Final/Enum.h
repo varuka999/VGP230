@@ -13,3 +13,11 @@ enum WallState
     WALL_STATE_INTACT,
     WALL_STATE_DESTROYED,
 };
+
+enum UnitDataBase
+{
+    INVALID = 0,
+    INFANTRY,
+    ARCHER,
+    RAM,
+};

@@ -27,21 +27,11 @@ void Unit::Update(float deltaTime)
 {
     if (IsActive())
     {
-        switch (mState)
+        if (IsMoveAvailable())
         {
-        case UNIT_STATE_MOVING:
-        {
-            if (IsMoveAvailable())
-            {
-                Move(deltaTime);
-            }
-            else
-            {
-                mState = UNIT_STATE_ATTACKING;
-            }
-            break;
+            Move(deltaTime);
         }
-        case UNIT_STATE_ATTACKING:
+        else
         {
             if (mAttackTimer > 0.0f)
             {
@@ -52,11 +42,37 @@ void Unit::Update(float deltaTime)
                 Attack();
             }
         }
-        break;
-        default:
-            break;
-        }
     }
+
+    //switch (mState)
+    //{
+    //case UNIT_STATE_MOVING:
+    //{
+    //    if (IsMoveAvailable())
+    //    {
+    //        Move(deltaTime);
+    //    }
+    //    else
+    //    {
+    //        mState = UNIT_STATE_ATTACKING;
+    //    }
+    //    break;
+    //}
+    //case UNIT_STATE_ATTACKING:
+    //{
+    //    if (mAttackTimer > 0.0f)
+    //    {
+    //        mAttackTimer -= deltaTime;
+    //    }
+    //    else
+    //    {
+    //        Attack();
+    //    }
+    //}
+    //break;
+    //default:
+    //    break;
+    //}
 }
 
 void Unit::Render()
