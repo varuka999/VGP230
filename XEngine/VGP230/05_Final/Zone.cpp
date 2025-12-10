@@ -1,7 +1,6 @@
 #include "Zone.h"
-#include "Castle.h"
 #include "Attacker.h"
-#include "Enum.h"
+
 
 int Zone::mTotalZones = 0;
 
@@ -9,7 +8,9 @@ Zone::Zone()
     : Entity(),
     mImageID(0),
     mPosition(0.0f, 0.0f),
-    mZoneID(0)
+    mState(WALL_STATE_INTACT),
+    mZoneID(0),
+    mHealth(0)
 {
     ++mTotalZones;
 }
@@ -54,6 +55,28 @@ void Zone::Unload()
 {
 }
 
+void Zone::UpdateHP(int value)
+{
+    switch (mState)
+    {
+    case WALL_STATE_INTACT:
+        mHealth += value;
+        if (mHealth <= 0)
+        {
+            mHealth = 0;
+            mState = WALL_STATE_DESTROYED;
+        }
+        break;
+    case WALL_STATE_DESTROYED:
+        value *= 2; // Double damage to castle if wall is destroyed
+        break;
+    default:
+        break;
+    }
+
+    mAttack(value);
+}
+
 void Zone::SpawnDefenders()
 {
 }
@@ -65,8 +88,8 @@ void Zone::SpawnAttackers()
     newAttacker->Load();
 
     // Callbacks
-    std::function<void(int)> attackCallback = std::bind(&Castle::UpdateHP, Castle::Get(), std::placeholders::_1);
-    newAttacker->SetAttackCastleCallback(attackCallback);
+    std::function<void(int)> attackCallback = std::bind(&Zone::UpdateHP, this, std::placeholders::_1);
+    newAttacker->SetAttackZoneWallCallback(attackCallback);
     mAttackers.push_back(newAttacker);
 
     // Position
@@ -86,8 +109,10 @@ void Zone::SpawnAttackers()
     newAttacker->SetActive(enemyPosition, enemyDestination, enemyTexture, 5, 5, 100.0f); // change the values to some kind of database later
 }
 
-void Zone::SetActive()
+void Zone::SetActive(int castleHP)
 {
+    mHealth = castleHP / mTotalZones * 0.75f; // Total HP of all walls is less than total castle HP
+
     X::Math::Vector2 zonePosition = X::Math::Vector2::Zero();
     float zoneXOffset = (float)X::GetScreenWidth() / (float)mTotalZones;
     float screenXOffset = zoneXOffset * 0.5f;
@@ -98,4 +123,9 @@ void Zone::SetActive()
 
     SpawnDefenders();
     SpawnAttackers();
+}
+
+void Zone::SetAttackCastleCallback(std::function<void(int)> callback)
+{
+    mAttackCastle = callback;
 }

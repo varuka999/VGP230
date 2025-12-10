@@ -79,9 +79,9 @@ void Unit::UpdateHealth(int value)
     }
 }
 
-void Unit::SetAttackCastleCallback(std::function<void(int)> callback)
+void Unit::SetAttackZoneWallCallback(std::function<void(int)> callback)
 {
-    mAttackCastle = callback;
+    mAttackZoneWall = callback;
 }
 
 void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed)

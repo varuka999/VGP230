@@ -21,7 +21,7 @@ void Attacker::Unload()
 
 void Attacker::Attack()
 {
-    mAttackCastle(-1);
+    mAttackZoneWall(-1);
 
     mAttackTimer = mAttackInterval;
 }

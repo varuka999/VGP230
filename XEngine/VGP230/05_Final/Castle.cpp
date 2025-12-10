@@ -6,7 +6,7 @@ Castle* Castle::mInstance = nullptr;
 Castle::Castle()
     : Entity(),
     mHealth(0),
-    mTotalZones(5)
+    mTotalZones(0)
 {
 
 }
@@ -28,11 +28,16 @@ Castle* Castle::Get()
 void Castle::Load()
 {
     mHealth = 1000;
+    mTotalZones = 5;
 
     for (int i = 0; i < mTotalZones; ++i)
     {
         Zone* newZone = new Zone();
         newZone->Load();
+
+        // Callback
+        std::function<void(int)> attackCallback = std::bind(&Castle::UpdateHP, this, std::placeholders::_1);
+        newZone->SetAttackCastleCallback(attackCallback);
         mZones.push_back(newZone);
     }
 
@@ -65,5 +70,12 @@ void Castle::Unload()
 void Castle::UpdateHP(int value)
 {
     mHealth += value;
+
+    if (mHealth <= 0)
+    {
+        mHealth = 0;
+        // Zone destroyed logic
+    }
+
     XLOG("Castle HP: %i", mHealth);
 }
