@@ -28,7 +28,7 @@ Castle* Castle::Get()
 void Castle::Load()
 {
     mHealth = 1000;
-    mTotalZones = 5;
+    mTotalZones = 1;
 
     for (int i = 0; i < mTotalZones; ++i)
     {
@@ -61,6 +61,13 @@ void Castle::Render()
     {
         zone->Render();
     }
+
+    std::string text = std::string(std::to_string(mHealth));
+    const float textSize = 45.0f;
+    float textWidth = X::GetTextWidth(text.c_str(), textSize);
+    float screenX = X::GetScreenWidth() * 0.5;
+    float screenY = 25.0f;
+    X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
 }
 
 void Castle::Unload()

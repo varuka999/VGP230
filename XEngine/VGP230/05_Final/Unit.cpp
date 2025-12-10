@@ -25,34 +25,37 @@ void Unit::Load()
 
 void Unit::Update(float deltaTime)
 {
-    switch (mState)
+    if (IsActive())
     {
-    case UNIT_STATE_MOVING:
-    {
-        if (IsMoveAvailable())
+        switch (mState)
         {
-            Move(deltaTime);
+        case UNIT_STATE_MOVING:
+        {
+            if (IsMoveAvailable())
+            {
+                Move(deltaTime);
+            }
+            else
+            {
+                mState = UNIT_STATE_ATTACKING;
+            }
+            break;
         }
-        else
+        case UNIT_STATE_ATTACKING:
         {
-            mState = UNIT_STATE_ATTACKING;
+            if (mAttackTimer > 0.0f)
+            {
+                mAttackTimer -= deltaTime;
+            }
+            else
+            {
+                Attack();
+            }
         }
         break;
-    }
-    case UNIT_STATE_ATTACKING:
-    {
-        if (mAttackTimer > 0.0f)
-        {
-            mAttackTimer -= deltaTime;
+        default:
+            break;
         }
-        else
-        {
-            Attack();
-        }
-    }
-    break;
-    default:
-        break;
     }
 }
 
@@ -61,6 +64,13 @@ void Unit::Render()
     if (IsActive())
     {
         X::DrawSprite(mImageID, mPosition);
+
+        std::string text = std::string(std::to_string(mHealth));
+        const float textSize = 25.0f;
+        float textWidth = X::GetTextWidth(text.c_str(), textSize);
+        float screenX = mPosition.x - 8.0f;
+        float screenY = mPosition.y - 40.0f;
+        X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Red);
     }
 }
 
@@ -96,7 +106,7 @@ void Unit::UpdateHealth(int value)
 
 void Unit::SetAttackZoneWallCallback(std::function<void(int)> callback)
 {
-    mAttackZoneWall = callback;
+    mAttackZoneWallCallback = callback;
 }
 
 void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed)

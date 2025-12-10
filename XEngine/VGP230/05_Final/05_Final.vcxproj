@@ -135,6 +135,7 @@
     <ClCompile Include="..\04_HelloZelda\BulletPool.cpp" />
     <ClCompile Include="Attacker.cpp" />
     <ClCompile Include="Castle.cpp" />
+    <ClCompile Include="Defender.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="Zone.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Attacker.h" />
     <ClInclude Include="BulletPool.h" />
     <ClInclude Include="Castle.h" />
+    <ClInclude Include="Defender.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="Entity.h" />

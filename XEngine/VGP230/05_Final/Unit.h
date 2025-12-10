@@ -34,5 +34,5 @@ protected:
     float mAttackInterval;
     float mAttackTimer;
 
-    std::function<void(int)> mAttackZoneWall;
+    std::function<void(int)> mAttackZoneWallCallback;
 };

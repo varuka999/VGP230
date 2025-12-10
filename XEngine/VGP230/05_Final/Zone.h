@@ -18,9 +18,12 @@ public:
     void Unload() override;
 
     void UpdateHP(int value);
+    void AddAttackerInRange(Attacker* attacker);
+    void DefenderAttack(int value, X::Math::Vector2 position);
+    Attacker* ReturnRandomAttackerInRange() const;
 
-    void SpawnDefenders();
-    void SpawnAttackers();
+    void SpawnDefenders(int value);
+    void SpawnAttackers(int value);
 
     void SetActive(int castleHP);
 
@@ -32,10 +35,11 @@ private:
     WallState mState;
     std::vector<Unit*> mAttackers;
     std::vector<Unit*> mDefenders;
+    std::vector<Attacker*> mAttackersInRange;
     int mHealth;
 
     static int mTotalZones;
     int mZoneID;
 
-    std::function<void(int)> mAttackCastle;
+    std::function<void(int)> mAttackCastleCallback;
 };

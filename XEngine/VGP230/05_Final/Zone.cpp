@@ -1,6 +1,6 @@
 #include "Zone.h"
 #include "Attacker.h"
-
+#include "Defender.h"
 
 int Zone::mTotalZones = 0;
 
@@ -22,8 +22,10 @@ Zone::~Zone()
 void Zone::Load()
 {
     mZoneID = mTotalZones;
+    //mZoneID = X::Math::Clamp(mTotalZones, 1, 5); // TEMP Clamp to 5 zones max for visual purposes
     std::string textureName = "zone";
-    textureName += std::to_string(mZoneID) + ".jpg";;
+    //textureName += std::to_string(mZoneID) + ".jpg";
+    textureName += "1.jpg"; // TEMP DELETE LATER
     mImageID = X::LoadTexture(textureName.c_str());
 }
 
@@ -32,6 +34,10 @@ void Zone::Update(float deltaTime)
     for (Unit* attacker : mAttackers)
     {
         attacker->Update(deltaTime);
+    }
+    for (Unit* defender : mDefenders)
+    {
+        defender->Update(deltaTime);
     }
 
     // Timer between attacker load/spawn
@@ -45,14 +51,47 @@ void Zone::Render()
     {
         attacker->Render();
     }
-    //for (Defender* defender : mDefenders)
-    //{
-    //    defender->Render();
-    //}
+    for (Unit* defender : mDefenders)
+    {
+        defender->Render();
+    }
+
+    std::string text = std::string(std::to_string(mHealth));
+    const float textSize = 45.0f;
+    float textWidth = X::GetTextWidth(text.c_str(), textSize);
+    float screenX = mPosition.x;
+    float screenY = mPosition.y - 50.0f;
+    X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Orange);
 }
 
 void Zone::Unload()
 {
+}
+
+void Zone::AddAttackerInRange(Attacker* attacker)
+{
+    mAttackersInRange.push_back(attacker);
+}
+
+void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
+{
+    Attacker* targetAttacker = ReturnRandomAttackerInRange();
+
+    if (targetAttacker != nullptr)
+    {
+        targetAttacker->UpdateHealth(value); // Replace with actual projectile later
+    }
+}
+
+Attacker* Zone::ReturnRandomAttackerInRange() const
+{
+    if (!mAttackersInRange.empty())
+    {
+        int randomIndex = X::Random(0, mAttackersInRange.size() - 1);
+        return mAttackersInRange[randomIndex];
+    }
+
+    return nullptr;
 }
 
 void Zone::UpdateHP(int value)
@@ -80,14 +119,36 @@ void Zone::UpdateHP(int value)
         break;
     }
 
-    mAttackCastle(value);
+    mAttackCastleCallback(value);
 }
 
-void Zone::SpawnDefenders()
+void Zone::SpawnDefenders(int value)
 {
+    //Creation
+    Defender* newDefender = new Defender();
+    newDefender->Load();
+
+    // Callbacks
+    std::function<void(int, X::Math::Vector2)> attackCallback = std::bind(&Zone::DefenderAttack, this, std::placeholders::_1, std::placeholders::_2);
+    newDefender->SetAttackCallback(attackCallback);
+    mDefenders.push_back(newDefender);
+
+    // Position (eventually make it so defenders are placed along the wall, x offset?)
+    //float screenXOffset = X::GetScreenHeight() - 150.0f;
+    X::Math::Vector2 defenderPosition = mPosition;
+    //defenderPosition.x = screenXOffset;
+
+    // Enemy Stats
+    // Based on something?
+    std::string enemyTexture = "interceptor_01.png"; // Use Switch later or something??
+
+    // Destination
+    X::Math::Vector2 defenderDestination = mPosition;
+
+    newDefender->SetActive(defenderPosition, defenderDestination, enemyTexture, 5, 5, 10.0f); // change the values to some kind of database later
 }
 
-void Zone::SpawnAttackers()
+void Zone::SpawnAttackers(int value)
 {
     // Creation
     Attacker* newAttacker = new Attacker();
@@ -96,6 +157,10 @@ void Zone::SpawnAttackers()
     // Callbacks
     std::function<void(int)> attackCallback = std::bind(&Zone::UpdateHP, this, std::placeholders::_1);
     newAttacker->SetAttackZoneWallCallback(attackCallback);
+
+    std::function<void(Attacker*)> inRangeCallback = std::bind(&Zone::AddAttackerInRange, this, std::placeholders::_1);
+    newAttacker->SetInRangeCallBack(inRangeCallback);
+
     mAttackers.push_back(newAttacker);
 
     // Position
@@ -112,7 +177,7 @@ void Zone::SpawnAttackers()
     enemyDestination.y += 32.f; //Temp
     // Give the enemy the correct destination later. More tweaks and stuff.
 
-    newAttacker->SetActive(enemyPosition, enemyDestination, enemyTexture, 5, 5, 100.0f); // change the values to some kind of database later
+    newAttacker->SetActive(enemyPosition, enemyDestination, enemyTexture, 5, 5, 300.0f); // change the values to some kind of database later
 }
 
 void Zone::SetActive(int castleHP)
@@ -129,11 +194,11 @@ void Zone::SetActive(int castleHP)
     zonePosition.y = (float)X::GetScreenHeight() * 0.2f;
     mPosition = zonePosition;
 
-    SpawnDefenders();
-    SpawnAttackers();
+    SpawnDefenders(1);
+    SpawnAttackers(1);
 }
 
 void Zone::SetAttackCastleCallback(std::function<void(int)> callback)
 {
-    mAttackCastle = callback;
+    mAttackCastleCallback = callback;
 }

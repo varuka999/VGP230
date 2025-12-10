@@ -8,7 +8,15 @@ public:
     Attacker();
     ~Attacker();
 
+    void Update(float deltaTime) override;
     void Load() override;
     void Unload() override;
     void Attack() override;
+
+    float ReturnDistanceToDestination() const;
+    void SetInRangeCallBack(std::function<void(Attacker*)> callback);
+
+private:
+    std::function<void(Attacker*)> mAttackRangeCallback;
+    bool mInAttackRange;
 };
