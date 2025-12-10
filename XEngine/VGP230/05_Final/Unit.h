@@ -1,6 +1,7 @@
 #pragma once
-#include "Entity.h";
+#include "Entity.h"
 #include "functional"
+#include "Enum.h"
 
 class Unit : public Entity
 {
@@ -23,10 +24,10 @@ public:
     virtual bool IsActive() const;
 
 protected:
-    //UnitState mState; WORK ON STATE LATER
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     X::Math::Vector2 mDestination;
+    UnitState mState;
     int mHealth;
     int mAttack;
     int mMoveSpeed;

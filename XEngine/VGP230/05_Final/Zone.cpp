@@ -8,6 +8,7 @@ Zone::Zone()
     : Entity(),
     mImageID(0),
     mPosition(0.0f, 0.0f),
+    mState(WALL_STATE_INACTIVE),
     mZoneID(0),
     mHealth(0)
 {
@@ -57,28 +58,26 @@ void Zone::Unload()
 void Zone::UpdateHP(int value)
 {
     // For when states are implemented
-    //switch (mState)
-    //{
-    //case WALL_STATE_INTACT:
-    //    mHealth += value;
-    //    if (mHealth <= 0)
-    //    {
-    //        mHealth = 0;
-    //        mState = WALL_STATE_DESTROYED;
-    //    }
-    //    break;
-    //case WALL_STATE_DESTROYED:
-    //    value *= 2; // Double damage to castle if wall is destroyed
-    //    break;
-    //default:
-    //    break;
-    //}
-
-    mHealth += value;
-    if (mHealth <= 0)
+    switch (mState)
     {
-        mHealth = 0;
+    case WALL_STATE_INTACT:
+    {
+        mHealth += value;
+
+        if (mHealth <= 0)
+        {
+            mHealth = 0;
+            mState = WALL_STATE_DESTROYED;
+        }
+    }
+    break;
+    case WALL_STATE_DESTROYED:
+    {
         value *= 2; // Double damage to castle if wall is destroyed
+    }
+    break;
+    default:
+        break;
     }
 
     mAttackCastle(value);
@@ -119,6 +118,8 @@ void Zone::SpawnAttackers()
 void Zone::SetActive(int castleHP)
 {
     mHealth = castleHP / mTotalZones * 0.75f; // Total HP of all walls is less than total castle HP
+
+    mState = WALL_STATE_INTACT;
 
     X::Math::Vector2 zonePosition = X::Math::Vector2::Zero();
     float zoneXOffset = (float)X::GetScreenWidth() / (float)mTotalZones;

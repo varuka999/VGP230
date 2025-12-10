@@ -6,3 +6,10 @@ enum UnitState
     UNIT_STATE_MOVING,
     UNIT_STATE_ATTACKING
 };
+
+enum WallState
+{
+    WALL_STATE_INACTIVE = 0,
+    WALL_STATE_INTACT,
+    WALL_STATE_DESTROYED,
+};

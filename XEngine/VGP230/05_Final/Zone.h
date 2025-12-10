@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity.h"
-//#include "EnumFinal.h"
+#include "Enum.h"
 
 class Unit;
 class Attacker;
@@ -29,6 +29,7 @@ public:
 private:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
+    WallState mState;
     std::vector<Unit*> mAttackers;
     std::vector<Unit*> mDefenders;
     int mHealth;

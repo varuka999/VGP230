@@ -5,6 +5,7 @@ Unit::Unit()
     mImageID(0),
     mPosition(0.0f, 0.0f),
     mDestination(0.0f, 0.0f),
+    mState(UNIT_STATE_INACTIVE),
     mHealth(0),
     mAttack(0),
     mMoveSpeed(0),
@@ -24,11 +25,21 @@ void Unit::Load()
 
 void Unit::Update(float deltaTime)
 {
-    if (IsMoveAvailable()) // Implement States to make it so we dont need to check this every frame
+    switch (mState)
     {
-        Move(deltaTime);
+    case UNIT_STATE_MOVING:
+    {
+        if (IsMoveAvailable())
+        {
+            Move(deltaTime);
+        }
+        else
+        {
+            mState = UNIT_STATE_ATTACKING;
+        }
+        break;
     }
-    else
+    case UNIT_STATE_ATTACKING:
     {
         if (mAttackTimer > 0.0f)
         {
@@ -38,6 +49,10 @@ void Unit::Update(float deltaTime)
         {
             Attack();
         }
+    }
+    break;
+    default:
+        break;
     }
 }
 
@@ -89,10 +104,11 @@ void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 des
     mPosition = position;
     mDestination = destination;
     mImageID = X::LoadTexture(image.c_str());
+    mState = UNIT_STATE_MOVING;
     mHealth = health;
     mAttack = attack;
     mMoveSpeed = moveSpeed;
-    mAttackInterval = 1.0f;
+    mAttackInterval = 0.5f;
     mAttackTimer = 0.0f;
 }
 
