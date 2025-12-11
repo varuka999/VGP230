@@ -212,12 +212,17 @@ void Zone::SpawnDefenders(int value)
     // Destination
     X::Math::Vector2 defenderDestination = mPosition;
 
-    newDefender->SetActive(defenderPosition, defenderDestination, enemyTexture, 5, 5, 10.0f); // change the values to some kind of database later
+    newDefender->SetActive(defenderPosition, defenderDestination); // change the values to some kind of database later
 }
 
 void Zone::SpawnAttacker(UnitEnum unitType)
 {
     Attacker* newAttacker = UnitDatabase::ReturnAttackerUnit(unitType);
+    if (newAttacker == nullptr)
+    {
+        XLOG("Failed to spawn, invalid attacker");
+        return;
+    }
     newAttacker->Load();
 
     // Callbacks
@@ -240,7 +245,7 @@ void Zone::SpawnAttacker(UnitEnum unitType)
 
     // Enemy Stats
     // Based on something?
-    std::string enemyTexture = "scv_09.png"; // Use Switch later or something??
+    //std::string enemyTexture = "scv_09.png"; // Use Switch later or something??
 
     // Destination
     X::Math::Vector2 attackerDestination = mPosition;
@@ -251,7 +256,7 @@ void Zone::SpawnAttacker(UnitEnum unitType)
     attackerDestination.y += 32.f; //Temp
     // Give the enemy the correct destination later. More tweaks and stuff.
 
-    newAttacker->SetActive(attackerPosition, attackerDestination, enemyTexture, 5, 5, 300.0f); // change the values to some kind of database later
+    newAttacker->SetActive(attackerPosition, attackerDestination);
 }
 
 void Zone::SetActive(int castleHP)

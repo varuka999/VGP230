@@ -21,7 +21,7 @@ public:
     virtual void SetAttackZoneWallCallback(std::function<void(int)> callback);
 
     virtual void SetDestination(const X::Math::Vector2 destination);
-    virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed);
+    virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination);
     virtual bool IsActive() const;
 
 protected:

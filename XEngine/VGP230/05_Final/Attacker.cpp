@@ -27,6 +27,9 @@ void Attacker::Update(float deltaTime)
 void Attacker::Load()
 {
     mImageID = X::LoadTexture("scv_09.png");
+    mHealth = 5;
+    mAttack = 5;
+    mMoveSpeed = 300.0f;
 }
 
 void Attacker::Unload()

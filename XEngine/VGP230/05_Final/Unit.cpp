@@ -20,7 +20,12 @@ Unit::~Unit()
 
 void Unit::Load()
 {
-    mImageID = X::LoadTexture("scv_09.png");
+    mImageID = X::LoadTexture("scv_03.png");
+    mHealth = 5;
+    mAttack = 5;
+    mMoveSpeed = 300.0f;
+    mAttackInterval = 0.5f;
+    mAttackTimer = 0.0f;
 }
 
 void Unit::Update(float deltaTime)
@@ -130,17 +135,11 @@ void Unit::SetDestination(const X::Math::Vector2 destination)
     mDestination = destination;
 }
 
-void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed)
+void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination)
 {
     mPosition = position;
     SetDestination(destination);
-    mImageID = X::LoadTexture(image.c_str());
     mState = UNIT_STATE_MOVING;
-    mHealth = health;
-    mAttack = attack;
-    mMoveSpeed = moveSpeed;
-    mAttackInterval = 0.5f;
-    mAttackTimer = 0.0f;
 }
 
 bool Unit::IsActive() const

@@ -119,6 +119,7 @@ void Castle::Render()
     float screenX = X::GetScreenWidth() * 0.5;
     float screenY = 25.0f;
     X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
+    X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 20, textSize, X::Colors::Yellow);
 }
 
 void Castle::Unload()
