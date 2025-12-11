@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Enum.h"
 
 class Zone;
 
@@ -15,6 +16,7 @@ public:
     void Unload() override;
 
     void UpdateHP(int value);
+    UnitEnum GetPrimedAttackerType() const;
 
 private:
     Castle();
@@ -23,4 +25,5 @@ private:
     std::vector<Zone*> mZones;
     int mHealth;
     int mTotalZones;
+    char mPrimedAttackerKey;
 };

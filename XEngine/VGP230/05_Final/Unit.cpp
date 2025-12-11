@@ -125,10 +125,15 @@ void Unit::SetAttackZoneWallCallback(std::function<void(int)> callback)
     mAttackZoneWallCallback = callback;
 }
 
+void Unit::SetDestination(const X::Math::Vector2 destination)
+{
+    mDestination = destination;
+}
+
 void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination, std::string image, int health, int attack, float moveSpeed)
 {
     mPosition = position;
-    mDestination = destination;
+    SetDestination(destination);
     mImageID = X::LoadTexture(image.c_str());
     mState = UNIT_STATE_MOVING;
     mHealth = health;

@@ -14,7 +14,7 @@ enum WallState
     WALL_STATE_DESTROYED,
 };
 
-enum UnitDataBase
+enum UnitEnum
 {
     INVALID = 0,
     INFANTRY,

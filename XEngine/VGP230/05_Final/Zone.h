@@ -23,7 +23,7 @@ public:
     Attacker* ReturnRandomAttackerInRange() const;
 
     void SpawnDefenders(int value);
-    void SpawnAttacker();
+    void SpawnAttacker(UnitEnum unitType);
 
     void SetActive(int castleHP);
 

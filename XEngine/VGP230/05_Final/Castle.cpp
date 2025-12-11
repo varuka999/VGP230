@@ -1,12 +1,14 @@
 #include "Castle.h"
 #include "Zone.h"
+#include "Enum.h"
 
 Castle* Castle::mInstance = nullptr;
 
 Castle::Castle()
     : Entity(),
     mHealth(0),
-    mTotalZones(0)
+    mTotalZones(0),
+    mPrimedAttackerKey('n')
 {
 
 }
@@ -28,7 +30,7 @@ Castle* Castle::Get()
 void Castle::Load()
 {
     mHealth = 1000;
-    mTotalZones = 1;
+    mTotalZones = 5;
 
     for (int i = 0; i < mTotalZones; ++i)
     {
@@ -49,9 +51,58 @@ void Castle::Load()
 
 void Castle::Update(float deltaTime)
 {
+    if (X::IsKeyPressed(X::Keys::Q))
+    {
+        mPrimedAttackerKey = 'q';
+    }
+    else if (X::IsKeyPressed(X::Keys::W))
+    {
+        mPrimedAttackerKey = 'w';
+    }
+    else if (X::IsKeyPressed(X::Keys::E))
+    {
+        mPrimedAttackerKey = 'e';
+    }
+
+    if (X::IsKeyPressed(X::Keys::ONE))
+    {
+        mZones[0]->SpawnAttacker(GetPrimedAttackerType());
+    }
+    else if (X::IsKeyPressed(X::Keys::TWO))
+    {
+
+    }
+    else if (X::IsKeyPressed(X::Keys::THREE))
+    {
+
+    }
+    else if (X::IsKeyPressed(X::Keys::FOUR))
+    {
+
+    }
+    else if (X::IsKeyPressed(X::Keys::FIVE))
+    {
+
+    }
+
     for (Zone* zone : mZones)
     {
         zone->Update(deltaTime);
+    }
+}
+
+UnitEnum Castle::GetPrimedAttackerType() const
+{
+    switch (mPrimedAttackerKey)
+    {
+    case 'q':
+        return INFANTRY;
+    case 'w':
+        return ARCHER;
+    case 'e':
+        return RAM;
+    default:
+        return INVALID;
     }
 }
 

@@ -1,6 +1,7 @@
 #include "Zone.h"
 #include "Attacker.h"
 #include "Defender.h"
+#include "UnitDatabase.h"
 
 int Zone::mTotalZones = 0;
 
@@ -34,40 +35,41 @@ void Zone::Load()
 
 void Zone::Update(float deltaTime)
 {
-    if (X::IsKeyPressed(X::Keys::SPACE) && !mSpawnAllAttackersInQueue)
-    {
-        mSpawnAllAttackersInQueue = true;
-        mAttackerSpawnTimer = 0.0f;
-    }
+    //Batch spawn
+    //if (X::IsKeyPressed(X::Keys::SPACE) && !mSpawnAllAttackersInQueue)
+    //{
+    //    mSpawnAllAttackersInQueue = true;
+    //    mAttackerSpawnTimer = 0.0f;
+    //}
 
-    if (mSpawnAllAttackersInQueue)
-    {
-        if (mAttackersInSpawnQueue <= 0)
-        {
-            mAttackersInSpawnQueue = 0;
-            mSpawnAllAttackersInQueue = false;
-        }
-        else if (mAttackerSpawnTimer <= 0.0f)
-        {
-            SpawnAttacker();
-            --mAttackersInSpawnQueue;
-            mAttackerSpawnTimer = 0.1f;
-        }
-        else if (mAttackerSpawnTimer > 0.0f)
-        {
-            mAttackerSpawnTimer -= deltaTime;
-        }
-    }
-    else
-    {
-        mAttackerSpawnTimer -= deltaTime;
+    //if (mSpawnAllAttackersInQueue)
+    //{
+    //    if (mAttackersInSpawnQueue <= 0)
+    //    {
+    //        mAttackersInSpawnQueue = 0;
+    //        mSpawnAllAttackersInQueue = false;
+    //    }
+    //    else if (mAttackerSpawnTimer <= 0.0f)
+    //    {
+    //        SpawnAttacker();
+    //        --mAttackersInSpawnQueue;
+    //        mAttackerSpawnTimer = 0.1f;
+    //    }
+    //    else if (mAttackerSpawnTimer > 0.0f)
+    //    {
+    //        mAttackerSpawnTimer -= deltaTime;
+    //    }
+    //}
+    //else
+    //{
+    //    mAttackerSpawnTimer -= deltaTime;
 
-        if (mAttackerSpawnTimer <= 0)
-        {
-            mAttackersInSpawnQueue = mAttackersInSpawnQueue > 5 ? 5 : ++mAttackersInSpawnQueue; // Caps to 5 for now
-            mAttackerSpawnTimer = 1.0f;
-        }
-    }
+    //    if (mAttackerSpawnTimer <= 0)
+    //    {
+    //        mAttackersInSpawnQueue = mAttackersInSpawnQueue > 5 ? 5 : ++mAttackersInSpawnQueue; // Caps to 5 for now
+    //        mAttackerSpawnTimer = 1.0f;
+    //    }
+    //}
 
     // Steps
     // If key is pressed, allow all attackers to be spawned (disabled timer for adding enemy to queue) and set timer to 0
@@ -213,10 +215,9 @@ void Zone::SpawnDefenders(int value)
     newDefender->SetActive(defenderPosition, defenderDestination, enemyTexture, 5, 5, 10.0f); // change the values to some kind of database later
 }
 
-void Zone::SpawnAttacker()
+void Zone::SpawnAttacker(UnitEnum unitType)
 {
-    // Creation
-    Attacker* newAttacker = new Attacker();
+    Attacker* newAttacker = UnitDatabase::ReturnAttackerUnit(unitType);
     newAttacker->Load();
 
     // Callbacks
@@ -232,6 +233,7 @@ void Zone::SpawnAttacker()
     X::Math::Vector2 attackerPosition = mPosition;
     float rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
     float rangeXOffset = rangeX * 0.5f;
+    attackerPosition.x = X::RandomFloat(-rangeXOffset, rangeXOffset) + attackerPosition.x;
 
     float screenOffset = X::GetScreenHeight() - 50.0f;
     attackerPosition.y = screenOffset;
@@ -241,11 +243,15 @@ void Zone::SpawnAttacker()
     std::string enemyTexture = "scv_09.png"; // Use Switch later or something??
 
     // Destination
-    X::Math::Vector2 enemyDestination = mPosition;
-    enemyDestination.y += 32.f; //Temp
+    X::Math::Vector2 attackerDestination = mPosition;
+    rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
+    rangeXOffset = rangeX * 0.5f;
+    attackerDestination.x = X::RandomFloat(-rangeXOffset, rangeXOffset) + attackerDestination.x;
+
+    attackerDestination.y += 32.f; //Temp
     // Give the enemy the correct destination later. More tweaks and stuff.
 
-    newAttacker->SetActive(attackerPosition, enemyDestination, enemyTexture, 5, 5, 300.0f); // change the values to some kind of database later
+    newAttacker->SetActive(attackerPosition, attackerDestination, enemyTexture, 5, 5, 300.0f); // change the values to some kind of database later
 }
 
 void Zone::SetActive(int castleHP)

@@ -11,7 +11,7 @@ public:
     void Update(float deltaTime) override;
     void Load() override;
     void Unload() override;
-    void Attack() override;
+    virtual void Attack() override;
 
     float ReturnDistanceToDestination() const;
     void SetInRangeCallBack(std::function<void(Attacker*)> callback);

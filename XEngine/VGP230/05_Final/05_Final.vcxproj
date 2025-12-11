@@ -136,7 +136,9 @@
     <ClCompile Include="Attacker.cpp" />
     <ClCompile Include="Castle.cpp" />
     <ClCompile Include="Defender.cpp" />
+    <ClCompile Include="Infantry.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitDatabase.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="Zone.cpp" />
   </ItemGroup>
@@ -149,6 +151,8 @@
     <ClInclude Include="Castle.h" />
     <ClInclude Include="Defender.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="Infantry.h" />
+    <ClInclude Include="UnitDatabase.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Unit.h" />
