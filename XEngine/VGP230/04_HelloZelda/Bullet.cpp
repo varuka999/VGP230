@@ -117,21 +117,6 @@ void Bullet::SetActive(const X::Math::Vector2& pos, float rotation, float lifeTi
     CollisionManager::Get()->AddCollidable(this);
 }
 
-//void Bullet::SetEntityType(EntityType entityType)
-//{
-//	mBulletType = entityType;
-//
-//	if (entityType == ET_BULLET_PLAYER)
-//	{
-//		mImageID = X::LoadTexture("bullet1.png");
-//		SetCollisionFilter(ET_ENEMY);
-//	}
-//	else
-//	{
-//		SetCollisionFilter(0);
-//	}
-//}
-
 bool Bullet::IsActive() const
 {
     return mLifeTime > 0.0f;
