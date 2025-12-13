@@ -5,7 +5,6 @@ Unit::Unit()
     mImageID(0),
     mPosition(0.0f, 0.0f),
     mDestination(0.0f, 0.0f),
-    mState(UNIT_STATE_INACTIVE),
     mHealth(0),
     mAttack(0),
     mMoveSpeed(0),
@@ -45,36 +44,6 @@ void Unit::Update(float deltaTime)
             }
         }
     }
-
-    //switch (mState)
-    //{
-    //case UNIT_STATE_MOVING:
-    //{
-    //    if (IsMoveAvailable())
-    //    {
-    //        Move(deltaTime);
-    //    }
-    //    else
-    //    {
-    //        mState = UNIT_STATE_ATTACKING;
-    //    }
-    //    break;
-    //}
-    //case UNIT_STATE_ATTACKING:
-    //{
-    //    if (mAttackTimer > 0.0f)
-    //    {
-    //        mAttackTimer -= deltaTime;
-    //    }
-    //    else
-    //    {
-    //        Attack();
-    //    }
-    //}
-    //break;
-    //default:
-    //    break;
-    //}
 }
 
 void Unit::Render()
@@ -136,7 +105,6 @@ void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 des
 {
     mPosition = position;
     SetDestination(destination);
-    mState = UNIT_STATE_MOVING;
     mHealth = 5;
     mAttack = 5;
     mMoveSpeed = 300.0f;

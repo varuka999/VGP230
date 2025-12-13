@@ -28,7 +28,6 @@ protected:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     X::Math::Vector2 mDestination;
-    UnitState mState;
     int mHealth;
     int mAttack;
     int mMoveSpeed;

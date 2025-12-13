@@ -9,7 +9,6 @@ void Infantry::SetActive(const X::Math::Vector2 position, const X::Math::Vector2
 {
     mPosition = position;
     SetDestination(destination);
-    mState = UNIT_STATE_MOVING;
     mHealth = 5;
     mAttack = 1;
     mMoveSpeed = 50.0f;

@@ -7,7 +7,7 @@ class ProjectilePool : public Entity
 {
 public:
 	~ProjectilePool() override;
-	static Projectile* Get();
+	static ProjectilePool* Get();
 
 	void Load() override;
 	void Update(float deltaTime) override;
@@ -19,7 +19,7 @@ public:
 
 private:
 	ProjectilePool();
-	static Projectile* mInstance;
+	static ProjectilePool* mInstance;
 
 	int mNextAvailableIndex;
 	std::vector<Projectile*> mProjectilesPool;

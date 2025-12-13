@@ -1,9 +1,11 @@
 #include <XEngine.h>
 #include "Castle.h"
 #include "UnitPool.h"
+#include "ProjectilePool.h"
 
 void GameInit()
 {
+    ProjectilePool::Get()->Load();
     UnitPool::Get()->Load();
     Castle::Get()->Load();
 }

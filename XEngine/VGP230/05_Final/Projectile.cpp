@@ -1,6 +1,12 @@
 #include "Projectile.h"
 
 Projectile::Projectile()
+    : Entity(),
+    mImageID(0),
+    mPosition(0.0f, 0.0f),
+    mDestination(0.0f, 0.0f),
+    mRotation(0.0f),
+    mMoveSpeed(0.0f)
 {
 }
 
@@ -14,6 +20,11 @@ void Projectile::Load()
 
 void Projectile::Update(float deltaTime)
 {
+    if (IsActive())
+    {
+        X::Math::Vector2 direction = X::Math::Normalize(mDestination - mPosition);
+        mPosition += direction * mMoveSpeed * deltaTime;
+    }
 }
 
 void Projectile::Render()
@@ -24,28 +35,14 @@ void Projectile::Unload()
 {
 }
 
-void SetActive(const X::Math::Vector2& pos, float rotation, float lifeTime = 0.5f)
+void Projectile::SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed)
 {
-    //XLOG("BULLET ACTIVE");
-    //mPosition = pos;
-    //mRotation = rotation;
-    //mLifeTime = lifeTime;
-
-    //float halfWidth = X::GetSpriteWidth(mImageID) * 0.25f;
-    //float halfHeight = X::GetSpriteHeight(mImageID) * 0.25f;
-    //X::Math::Rect newRect;
-    //newRect.left = -halfWidth;
-    //newRect.right = halfWidth;
-    //newRect.top = -halfHeight;
-    //newRect.bottom = halfHeight;
-    //mBulletRect = newRect;
-
-    //SetRect(newRect);
-    //SetCollisionFilter(ET_ENEMY);
-    //CollisionManager::Get()->AddCollidable(this);
+    mPosition = position;
+    mDestination = destination;
+    mRotation = rotation;
 }
 
 bool Projectile::IsActive() const
 {
-    return true;
+    return X::Math::Distance(mDestination, mPosition) > 0.0f;
 }

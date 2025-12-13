@@ -23,6 +23,7 @@ UnitPool* UnitPool::Get()
     {
         mInstance = new UnitPool();
     }
+
     return mInstance;
 }
 

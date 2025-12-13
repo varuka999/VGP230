@@ -12,6 +12,13 @@ public:
     void Render() override;
     void Unload() override;
 
-    void SetActive(const X::Math::Vector2& pos, float rotation, float lifeTime = 0.5f);
+    void SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed);
     bool IsActive() const;
+
+private:
+    X::TextureId mImageID;
+    X::Math::Vector2 mPosition;
+    X::Math::Vector2 mDestination;
+    float mRotation;
+    float mMoveSpeed;
 };
