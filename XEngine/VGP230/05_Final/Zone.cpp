@@ -2,6 +2,8 @@
 #include "Attacker.h"
 #include "Defender.h"
 #include "UnitDatabase.h"
+#include "ProjectilePool.h"
+#include "Projectile.h"
 
 int Zone::mTotalZones = 0;
 
@@ -105,6 +107,11 @@ void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
 
     if (targetAttacker != nullptr)
     {
+        // spawn projectile
+        // calculate destination based on attacker movespeed and its destination and the defenders(start) position ('predictive' aiming, not using collidables so the projectile must pretend to hit the target)
+        // do ^ later, for now replaced with simple movement
+        Projectile* projectile = ProjectilePool::Get()->GetProjectile();
+        projectile->SetActive(startPosition, targetAttacker->GetPosition(), 0.0f, 1000.0f);
         targetAttacker->UpdateHealth(value); // Replace with actual projectile later
     }
 }

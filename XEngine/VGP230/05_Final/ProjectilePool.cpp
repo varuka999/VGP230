@@ -25,10 +25,7 @@ ProjectilePool* ProjectilePool::Get()
 
 void ProjectilePool::Load()
 {
-    // Infantry Pool
     const int projectilePool = 50;
-    //mUnitsPool.reserve(poolSize);
-    //mInfantryPool.reserve(poolSize);
 
     for (int i = 0; i < projectilePool; ++i)
     {

@@ -16,6 +16,7 @@ Projectile::~Projectile()
 
 void Projectile::Load()
 {
+    mImageID = X::LoadTexture("bullet1.png");
 }
 
 void Projectile::Update(float deltaTime)
@@ -29,6 +30,10 @@ void Projectile::Update(float deltaTime)
 
 void Projectile::Render()
 {
+    if (IsActive())
+    {
+        X::DrawSprite(mImageID, mPosition, mRotation);
+    }
 }
 
 void Projectile::Unload()
@@ -40,9 +45,10 @@ void Projectile::SetActive(const X::Math::Vector2& position, const X::Math::Vect
     mPosition = position;
     mDestination = destination;
     mRotation = rotation;
+    mMoveSpeed = speed;
 }
 
 bool Projectile::IsActive() const
 {
-    return X::Math::Distance(mDestination, mPosition) > 0.0f;
+    return X::Math::Distance(mDestination, mPosition) > 5.0f;
 }

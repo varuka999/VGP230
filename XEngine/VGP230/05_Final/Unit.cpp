@@ -114,3 +114,18 @@ bool Unit::IsActive() const
 {
     return mHealth > 0.0f;
 }
+
+float Unit::GetMoveSpeed() const
+{
+    return mMoveSpeed;
+}
+
+X::Math::Vector2 Unit::GetPosition() const
+{
+    return mPosition;
+}
+
+X::Math::Vector2 Unit::GetDestination() const
+{
+    return mDestination;
+}

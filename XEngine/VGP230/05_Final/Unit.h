@@ -24,6 +24,10 @@ public:
     virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination);
     virtual bool IsActive() const;
 
+    virtual float GetMoveSpeed() const;
+    virtual X::Math::Vector2 GetPosition() const;
+    virtual X::Math::Vector2 GetDestination() const;
+
 protected:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;

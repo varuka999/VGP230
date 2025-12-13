@@ -12,6 +12,8 @@ void GameInit()
 
 bool GameUpdate(float deltaTime)
 {
+    ProjectilePool::Get()->Update(deltaTime);
+    ProjectilePool::Get()->Render();
     Castle::Get()->Update(deltaTime);
     Castle::Get()->Render();
 
@@ -22,6 +24,7 @@ void GameCleanup()
 {
     Castle::Get()->Unload();
     UnitPool::Get()->Unload();
+    ProjectilePool::Get()->Unload();
 }
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
