@@ -1,4 +1,5 @@
 #include "UnitDatabase.h"
+#include "UnitPool.h"
 #include "Infantry.h"
 // #include "Archer.h"
 // #include "Ram.h"
@@ -8,16 +9,18 @@ Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit) // Consider changing t
     switch (unit)
     {
     case INFANTRY:
-        return new Infantry();
+        return UnitPool::Get()->GetInfantry();
     case ARCHER:
         // return std::make_unique<Archer>();
         break;
     case RAM:
         // return std::make_unique<Ram>();
         break;
+    case TESTING:
+        return new Attacker();
     default:
         return nullptr;
     }
 
-    return new Attacker(); // remove later i think
+    return nullptr;
 }

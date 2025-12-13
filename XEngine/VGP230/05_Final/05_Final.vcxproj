@@ -140,6 +140,7 @@
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitDatabase.cpp" />
+    <ClCompile Include="UnitPool.cpp" />
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="Zone.cpp" />
   </ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Infantry.h" />
     <ClInclude Include="UnitDatabase.h" />
+    <ClInclude Include="UnitPool.h" />
     <ClInclude Include="Zone.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Unit.h" />

@@ -20,4 +20,5 @@ enum UnitEnum
     INFANTRY,
     ARCHER,
     RAM,
+    TESTING,
 };

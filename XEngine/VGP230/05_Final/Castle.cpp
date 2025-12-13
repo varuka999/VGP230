@@ -63,6 +63,10 @@ void Castle::Update(float deltaTime)
     {
         mPrimedAttackerKey = 'e';
     }
+    else if (X::IsKeyPressed(X::Keys::P))
+    {
+        mPrimedAttackerKey = 'p';
+    }
 
     if (X::IsKeyPressed(X::Keys::ONE))
     {
@@ -95,6 +99,8 @@ UnitEnum Castle::GetPrimedAttackerType() const
 {
     switch (mPrimedAttackerKey)
     {
+    case 'p':
+        return TESTING;
     case 'q':
         return INFANTRY;
     case 'w':

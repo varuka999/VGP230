@@ -1,8 +1,10 @@
 #include <XEngine.h>
 #include "Castle.h"
+#include "UnitPool.h"
 
 void GameInit()
 {
+    UnitPool::Get()->Load();
     Castle::Get()->Load();
 }
 
@@ -17,6 +19,7 @@ bool GameUpdate(float deltaTime)
 void GameCleanup()
 {
     Castle::Get()->Unload();
+    UnitPool::Get()->Unload();
 }
 
 int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)

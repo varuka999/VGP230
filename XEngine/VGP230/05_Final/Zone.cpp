@@ -35,70 +35,6 @@ void Zone::Load()
 
 void Zone::Update(float deltaTime)
 {
-    //Batch spawn
-    //if (X::IsKeyPressed(X::Keys::SPACE) && !mSpawnAllAttackersInQueue)
-    //{
-    //    mSpawnAllAttackersInQueue = true;
-    //    mAttackerSpawnTimer = 0.0f;
-    //}
-
-    //if (mSpawnAllAttackersInQueue)
-    //{
-    //    if (mAttackersInSpawnQueue <= 0)
-    //    {
-    //        mAttackersInSpawnQueue = 0;
-    //        mSpawnAllAttackersInQueue = false;
-    //    }
-    //    else if (mAttackerSpawnTimer <= 0.0f)
-    //    {
-    //        SpawnAttacker();
-    //        --mAttackersInSpawnQueue;
-    //        mAttackerSpawnTimer = 0.1f;
-    //    }
-    //    else if (mAttackerSpawnTimer > 0.0f)
-    //    {
-    //        mAttackerSpawnTimer -= deltaTime;
-    //    }
-    //}
-    //else
-    //{
-    //    mAttackerSpawnTimer -= deltaTime;
-
-    //    if (mAttackerSpawnTimer <= 0)
-    //    {
-    //        mAttackersInSpawnQueue = mAttackersInSpawnQueue > 5 ? 5 : ++mAttackersInSpawnQueue; // Caps to 5 for now
-    //        mAttackerSpawnTimer = 1.0f;
-    //    }
-    //}
-
-    // Steps
-    // If key is pressed, allow all attackers to be spawned (disabled timer for adding enemy to queue) and set timer to 0
-    // If spawns are supposed to be on, check if there are any attackers to spawn,
-    // , if not disabled attackers spawning
-    // , otherwise && if timer is <= 0 spawn
-    // , otherwise, -= timer
-    // -= timer to add enemy to queue (if spawns arent happening)
-
-    //if (mSpawnAllAttackersInQueue && mAttackerSpawnTimer <= 0.0f && mAttackersInSpawnQueue > 0)
-    //{
-    //    SpawnAttacker();
-    //    mAttackerSpawnTimer = 0.1f;
-    //    --mAttackersInSpawnQueue;
-    //}
-    //else if (mAttackerSpawnTimer > 0.0f)
-    //{
-    //    mAttackerSpawnTimer -= deltaTime;
-    //}
-    //else if (mAttackersInSpawnQueue <= 0)
-    //{
-    //    mSpawnAllAttackersInQueue = false;
-    //}
-    //else
-    //{
-    //    XLOG("Attacker Queued");
-    //    ++mAttackersInSpawnQueue;
-    //}
-
     for (Unit* attacker : mAttackers)
     {
         attacker->Update(deltaTime);
@@ -107,8 +43,6 @@ void Zone::Update(float deltaTime)
     {
         defender->Update(deltaTime);
     }
-
-    // Timer between attacker load/spawn
 }
 
 void Zone::Render()
@@ -242,10 +176,6 @@ void Zone::SpawnAttacker(UnitEnum unitType)
 
     float screenOffset = X::GetScreenHeight() - 50.0f;
     attackerPosition.y = screenOffset;
-
-    // Enemy Stats
-    // Based on something?
-    //std::string enemyTexture = "scv_09.png"; // Use Switch later or something??
 
     // Destination
     X::Math::Vector2 attackerDestination = mPosition;

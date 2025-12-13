@@ -21,9 +21,6 @@ Unit::~Unit()
 void Unit::Load()
 {
     mImageID = X::LoadTexture("scv_03.png");
-    mHealth = 5;
-    mAttack = 5;
-    mMoveSpeed = 300.0f;
     mAttackInterval = 0.5f;
     mAttackTimer = 0.0f;
 }
@@ -140,6 +137,9 @@ void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 des
     mPosition = position;
     SetDestination(destination);
     mState = UNIT_STATE_MOVING;
+    mHealth = 5;
+    mAttack = 5;
+    mMoveSpeed = 300.0f;
 }
 
 bool Unit::IsActive() const
