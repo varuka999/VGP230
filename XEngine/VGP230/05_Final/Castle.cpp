@@ -63,7 +63,7 @@ void Castle::Update(float deltaTime)
     {
         mPrimedAttackerKey = 'e';
     }
-    else if (X::IsKeyPressed(X::Keys::P))
+    else if (X::IsKeyPressed(X::Keys::P)) // Test unit
     {
         mPrimedAttackerKey = 'p';
     }
@@ -74,19 +74,19 @@ void Castle::Update(float deltaTime)
     }
     else if (X::IsKeyPressed(X::Keys::TWO))
     {
-
+        mZones[1]->SpawnAttacker(GetPrimedAttackerType());
     }
     else if (X::IsKeyPressed(X::Keys::THREE))
     {
-
+        mZones[2]->SpawnAttacker(GetPrimedAttackerType());
     }
     else if (X::IsKeyPressed(X::Keys::FOUR))
     {
-
+        mZones[3]->SpawnAttacker(GetPrimedAttackerType());
     }
     else if (X::IsKeyPressed(X::Keys::FIVE))
     {
-
+        mZones[4]->SpawnAttacker(GetPrimedAttackerType());
     }
 
     for (Zone* zone : mZones)
@@ -119,17 +119,32 @@ void Castle::Render()
         zone->Render();
     }
 
-    std::string text = std::string(std::to_string(mHealth));
+    CastleUI();
+}
+
+void Castle::CastleUI()
+{
+    std::string healthText = std::string(std::to_string(mHealth));
     const float textSize = 45.0f;
-    float textWidth = X::GetTextWidth(text.c_str(), textSize);
+    float textWidth = X::GetTextWidth(healthText.c_str(), textSize);
     float screenX = X::GetScreenWidth() * 0.5;
     float screenY = 25.0f;
-    X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
-    X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 20, textSize, X::Colors::Yellow);
+    X::DrawScreenText(healthText.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
+    X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 40, textSize, X::Colors::Yellow);
+
+
 }
 
 void Castle::Unload()
 {
+    for (Zone* zone : mZones)
+    {
+        zone->Unload();
+        delete zone;
+        zone = nullptr;
+    }
+
+    mZones.clear();
 }
 
 void Castle::UpdateHP(int value)

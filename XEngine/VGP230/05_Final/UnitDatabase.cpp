@@ -17,7 +17,7 @@ Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit) // Consider changing t
         // return std::make_unique<Ram>();
         break;
     case TESTING:
-        return new Attacker();
+        return nullptr;
     default:
         return nullptr;
     }

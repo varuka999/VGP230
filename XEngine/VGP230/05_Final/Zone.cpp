@@ -68,6 +68,30 @@ void Zone::Render()
 
 void Zone::Unload()
 {
+    for (Unit* attacker : mAttackers)
+    {
+        if (attacker)
+        {
+            attacker->Unload();
+            //delete attacker;
+            //attacker = nullptr;
+        }
+    }
+
+    mAttackersInRange.clear();
+    mAttackers.clear();
+
+    for (Unit* defender : mDefenders)
+    {
+        if (defender)
+        {
+            defender->Unload();
+            delete defender;
+            defender = nullptr;
+        }
+    }
+
+    mDefenders.clear();
 }
 
 void Zone::AddAttackerInRange(Attacker* attacker)
@@ -125,28 +149,35 @@ void Zone::UpdateHP(int value)
 
 void Zone::SpawnDefenders(int value)
 {
-    //Creation
-    Defender* newDefender = new Defender();
-    newDefender->Load();
+    for (int i = 0; i < value; ++i)
+    {
+        //Creation
+        Defender* newDefender = new Defender();
+        newDefender->Load();
 
-    // Callbacks
-    std::function<void(int, X::Math::Vector2)> attackCallback = std::bind(&Zone::DefenderAttack, this, std::placeholders::_1, std::placeholders::_2);
-    newDefender->SetAttackCallback(attackCallback);
-    mDefenders.push_back(newDefender);
+        // Callbacks
+        std::function<void(int, X::Math::Vector2)> attackCallback = std::bind(&Zone::DefenderAttack, this, std::placeholders::_1, std::placeholders::_2);
+        newDefender->SetAttackCallback(attackCallback);
+        mDefenders.push_back(newDefender);
 
-    // Position (eventually make it so defenders are placed along the wall, x offset?)
-    //float screenXOffset = X::GetScreenHeight() - 150.0f;
-    X::Math::Vector2 defenderPosition = mPosition;
-    //defenderPosition.x = screenXOffset;
+        // Position
+        X::Math::Vector2 defenderPosition = mPosition;
+        float rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
+        float rangeXOffset = rangeX * 0.5f;
+        //float rangeCenter = mPosition.x;
+        float rangeStep = rangeX / (float)(value);
+        //defenderPosition.x = X::RandomFloat(-rangeXOffset, rangeXOffset) + defenderPosition.x;
+        defenderPosition.x += rangeStep * (float)(i + 0.5f) - rangeXOffset; // Temp to align defenders
 
-    // Enemy Stats
-    // Based on something?
-    std::string enemyTexture = "interceptor_01.png"; // Use Switch later or something??
+        // Enemy Stats
+        // Temp
+        std::string enemyTexture = "interceptor_01.png";
 
-    // Destination
-    X::Math::Vector2 defenderDestination = mPosition;
+        // Destination
+        X::Math::Vector2 defenderDestination = defenderPosition;
 
-    newDefender->SetActive(defenderPosition, defenderDestination); // change the values to some kind of database later
+        newDefender->SetActive(defenderPosition, defenderDestination); // change the values to some kind of database later
+    }
 }
 
 void Zone::SpawnAttacker(UnitEnum unitType)
@@ -204,7 +235,7 @@ void Zone::SetActive(int castleHP)
     zonePosition.y = (float)X::GetScreenHeight() * 0.2f;
     mPosition = zonePosition;
 
-    SpawnDefenders(1);
+    SpawnDefenders(5);
     //SpawnAttacker();
 }
 

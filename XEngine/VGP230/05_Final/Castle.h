@@ -18,6 +18,8 @@ public:
     void UpdateHP(int value);
     UnitEnum GetPrimedAttackerType() const;
 
+    void CastleUI();
+
 private:
     Castle();
     static Castle* mInstance;

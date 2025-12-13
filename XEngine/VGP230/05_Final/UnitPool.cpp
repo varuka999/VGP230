@@ -72,8 +72,8 @@ void UnitPool::Unload()
         }
     }
 
-    mUnitsPool.clear();
     mInfantryPool.clear();
+    mUnitsPool.clear();
     mNextAvailableIndex = 0;
 }
 
