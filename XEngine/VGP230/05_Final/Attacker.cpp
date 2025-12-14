@@ -14,7 +14,7 @@ void Attacker::Update(float deltaTime)
 {
     if (IsActive())
     {
-        if (!mInAttackRange && ReturnDistanceToDestination() <= 300.0f) // really need to change this.. the 300 should be based on defender attack range, and not something attacker knows
+        if (!mInAttackRange && ReturnDistanceToDestination() <= 800.0f) // really need to change this.. the 300 should be based on defender attack range, and not something attacker knows
         {
             mInAttackRange = true;
             mAttackRangeCallback(this);
