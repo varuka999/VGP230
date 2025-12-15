@@ -45,6 +45,17 @@ void Attacker::Attack()
     mAttackTimer = mAttackInterval;
 }
 
+void Attacker::UpdateHealth(int value)
+{
+    mHealth += value;
+
+    if (mHealth <= 0.0f)
+    {
+        mHealth = 0.0f;
+        mOutOfRangeCallback(this);
+    }
+}
+
 float Attacker::ReturnDistanceToDestination() const
 {
     return X::Math::Distance(mDestination, mPosition);
@@ -53,4 +64,9 @@ float Attacker::ReturnDistanceToDestination() const
 void Attacker::SetInRangeCallBack(std::function<void(Attacker*)> callback)
 {
     mAttackRangeCallback = callback;
+}
+
+void Attacker::SetOutOfRangeCallBack(std::function<void(Attacker*)> callback)
+{
+    mOutOfRangeCallback = callback;
 }

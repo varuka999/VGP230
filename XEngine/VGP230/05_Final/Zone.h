@@ -21,6 +21,7 @@ public:
     void AddAttackerInRange(Attacker* attacker);
     void DefenderAttack(int value, X::Math::Vector2 position);
     Attacker* ReturnRandomAttackerInRange() const;
+    void RemoveAttackerFromInRange(Attacker* attacker);
 
     void SpawnDefenders(int value);
     void SpawnAttacker(UnitEnum unitType);

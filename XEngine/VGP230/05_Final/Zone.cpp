@@ -175,7 +175,7 @@ void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
         Projectile* projectile = ProjectilePool::Get()->GetProjectile();
         projectile->SetActive(startPosition, firDir, 0, 1000.0f);
         //projectile->SetActive(startPosition, targetAttacker->GetPosition(), 0, 1000.0f);
-        targetAttacker->UpdateHealth(value); // Replace with actual projectile later
+        targetAttacker->UpdateHealth(value); // Replace with correct logic later, make this a callback in projectile when it becomes not active. attacker also needs a callback that removes it from attackers in range when dead
     }
 }
 
@@ -188,6 +188,16 @@ Attacker* Zone::ReturnRandomAttackerInRange() const
     }
 
     return nullptr;
+}
+
+void Zone::RemoveAttackerFromInRange(Attacker* attacker)
+{
+    auto it = std::find(mAttackersInRange.begin(), mAttackersInRange.end(), attacker);
+
+    if (it != mAttackersInRange.end())
+    {
+        mAttackersInRange.erase(it);
+    }
 }
 
 void Zone::UpdateHP(int value)
@@ -266,6 +276,9 @@ void Zone::SpawnAttacker(UnitEnum unitType)
 
     std::function<void(Attacker*)> inRangeCallback = std::bind(&Zone::AddAttackerInRange, this, std::placeholders::_1);
     newAttacker->SetInRangeCallBack(inRangeCallback);
+
+    std::function<void(Attacker*)> outOfRangeCallback = std::bind(&Zone::RemoveAttackerFromInRange, this, std::placeholders::_1);
+    newAttacker->SetOutOfRangeCallBack(outOfRangeCallback);
 
     mAttackers.push_back(newAttacker);
 
