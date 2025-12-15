@@ -28,4 +28,9 @@ private:
     int mHealth;
     int mTotalZones;
     char mPrimedAttackerKey;
+
+    int mAttackerResource;
+    float mAttackerResourceCooldown;
+    float mAttackerResourceTimer;
+
 };

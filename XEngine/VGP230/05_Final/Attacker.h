@@ -11,6 +11,7 @@ public:
     void Update(float deltaTime) override;
     void Load() override;
     void Unload() override;
+    virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination) override;
     virtual void Attack() override;
 
     void UpdateHealth(int value) override;
@@ -18,8 +19,9 @@ public:
     void SetInRangeCallBack(std::function<void(Attacker*)> callback);
     void SetOutOfRangeCallBack(std::function<void(Attacker*)> callback);
 
-private:
+protected:
     std::function<void(Attacker*)> mAttackRangeCallback;
     std::function<void(Attacker*)> mOutOfRangeCallback;
     bool mInAttackRange;
+    int mResourceCost;
 };

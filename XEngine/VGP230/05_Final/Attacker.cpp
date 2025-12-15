@@ -2,7 +2,8 @@
 
 Attacker::Attacker()
     : Unit(),
-    mInAttackRange(false)
+    mInAttackRange(false),
+    mResourceCost(0)
 {
 }
 
@@ -14,7 +15,7 @@ void Attacker::Update(float deltaTime)
 {
     if (IsActive())
     {
-        if (!mInAttackRange && ReturnDistanceToDestination() <= 800.0f) // really need to change this.. the 300 should be based on defender attack range, and not something attacker knows
+        if (!mInAttackRange && ReturnDistanceToDestination() <= 500.0f) // would love to change this to something defender does
         {
             mInAttackRange = true;
             mAttackRangeCallback(this);
@@ -30,6 +31,7 @@ void Attacker::Load()
     mHealth = 5;
     mAttack = 5;
     mMoveSpeed = 300.0f;
+    mResourceCost = 1;
 }
 
 void Attacker::Unload()
@@ -37,11 +39,18 @@ void Attacker::Unload()
 
 }
 
+void Attacker::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination)
+{
+    mInAttackRange = false;
+    mPosition = position;
+    SetDestination(destination);
+}
+
 void Attacker::Attack()
 {
     mAttackZoneWallCallback(-1);
 
-    mAttackInterval = (float)X::Random(5, 10) / 10.0f; // 0.5-1.0s
+    mAttackInterval = (float)X::Random(7, 10) / 10.0f; // 0.7-1.0s
     mAttackTimer = mAttackInterval;
 }
 
