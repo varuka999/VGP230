@@ -1,7 +1,7 @@
 #include "UnitDatabase.h"
 #include "UnitPool.h"
 #include "Infantry.h"
-// #include "Archer.h"
+ #include "Archer.h"
 // #include "Ram.h"
 
 Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit)
@@ -11,7 +11,7 @@ Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit)
     case INFANTRY:
         return UnitPool::Get()->GetInfantry();
     case ARCHER:
-        // return std::make_unique<Archer>();
+        return UnitPool::Get()->GetArcher();
         break;
     case RAM:
         // return std::make_unique<Ram>();

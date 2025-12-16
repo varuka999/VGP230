@@ -1,6 +1,6 @@
 #include "Unit.h"
 
-int Unit::allID = 0;
+int Unit::mTotalUnits = 0;
 
 Unit::Unit()
     : Entity(),
@@ -12,11 +12,11 @@ Unit::Unit()
     mMoveSpeed(0),
     mAttackInterval(0),
     mAttackTimer(0),
-    id(0)
+    mUnitID(0)
 {
     // Test
-    ++allID;
-    id = allID;
+    ++mTotalUnits;
+    mUnitID = mTotalUnits;
 }
 
 Unit::~Unit()
@@ -56,7 +56,7 @@ void Unit::Render()
     {
         X::DrawSprite(mImageID, mPosition);
 
-        std::string text = std::string(std::to_string(id));
+        std::string text = std::string(std::to_string(mUnitID));
         const float textSize = 25.0f;
         float textWidth = X::GetTextWidth(text.c_str(), textSize);
         float screenX = mPosition.x - 8.0f;

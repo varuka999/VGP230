@@ -114,19 +114,25 @@ void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
 
     if (target != nullptr)
     { 
-        X::Math::Vector2 destination;
-        float tHit = 0.0f;
+        //float tHit = 0.0f;
         // Calculate intercept point (not my own logic/function. it takes the address of variables and modifies it within the function)
+        X::Math::Vector2 outIntercept;
         X::Math::Vector2 attackerVel = X::Math::Normalize(target->GetDestination() - target->GetPosition()) * target->GetMoveSpeed();
-        bool canHit = X::Math::ComputeInterceptPoint(startPosition, 1000.0f, target->GetPosition(), attackerVel, destination); // unused bool because I'm assuming it will always hit for now
+        bool canHit = X::Math::ComputeInterceptPoint(startPosition, 1200, target->GetPosition(), attackerVel, outIntercept); // unused bool because I'm assuming it will always hit for now
+        float rotation = 0.0f;
+        X::Math::Vector2 direction = outIntercept - startPosition;
+        if (!X::Math::IsZero(direction)) // Avoid normalizing a zero vector
+        {
+            direction = X::Math::Normalize(direction);
+            rotation = std::atan2(direction.y, direction.x) + X::Math::kPiByTwo;
+        }
 
         Projectile* projectile = ProjectilePool::Get()->GetProjectile();
         
         std::function<void(int)> hitCallback = std::bind(&Attacker::UpdateHealth, target, std::placeholders::_1);
         projectile->SetHitCallback(hitCallback);
 
-        projectile->SetActive(startPosition, destination, 0, 1000.0f, value);
-        //target->UpdateHealth(value); // Replace with correct logic later, make this a callback in projectile when it becomes not active. attacker also needs a callback that removes it from attackers in range when dead
+        projectile->SetActive(startPosition, outIntercept, rotation, 1200, value);
     }
 }
 
@@ -271,7 +277,6 @@ void Zone::SetActive(int castleHP)
     mPosition = zonePosition;
 
     SpawnDefenders(5);
-    //SpawnAttacker();
 }
 
 void Zone::SetAttackCastleCallback(std::function<void(int)> callback)

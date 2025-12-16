@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "functional"
-#include "Enum.h"
+//#include "Enum.h"
 
 class Unit : public Entity
 {
@@ -40,8 +40,8 @@ protected:
     float mAttackTimer;
 
     //test
-    static int allID;
-    int id;
+    static int mTotalUnits;
+    int mUnitID;
 
     std::function<void(int)> mAttackZoneWallCallback;
 };

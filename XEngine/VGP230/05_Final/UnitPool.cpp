@@ -1,6 +1,7 @@
 #include "UnitPool.h"
-#include "Infantry.h"
 #include "Unit.h"
+#include "Infantry.h"
+#include "Archer.h"
 #include <XEngine.h>
 #include <algorithm>
 #include <typeinfo>
@@ -41,7 +42,17 @@ void UnitPool::Load()
         mInfantryPool.push_back(infantry);
     }
 
-    // Ranged Pool
+    // Archer Pool
+    const int archerPool = 2;
+
+    for (int i = 0; i < archerPool; ++i)
+    {
+        Archer* archer = new Archer();
+        archer->Load();
+
+        mUnitsPool.push_back(archer);
+        mArcherPool.push_back(archer);
+    }
 }
 
 void UnitPool::Update(float deltaTime)
@@ -79,6 +90,7 @@ void UnitPool::Unload()
     }
 
     mInfantryPool.clear();
+    mArcherPool.clear();
     mUnitsPool.clear();
     mNextAvailableIndex = 0;
 }
@@ -159,4 +171,33 @@ Infantry* UnitPool::GetInfantry()
 
     mNextAvailableIndex = 0;
     return infantry;
+}
+
+Archer* UnitPool::GetArcher()
+{
+    Archer* archer = mArcherPool[mNextAvailableIndex];
+
+    while (archer->IsActive())
+    {
+        if (mNextAvailableIndex != mArcherPool.size() - 1)
+        {
+            ++mNextAvailableIndex;
+            archer = mArcherPool[mNextAvailableIndex];
+            continue;
+        }
+        else
+        {
+            Archer* newArcher = new Archer();
+            newArcher->Load();
+
+            mUnitsPool.push_back(newArcher);
+            mArcherPool.push_back(newArcher);
+
+            archer = newArcher;
+            break;
+        }
+    }
+
+    mNextAvailableIndex = 0;
+    return archer;
 }

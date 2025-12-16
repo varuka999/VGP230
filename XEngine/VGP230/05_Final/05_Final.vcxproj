@@ -132,6 +132,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Archer.cpp" />
     <ClCompile Include="Attacker.cpp" />
     <ClCompile Include="Castle.cpp" />
     <ClCompile Include="Defender.cpp" />

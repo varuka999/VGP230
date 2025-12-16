@@ -48,6 +48,9 @@
     <ClCompile Include="UnitPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Archer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xconfig.json">

@@ -6,7 +6,7 @@ class Unit;
 class Defender;
 class Attacker;
 class Infantry;
-//class Archer;
+class Archer;
 //class Ram;
 
 class UnitPool : public Entity
@@ -27,6 +27,7 @@ public:
     std::vector<Unit*>& GetUnitsPool();
 
     Infantry* GetInfantry();
+    Archer* GetArcher();
 
 private:
     UnitPool();
@@ -35,4 +36,5 @@ private:
     int mNextAvailableIndex;
     std::vector<Unit*> mUnitsPool;
     std::vector<Infantry*> mInfantryPool;
+    std::vector<Archer*> mArcherPool;
 };
