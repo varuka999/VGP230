@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "functional"
-//#include "Enum.h"
+#include "Enum.h"
 
 class Unit : public Entity
 {
@@ -28,16 +28,20 @@ public:
     virtual float GetMoveSpeed() const;
     virtual X::Math::Vector2 GetPosition() const;
     virtual X::Math::Vector2 GetDestination() const;
+    virtual UnitEnum GetType() const;
 
 protected:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     X::Math::Vector2 mDestination;
+    UnitEnum mType;
     int mHealth;
     int mAttack;
-    int mMoveSpeed;
+    float mMoveSpeed;
     float mAttackInterval;
     float mAttackTimer;
+    float mAttackMinInterval;
+    float mAttackMaxInterval;
 
     //test
     static int mTotalUnits;

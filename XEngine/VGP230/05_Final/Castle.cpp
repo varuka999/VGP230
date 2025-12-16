@@ -79,7 +79,15 @@ void Castle::Update(float deltaTime)
     {
         mPrimedAttackerKey = 'e';
     }
-    else if (X::IsKeyPressed(X::Keys::P)) // Test unit
+    else if (X::IsKeyPressed(X::Keys::R))
+    {
+        mPrimedAttackerKey = 'r';
+    }
+    else if (X::IsKeyPressed(X::Keys::T))
+    {
+        mPrimedAttackerKey = 't';
+    }
+    else if (X::IsKeyPressed(X::Keys::P)) // no spawn , just for testing
     {
         mPrimedAttackerKey = 'p';
     }
@@ -116,35 +124,40 @@ UnitEnum Castle::GetPrimedAttackerType()
     switch (mPrimedAttackerKey)
     {
     case 'q':
-        if (HasEnoughResourceForAttacker(INFANTRY)) // current resource - unit resource >= 0, return key, otherwise return default non-spawning key
+        if (HasEnoughResourceForAttacker(INFANTRY)) // if current resource - unit resource >= 0 return key, otherwise return default non-unit spawning key
         {
             return INFANTRY;
         }
-        else
-        {
-            return INVALID;
-        }
+        break;
     case 'w':
         if (HasEnoughResourceForAttacker(ARCHER))
         {
             return ARCHER;
         }
-        else
-        {
-            return INVALID;
-        }
+        break;
     case 'e':
+        if (HasEnoughResourceForAttacker(SHIELD))
+        {
+            return SHIELD;
+        }
+        break;
+    case 'r':
+        if (HasEnoughResourceForAttacker(FARMER))
+        {
+            return FARMER;
+        }
+        break;
+    case 't':
         if (HasEnoughResourceForAttacker(RAM))
         {
             return RAM;
         }
-        else
-        {
-            return INVALID;
-        }
+        break;
     default:
         return INVALID;
     }
+
+    return INVALID;
 }
 
 bool Castle::HasEnoughResourceForAttacker(UnitEnum unitType) const

@@ -13,6 +13,10 @@ Archer::Archer()
 void Archer::Load()
 {
     mImageID = X::LoadTexture("scv_16.png");
+    mType = UnitEnum::ARCHER;
+    mAttackMinInterval = 9.0f;
+    mAttackMaxInterval = 13.0f;
+    mAttackWindupInterval = 0.5f;
 }
 
 void Archer::Update(float deltaTime)
@@ -30,7 +34,7 @@ void Archer::Update(float deltaTime)
             mAttackTimer -= deltaTime;
             mState = UNIT_STATE_MOVING;
         }
-        else if (mAttackTimer <= 0.0f && mAttackWindupTimer <= 0.0f && mState != UNIT_STATE_WINDUP && mState != UNIT_STATE_ATTACKING)
+        else if (mAttackTimer <= 0.0f && mAttackWindupTimer <= 0.0f && mState != UNIT_STATE_WINDUP && mState != UNIT_STATE_ATTACKING && X::Math::Distance(mDestination, mPosition) < 600.0f)
         {
             mAttackTimer = 0.0f;
             mAttackWindupTimer = mAttackWindupInterval;
@@ -91,7 +95,7 @@ void Archer::Attack()
     projectile->SetHitCallback(mAttackZoneWallCallback);
     projectile->SetActive(mPosition, outIntercept, rotation, 1200.0f, -mAttack);
 
-    mAttackInterval = (float)X::Random(9, 13) / 10.0f;
+    mAttackInterval = (float)X::Random(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
     mAttackTimer = mAttackInterval;
 }
 
@@ -101,7 +105,6 @@ void Archer::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 d
 
     mAttackInterval = (float)X::Random(9, 13) / 10.0f; // 0.9-1.3s
     mAttackTimer = mAttackInterval;
-    mAttackWindupInterval = 0.5f;
     mAttackWindupTimer = 0.0f;
     mState = UNIT_STATE_MOVING;
     mHealth = 3;

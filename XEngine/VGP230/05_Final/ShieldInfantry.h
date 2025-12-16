@@ -1,7 +1,7 @@
 #pragma once
 #include "Attacker.h"
 
-class Infantry : public Attacker
+class ShieldInfantry : public Attacker
 {
 public:
     void Load() override;

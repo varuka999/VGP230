@@ -27,6 +27,8 @@ void Attacker::Update(float deltaTime)
 void Attacker::Load()
 {
     mImageID = X::LoadTexture("scv_09.png");
+    mAttackMinInterval = 7.0f;
+    mAttackMaxInterval = 10.0f;
 }
 
 void Attacker::Unload()
@@ -45,7 +47,7 @@ void Attacker::Attack()
 {
     mAttackZoneWallCallback(-mAttack);
 
-    mAttackInterval = (float)X::Random(7, 10) / 10.0f; // 0.7-1.0s
+    mAttackInterval = (float)X::Random(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
     mAttackTimer = mAttackInterval;
 }
 

@@ -51,6 +51,15 @@
     <ClCompile Include="Archer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Farmer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShieldInfantry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xconfig.json">
@@ -95,6 +104,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Archer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShieldInfantry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Farmer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

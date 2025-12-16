@@ -3,6 +3,9 @@
 void Infantry::Load()
 {
     mImageID = X::LoadTexture("scv_01.png");
+    mType = UnitEnum::INFANTRY;
+    mAttackMinInterval = 7.0f;
+    mAttackMaxInterval = 10.0f;
 }
 
 void Infantry::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination)

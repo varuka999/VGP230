@@ -7,7 +7,9 @@ class Defender;
 class Attacker;
 class Infantry;
 class Archer;
-//class Ram;
+class ShieldInfantry;
+class Farmer;
+class Ram;
 
 class UnitPool : public Entity
 {
@@ -28,6 +30,9 @@ public:
 
     Infantry* GetInfantry();
     Archer* GetArcher();
+    ShieldInfantry* GetShieldInfantry();
+    Farmer* GetFarmer();
+    Ram* GetRam();
 
 private:
     UnitPool();
@@ -35,6 +40,9 @@ private:
 
     int mNextAvailableIndex;
     std::vector<Unit*> mUnitsPool;
-    std::vector<Infantry*> mInfantryPool;
+    std::vector<Infantry*> mInfantryPool; // Would have preferred to use one pool but there was some logic stuff I couldnt figure out in reasonable time
     std::vector<Archer*> mArcherPool;
+    std::vector<ShieldInfantry*> mShieldInfantryPool;
+    std::vector<Farmer*> mFarmerPool;
+    std::vector<Ram*> mRamPool;
 };

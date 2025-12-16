@@ -136,9 +136,12 @@
     <ClCompile Include="Attacker.cpp" />
     <ClCompile Include="Castle.cpp" />
     <ClCompile Include="Defender.cpp" />
+    <ClCompile Include="Farmer.cpp" />
     <ClCompile Include="Infantry.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
+    <ClCompile Include="Ram.cpp" />
+    <ClCompile Include="ShieldInfantry.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitDatabase.cpp" />
     <ClCompile Include="UnitPool.cpp" />
@@ -151,12 +154,15 @@
   <ItemGroup>
     <ClInclude Include="Archer.h" />
     <ClInclude Include="Attacker.h" />
+    <ClInclude Include="Farmer.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Castle.h" />
     <ClInclude Include="Defender.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Infantry.h" />
+    <ClInclude Include="Ram.h" />
+    <ClInclude Include="ShieldInfantry.h" />
     <ClInclude Include="UnitDatabase.h" />
     <ClInclude Include="UnitPool.h" />
     <ClInclude Include="Zone.h" />

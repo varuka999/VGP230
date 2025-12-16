@@ -7,11 +7,14 @@ Unit::Unit()
     mImageID(0),
     mPosition(0.0f, 0.0f),
     mDestination(0.0f, 0.0f),
+    mType(UnitEnum::INVALID),
     mHealth(0),
     mAttack(0),
-    mMoveSpeed(0),
+    mMoveSpeed(0.0f),
     mAttackInterval(0),
     mAttackTimer(0),
+    mAttackMinInterval(0.0f),
+    mAttackMaxInterval(0.0f),
     mUnitID(0)
 {
     // Test
@@ -26,6 +29,7 @@ Unit::~Unit()
 void Unit::Load()
 {
     mImageID = X::LoadTexture("scv_03.png");
+    mType = UnitEnum::INVALID;
 }
 
 void Unit::Update(float deltaTime)
@@ -130,6 +134,11 @@ X::Math::Vector2 Unit::GetPosition() const
 X::Math::Vector2 Unit::GetDestination() const
 {
     return mDestination;
+}
+
+UnitEnum Unit::GetType() const
+{
+    return mType;
 }
 
 void Unit::Reset()

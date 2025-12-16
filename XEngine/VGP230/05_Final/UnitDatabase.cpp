@@ -1,8 +1,10 @@
 #include "UnitDatabase.h"
 #include "UnitPool.h"
 #include "Infantry.h"
- #include "Archer.h"
-// #include "Ram.h"
+#include "Archer.h"
+#include "ShieldInfantry.h"
+#include "Farmer.h"
+#include "Ram.h"
 
 Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit)
 {
@@ -12,10 +14,12 @@ Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit)
         return UnitPool::Get()->GetInfantry();
     case ARCHER:
         return UnitPool::Get()->GetArcher();
-        break;
+    case SHIELD:
+        return UnitPool::Get()->GetShieldInfantry();
+    case FARMER:
+        return UnitPool::Get()->GetFarmer();
     case RAM:
-        // return std::make_unique<Ram>();
-        break;
+        return UnitPool::Get()->GetRam();
     case INVALID:
         return nullptr;
     default:
