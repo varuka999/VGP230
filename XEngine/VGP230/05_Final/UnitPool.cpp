@@ -153,8 +153,8 @@ Infantry* UnitPool::GetInfantry()
             mUnitsPool.push_back(newInfantry);
             mInfantryPool.push_back(newInfantry);
 
-            mNextAvailableIndex = 0;
-            return newInfantry;
+            infantry = newInfantry;
+            break;
         }
     }
 

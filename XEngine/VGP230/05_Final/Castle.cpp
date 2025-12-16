@@ -48,7 +48,7 @@ void Castle::Load()
     }
 
     mAttackerResource = 5;
-    mAttackerResourceCooldown = 1.0f;
+    mAttackerResourceCooldown = 0.5f;
     mAttackerResourceTimer = 0.0f;
 
     for (Zone* zone : mZones)
@@ -151,8 +151,6 @@ bool Castle::HasEnoughResourceForAttacker(UnitEnum unitType) const
 {
     return mAttackerResource - unitType >= 0;
 }
-
-
 
 void Castle::Render()
 {

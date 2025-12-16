@@ -99,26 +99,25 @@ void Zone::AddAttackerInRange(Attacker* attacker)
     mAttackersInRange.push_back(attacker);
 }
 
-
-
-// Returns true if an intercept exists.
-// outIntercept is the point your projectile should aim at (mDestination).
-
 void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
 {
-    Attacker* targetAttacker = ReturnRandomAttackerInRange();
+    Attacker* target = ReturnRandomAttackerInRange();
 
-    if (targetAttacker != nullptr)
-    {
-        // Calculate intercept point (not my own logic/function)
+    if (target != nullptr)
+    { 
         X::Math::Vector2 destination;
         float tHit = 0.0f;
-        X::Math::Vector2 attackerVel = X::Math::Normalize(targetAttacker->GetDestination() - targetAttacker->GetPosition()) * targetAttacker->GetMoveSpeed();
-        bool canHit = X::Math::ComputeInterceptPoint(startPosition, 1000.0f, targetAttacker->GetPosition(), attackerVel, destination);
+        // Calculate intercept point (not my own logic/function. it takes the address of variables and modifies it within the function)
+        X::Math::Vector2 attackerVel = X::Math::Normalize(target->GetDestination() - target->GetPosition()) * target->GetMoveSpeed();
+        bool canHit = X::Math::ComputeInterceptPoint(startPosition, 1000.0f, target->GetPosition(), attackerVel, destination); // unused bool because I'm assuming it will always hit for now
 
         Projectile* projectile = ProjectilePool::Get()->GetProjectile();
-        projectile->SetActive(startPosition, destination, 0, 1000.0f);
-        targetAttacker->UpdateHealth(value); // Replace with correct logic later, make this a callback in projectile when it becomes not active. attacker also needs a callback that removes it from attackers in range when dead
+        
+        std::function<void(int)> hitCallback = std::bind(&Attacker::UpdateHealth, target, std::placeholders::_1);
+        projectile->SetHitCallback(hitCallback);
+
+        projectile->SetActive(startPosition, destination, 0, 1000.0f, value);
+        //target->UpdateHealth(value); // Replace with correct logic later, make this a callback in projectile when it becomes not active. attacker also needs a callback that removes it from attackers in range when dead
     }
 }
 

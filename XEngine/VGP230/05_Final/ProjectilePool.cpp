@@ -76,18 +76,28 @@ void ProjectilePool::Unload()
 Projectile* ProjectilePool::GetProjectile()
 {
     Projectile* projectile = mProjectilesPool[mNextAvailableIndex];
-    if (projectile->IsActive())
+
+    while (projectile->IsActive())
     {
-        Projectile* newProjectile = new Projectile();
-        newProjectile->Load();
+        if (mNextAvailableIndex != mProjectilesPool.size() - 1)
+        {
+            ++mNextAvailableIndex;
+            projectile = mProjectilesPool[mNextAvailableIndex];
+            continue;
+        }
+        else
+        {
+            Projectile* newProjectile = new Projectile();
+            newProjectile->Load();
 
-        mProjectilesPool.push_back(newProjectile);
+            mProjectilesPool.push_back(newProjectile);
 
-        projectile = newProjectile;
+            projectile = newProjectile;
+            break;
+        }
     }
 
-    mNextAvailableIndex = (mNextAvailableIndex + 1) % mProjectilesPool.size();
-
+    mNextAvailableIndex = 0;
     return projectile;
 }
 

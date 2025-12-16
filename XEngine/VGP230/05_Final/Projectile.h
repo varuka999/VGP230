@@ -12,7 +12,8 @@ public:
     void Render() override;
     void Unload() override;
 
-    void SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed);
+    void SetHitCallback(std::function<void(int)> callback);
+    void SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed, int damage);
     bool IsActive() const;
 
 private:
@@ -21,4 +22,9 @@ private:
     X::Math::Vector2 mDestination;
     float mRotation;
     float mMoveSpeed;
+    int mDamage;
+    bool mActiveTarget;
+
+    std::function<void(int)> mHitCallback;
+
 };

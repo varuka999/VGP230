@@ -6,7 +6,9 @@ Projectile::Projectile()
     mPosition(0.0f, 0.0f),
     mDestination(0.0f, 0.0f),
     mRotation(0.0f),
-    mMoveSpeed(0.0f)
+    mMoveSpeed(0.0f),
+    mDamage(0),
+    mActiveTarget(false)
 {
 }
 
@@ -26,6 +28,11 @@ void Projectile::Update(float deltaTime)
         X::Math::Vector2 direction = X::Math::Normalize(mDestination - mPosition);
         mPosition += direction * mMoveSpeed * deltaTime;
     }
+    else if (mActiveTarget)
+    {
+        mActiveTarget = false;
+        mHitCallback(mDamage);
+    }
 }
 
 void Projectile::Render()
@@ -40,12 +47,19 @@ void Projectile::Unload()
 {
 }
 
-void Projectile::SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed)
+void Projectile::SetHitCallback(std::function<void(int)> callback)
 {
+    mHitCallback = callback;
+}
+
+void Projectile::SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed, int damage)
+{
+    mActiveTarget = true;
     mPosition = position;
     mDestination = destination;
     mRotation = rotation;
     mMoveSpeed = speed;
+    mDamage = damage;
 }
 
 bool Projectile::IsActive() const
