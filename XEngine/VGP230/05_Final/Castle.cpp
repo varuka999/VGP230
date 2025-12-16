@@ -167,28 +167,25 @@ void Castle::CastleUI()
     // HP
     std::string healthText = std::string(std::to_string(mHealth));
     const float textSize = 45.0f;
-    float textWidth = X::GetTextWidth(healthText.c_str(), textSize);
     float screenX = X::GetScreenWidth() * 0.5;
     float screenY = 25.0f;
     X::DrawScreenText(healthText.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
     X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 40, textSize, X::Colors::Yellow);
 
     // Resource
-    std::string resourceText = "Resource: " + std::to_string(mAttackerResource);
+    std::string resourceText = "Resource: " + std::to_string(mAttackerResource) + "r";
     const float textSize2 = 25.0f;
-    float resourceTextWidth = X::GetTextWidth(resourceText.c_str(), textSize);
     float resourceScreenX = 50.0f;
     float resourceScreenY = X::GetScreenHeight() * 0.9f;
     X::DrawScreenText(resourceText.c_str(), resourceScreenX, resourceScreenY, textSize2, X::Colors::OrangeRed);
 
     // Attacker Types
-    std::string attackerTypeText = "Q:Infantry (" + std::to_string(INFANTRY) +
-        ")      W: Archer (" + std::to_string(ARCHER) +
-        ")      E: Shield Infantry (" + std::to_string(SHIELD) +
-        ")      R: Farmer (" + std::to_string(FARMER) +
-        ")      T: Ram (" + std::to_string(RAM) + ")";
+    std::string attackerTypeText = "Q: Infantry (" + std::to_string(INFANTRY) +
+        "r)      W: Archer (" + std::to_string(ARCHER) +
+        "r)      E: Shield Infantry (" + std::to_string(SHIELD) +
+        "r)      R: Farmer (" + std::to_string(FARMER) +
+        "r)      T: Ram (" + std::to_string(RAM) + "r)";
     const float textSize3 = 20.0f;
-    float attackerTypeTextWidth = X::GetTextWidth(attackerTypeText.c_str(), textSize3);
     float attackerScreenX = 50.0f;
     float attackerScreenY = X::GetScreenHeight() * 0.95f;
     X::DrawScreenText(attackerTypeText.c_str(), attackerScreenX, attackerScreenY, textSize3, X::Colors::OrangeRed);

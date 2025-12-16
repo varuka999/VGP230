@@ -60,12 +60,21 @@ void Zone::Render()
         defender->Render();
     }
 
+    // Health
     std::string text = std::string(std::to_string(mHealth));
     const float textSize = 45.0f;
-    float textWidth = X::GetTextWidth(text.c_str(), textSize);
-    float screenX = mPosition.x;
-    float screenY = mPosition.y - 50.0f;
+    float textOffset = X::GetTextWidth(text.c_str(), textSize) * 0.5f;
+    float screenX = mPosition.x - textOffset;
+    float screenY = mPosition.y - 100.0f;
     X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Orange);
+
+    // Lane Selection
+    std::string text2 = std::string(std::to_string(mZoneID));
+    const float textSize2 = 25.0f;
+    float textOffset2 = X::GetTextWidth(text2.c_str(), textSize2) * 0.5f;
+    float screenX2 = mPosition.x - textOffset2;
+    float screenY2 = mPosition.y + 50.0f;
+    X::DrawScreenText(text2.c_str(), screenX2, screenY2, textSize2, X::Colors::OrangeRed);
 }
 
 void Zone::Unload()
