@@ -165,6 +165,11 @@ bool Castle::HasEnoughResourceForAttacker(UnitEnum unitType) const
     return mAttackerResource - unitType >= 0;
 }
 
+bool Castle::IsActive() const
+{
+    return mHealth > 0;
+}
+
 void Castle::Render()
 {
     for (Zone* zone : mZones)

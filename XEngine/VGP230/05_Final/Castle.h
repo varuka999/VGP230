@@ -19,6 +19,7 @@ public:
     void UpdateAttackerResource(int value);
     UnitEnum GetPrimedAttackerType();
     bool HasEnoughResourceForAttacker(UnitEnum unitType) const;
+    bool IsActive() const;
 
     void CastleUI();
 

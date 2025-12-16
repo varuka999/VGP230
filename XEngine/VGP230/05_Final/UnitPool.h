@@ -22,10 +22,6 @@ public:
     void Render() override;
     void Unload() override;
 
-    // Acquire a Unit of the requested concrete type (returns nullptr if none available)
-    Unit* GetUnit(UnitEnum type);
-
-    // Access to internal pool if needed
     std::vector<Unit*>& GetUnitsPool();
 
     Infantry* GetInfantry();
