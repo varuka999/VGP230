@@ -11,6 +11,8 @@ public:
     void Update(float deltaTime) override;
     void Load() override;
     void Unload() override;
+    void Render() override;
+
     virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination) override;
     virtual void Attack() override;
 

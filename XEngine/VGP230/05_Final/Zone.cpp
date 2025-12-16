@@ -28,19 +28,11 @@ Zone::~Zone()
 void Zone::Load()
 {
     mZoneID = mTotalZones;
-    //mZoneID = X::Math::Clamp(mTotalZones, 1, 5); // TEMP Clamp to 5 zones max for visual purposes
-    std::string textureName = "zone";
-    //textureName += std::to_string(mZoneID) + ".jpg";
-    textureName += "1.jpg"; // TEMP DELETE LATER
-    mImageID = X::LoadTexture(textureName.c_str());
+    mImageID = X::LoadTexture("WallIntact.png");
 }
 
 void Zone::Update(float deltaTime)
 {
-    //for (Unit* attacker : mAttackers)
-    //{
-    //    attacker->Update(deltaTime);
-    //}
     for (Unit* defender : mDefenders)
     {
         defender->Update(deltaTime);
@@ -51,10 +43,6 @@ void Zone::Render()
 {
     X::DrawSprite(mImageID, mPosition);
 
-    //for (Unit* attacker : mAttackers)
-    //{
-    //    attacker->Render();
-    //}
     for (Unit* defender : mDefenders)
     {
         defender->Render();
@@ -62,33 +50,24 @@ void Zone::Render()
 
     // Health
     std::string text = std::string(std::to_string(mHealth));
-    const float textSize = 45.0f;
+    const float textSize = 30.0f;
     float textOffset = X::GetTextWidth(text.c_str(), textSize) * 0.5f;
     float screenX = mPosition.x - textOffset;
-    float screenY = mPosition.y - 100.0f;
+    float screenY = mPosition.y + 25.0f;
     X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Orange);
 
     // Lane Selection
     std::string text2 = std::string(std::to_string(mZoneID));
-    const float textSize2 = 25.0f;
+    const float textSize2 = 20.0f;
     float textOffset2 = X::GetTextWidth(text2.c_str(), textSize2) * 0.5f;
     float screenX2 = mPosition.x - textOffset2;
-    float screenY2 = mPosition.y + 50.0f;
+    float screenY2 = mPosition.y + 85.0f;
     X::DrawScreenText(text2.c_str(), screenX2, screenY2, textSize2, X::Colors::OrangeRed);
 }
 
 void Zone::Unload()
 {
-    //for (Unit* attacker : mAttackers)
-    //{
-    //    if (attacker)
-    //    {
-    //        attacker->Unload(); // Zone does not own attackers, UnitPool will delete them
-    //    }
-    //}
-
     mAttackersInRange.clear();
-    //mAttackers.clear();
 
     for (Unit* defender : mDefenders)
     {
@@ -113,8 +92,7 @@ void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
     Attacker* target = ReturnRandomAttackerInRange();
 
     if (target != nullptr)
-    { 
-        //float tHit = 0.0f;
+    {
         // Calculate intercept point (not my own logic/function. it takes the address of variables and modifies it within the function)
         X::Math::Vector2 outIntercept;
         X::Math::Vector2 attackerVel = X::Math::Normalize(target->GetDestination() - target->GetPosition()) * target->GetMoveSpeed();
@@ -128,11 +106,11 @@ void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
         }
 
         Projectile* projectile = ProjectilePool::Get()->GetProjectile();
-        
+
         std::function<void(int)> hitCallback = std::bind(&Attacker::UpdateHealth, target, std::placeholders::_1);
         projectile->SetHitCallback(hitCallback);
 
-        projectile->SetActive(startPosition, outIntercept, rotation, 1200, value);
+        projectile->SetActive("Arrow2.png", startPosition, outIntercept, rotation, 1200, value);
     }
 }
 
@@ -169,14 +147,17 @@ void Zone::UpdateHP(int value)
         {
             mHealth = 0;
             mState = WALL_STATE_DESTROYED;
+
+            mImageID = X::LoadTexture("WallDestroyed.png");
+            for (Unit* defender : mDefenders)
+            {
+                defender->UpdateHealth(-999);
+            }
         }
     }
     break;
     case WALL_STATE_DESTROYED:
-    {
-        value *= 2; // Double damage to castle if wall is destroyed
-    }
-    break;
+        return; // Wall destroyed, do nothing
     default:
         break;
     }
@@ -201,19 +182,14 @@ void Zone::SpawnDefenders(int value)
         X::Math::Vector2 defenderPosition = mPosition;
         float rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
         float rangeXOffset = rangeX * 0.5f;
-        //float rangeCenter = mPosition.x;
         float rangeStep = rangeX / (float)(value);
-        //defenderPosition.x = X::RandomFloat(-rangeXOffset, rangeXOffset) + defenderPosition.x;
-        defenderPosition.x += rangeStep * (float)(i + 0.5f) - rangeXOffset; // Temp to align defenders
-
-        // Enemy Stats
-        // Temp
-        std::string enemyTexture = "interceptor_01.png";
+        defenderPosition.x += rangeStep * (float)(i + 0.5f) - rangeXOffset;
+        defenderPosition.y -= 50.0f;
 
         // Destination
         X::Math::Vector2 defenderDestination = defenderPosition;
 
-        newDefender->SetActive(defenderPosition, defenderDestination); // change the values to some kind of database later
+        newDefender->SetActive(defenderPosition, defenderDestination);
     }
 }
 
@@ -238,8 +214,6 @@ void Zone::SpawnAttacker(UnitEnum unitType)
     std::function<void(Attacker*)> outOfRangeCallback = std::bind(&Zone::RemoveAttackerFromInRange, this, std::placeholders::_1);
     newAttacker->SetOutOfRangeCallBack(outOfRangeCallback);
 
-    //mAttackers.push_back(newAttacker);
-
     // Position
     X::Math::Vector2 attackerPosition = mPosition;
     float rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
@@ -254,16 +228,14 @@ void Zone::SpawnAttacker(UnitEnum unitType)
     rangeX = (float)X::GetScreenWidth() / (float)mTotalZones;
     rangeXOffset = rangeX * 0.5f;
     attackerDestination.x = X::RandomFloat(-rangeXOffset, rangeXOffset) + attackerDestination.x;
-
-    attackerDestination.y += 50.f; //Temp
-    // Give the enemy the correct destination later. More tweaks and stuff.
+    attackerDestination.y += 120.f;
 
     newAttacker->SetActive(attackerPosition, attackerDestination);
 }
 
 void Zone::SetActive(int castleHP)
 {
-    mHealth = castleHP / mTotalZones * 0.75f; // Total HP of all walls is less than total castle HP
+    mHealth = castleHP / mTotalZones * 1.25f; // Total HP of all walls is more than total castle HP (Don't need to destroy every wall to win)
     mAttackerSpawnTimer = 1.0f;
 
     mState = WALL_STATE_INTACT;

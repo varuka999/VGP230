@@ -18,7 +18,7 @@ Projectile::~Projectile()
 
 void Projectile::Load()
 {
-    mImageID = X::LoadTexture("bullet1.png");
+    mImageID = X::LoadTexture("Arrow.png");
 }
 
 void Projectile::Update(float deltaTime)
@@ -52,8 +52,9 @@ void Projectile::SetHitCallback(std::function<void(int)> callback)
     mHitCallback = callback;
 }
 
-void Projectile::SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed, int damage)
+void Projectile::SetActive(std::string imageID, const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed, int damage)
 {
+    mImageID = X::LoadTexture(imageID.c_str());
     mActiveTarget = true;
     mPosition = position;
     mDestination = destination;

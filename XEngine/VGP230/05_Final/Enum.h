@@ -19,7 +19,7 @@ enum UnitEnum : int
 {
     INVALID = 0,
     INFANTRY = 1, // Resource cost of unit is equal to its enum value (strange compromise for now)
-    FARMER = 3,
+    FARMER = 4,
     ARCHER = 5,
     SHIELD = 10,
     RAM = 50,

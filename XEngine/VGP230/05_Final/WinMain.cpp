@@ -3,7 +3,8 @@
 #include "UnitPool.h"
 #include "ProjectilePool.h"
 
-float gameTimer = 0.0f;
+float gGameTimer = 0.0f;
+float gGameDuration = 300.0f;
 
 void GameInit()
 {
@@ -18,17 +19,23 @@ bool GameUpdate(float deltaTime)
     UnitPool::Get()->Update(deltaTime);
     Castle::Get()->Update(deltaTime);
 
-    ProjectilePool::Get()->Render();
-    UnitPool::Get()->Render();
     Castle::Get()->Render();
+    UnitPool::Get()->Render();
+    ProjectilePool::Get()->Render();
 
-    if (gameTimer <= 180)
+    if (gGameTimer <= 300)
     {
-        gameTimer += deltaTime;
+        gGameTimer += deltaTime;
+
+        std::string text = "Time Remaining: " + std::string(std::to_string((int)(gGameDuration - gGameTimer))) + "s";
+        const float textSize = 30.0f;
+        float screenX = 10.0f;
+        float screenY = 10.0f;
+        X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Purple);
     }
     else
     {
-        return true; // Lose the game after 3 minutes
+        return true; // Lose the game after X minutes
     }
 
     if (!Castle::Get()->IsActive())

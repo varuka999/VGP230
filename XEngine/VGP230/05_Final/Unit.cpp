@@ -60,12 +60,12 @@ void Unit::Render()
     {
         X::DrawSprite(mImageID, mPosition);
 
-        std::string text = std::string(std::to_string(mUnitID));
-        const float textSize = 25.0f;
-        float textWidth = X::GetTextWidth(text.c_str(), textSize);
-        float screenX = mPosition.x - 8.0f;
-        float screenY = mPosition.y - 40.0f;
-        X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Red);
+        //std::string text = std::string(std::to_string(mUnitID));
+        //const float textSize = 25.0f;
+        //float textWidth = X::GetTextWidth(text.c_str(), textSize);
+        //float screenX = mPosition.x - 8.0f;
+        //float screenY = mPosition.y - 40.0f;
+        //X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Red);
     }
 }
 

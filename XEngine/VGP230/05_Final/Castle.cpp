@@ -5,12 +5,18 @@ Castle* Castle::mInstance = nullptr;
 
 Castle::Castle()
     : Entity(),
+    mImageID(0),
     mHealth(0),
     mTotalZones(0),
     mPrimedAttackerKey('n'),
     mAttackerResource(0),
     mAttackerResourceCooldown(0.0f),
-    mAttackerResourceTimer(0.0f)
+    mAttackerResourceTimer(0.0f),
+    mBackgroundID(0),
+    mBarID(0),
+    mBarRect(),
+    mPosition(0.0f, 0.0f),
+    mBarFullWidth(0.0f)
 {
 
 }
@@ -31,8 +37,17 @@ Castle* Castle::Get()
 
 void Castle::Load()
 {
-    mHealth = 1000;
-    mTotalZones = 5;
+    mImageID = X::LoadTexture("Castle.png");
+    mHealth = 1200;
+    mTotalZones = 3;
+
+    mBackgroundID = X::LoadTexture("bar_empty.png");
+    mBarID = X::LoadTexture("bar_red.png");
+    mBarRect.right = X::GetSpriteWidth(mBarID);
+    mBarRect.bottom = X::GetSpriteHeight(mBarID);
+    mBarFullWidth = mBarRect.right;
+    mPosition.x = (X::GetScreenWidth() - mBarFullWidth) * 0.5f;
+    mPosition.y = X::GetScreenHeight() * 0.1f;
 
     for (int i = 0; i < mTotalZones; ++i)
     {
@@ -47,7 +62,7 @@ void Castle::Load()
         mZones.push_back(newZone);
     }
 
-    mAttackerResource = 5;
+    mAttackerResource = 0;
     mAttackerResourceCooldown = 0.5f;
     mAttackerResourceTimer = 0.0f;
 
@@ -104,14 +119,14 @@ void Castle::Update(float deltaTime)
     {
         mZones[2]->SpawnAttacker(GetPrimedAttackerType());
     }
-    else if (X::IsKeyPressed(X::Keys::FOUR))
-    {
-        mZones[3]->SpawnAttacker(GetPrimedAttackerType());
-    }
-    else if (X::IsKeyPressed(X::Keys::FIVE))
-    {
-        mZones[4]->SpawnAttacker(GetPrimedAttackerType());
-    }
+    //else if (X::IsKeyPressed(X::Keys::FOUR))
+    //{
+    //    mZones[3]->SpawnAttacker(GetPrimedAttackerType());
+    //}
+    //else if (X::IsKeyPressed(X::Keys::FIVE))
+    //{
+    //    mZones[4]->SpawnAttacker(GetPrimedAttackerType());
+    //}
 
     for (Zone* zone : mZones)
     {
@@ -172,29 +187,39 @@ bool Castle::IsActive() const
 
 void Castle::Render()
 {
+    CastleUI();
+
     for (Zone* zone : mZones)
     {
         zone->Render();
     }
-
-    CastleUI();
 }
 
 void Castle::CastleUI()
 {
     // HP
-    std::string healthText = std::string(std::to_string(mHealth));
-    const float textSize = 45.0f;
-    float screenX = X::GetScreenWidth() * 0.5;
-    float screenY = 25.0f;
-    X::DrawScreenText(healthText.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
-    X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 40, textSize, X::Colors::Yellow);
+    //std::string healthText = std::string(std::to_string(mHealth));
+    //const float textSize = 45.0f;
+    //float screenX = X::GetScreenWidth() * 0.5;
+    //float screenY = 25.0f;
+    //X::DrawScreenText(healthText.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
+    //X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 40, textSize, X::Colors::Yellow);
+
+    mPosition.x = X::GetScreenWidth() * 0.5f;
+    X::DrawSprite(mImageID, mPosition);
+
+    // HP Slider
+    X::Math::Vector2 castlePosition = mPosition;
+    castlePosition.x = X::GetScreenWidth() * 0.5f - 75.0f;
+    castlePosition.y = 25.0f;
+    X::DrawSprite(mBackgroundID, mBarRect, castlePosition, 0.75f, X::Pivot::Left);
+    X::DrawSprite(mBarID, mBarRect, castlePosition, 0.75f, X::Pivot::Left);
 
     // Resource
     std::string resourceText = "Resource: " + std::to_string(mAttackerResource) + "r";
     const float textSize2 = 25.0f;
     float resourceScreenX = 50.0f;
-    float resourceScreenY = X::GetScreenHeight() * 0.9f;
+    float resourceScreenY = X::GetScreenHeight() * 0.85f;
     X::DrawScreenText(resourceText.c_str(), resourceScreenX, resourceScreenY, textSize2, X::Colors::OrangeRed);
 
     // Attacker Types
@@ -207,6 +232,34 @@ void Castle::CastleUI()
     float attackerScreenX = 50.0f;
     float attackerScreenY = X::GetScreenHeight() * 0.95f;
     X::DrawScreenText(attackerTypeText.c_str(), attackerScreenX, attackerScreenY, textSize3, X::Colors::OrangeRed);
+
+    // Current Primed Attacker
+    std::string selected = "";
+    switch (mPrimedAttackerKey)
+    {
+    case 'q':
+        selected = "Infantry";
+        break;
+    case 'w':
+        selected = "Archer";
+        break;
+    case 'e':
+        selected = "Shield Infantry";
+        break;
+    case 'r':
+        selected = "Farmer";
+        break;
+    case 't':
+        selected = "Ram";
+        break;
+    default:
+        break;
+    }
+    std::string primedText = "Selected: " + selected;
+    const float textSize4 = 20.0f;
+    float primedScreenX = 50.0f;
+    float primedScreenY = X::GetScreenHeight() * 0.90f;
+    X::DrawScreenText(primedText.c_str(), primedScreenX, primedScreenY, textSize4, X::Colors::OrangeRed);
 }
 
 void Castle::Unload()
@@ -224,6 +277,7 @@ void Castle::Unload()
 void Castle::UpdateHP(int value)
 {
     mHealth += value;
+    SetBarValue(mHealth, 1200);
 
     if (mHealth <= 0)
     {
@@ -232,6 +286,11 @@ void Castle::UpdateHP(int value)
     }
 
     XLOG("Castle HP: %i", mHealth);
+}
+
+void Castle::SetBarValue(int current, int max)
+{
+    mBarRect.right = X::Math::Clamp((float)current / (float)max, 0.0f, 1.0f) * mBarFullWidth;
 }
 
 void Castle::UpdateAttackerResource(int value)

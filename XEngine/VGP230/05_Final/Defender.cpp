@@ -11,7 +11,7 @@ Defender::~Defender()
 
 void Defender::Load()
 {
-    mImageID = X::LoadTexture("interceptor_01.png");
+    mImageID = X::LoadTexture("Defender.png");
     mAttackMinInterval = 8.0f;
     mAttackMaxInterval = 15.0f;
 }
@@ -24,7 +24,7 @@ void Defender::Attack()
 {
     mAttackCallback(-mAttack, mPosition);
 
-    mAttackInterval = (float)X::Random(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
+    mAttackInterval = X::RandomFloat(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
     mAttackTimer = mAttackInterval;
 }
 

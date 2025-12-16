@@ -12,7 +12,7 @@ Archer::Archer()
 
 void Archer::Load()
 {
-    mImageID = X::LoadTexture("scv_16.png");
+    mImageID = X::LoadTexture("Archer.png");
     mType = UnitEnum::ARCHER;
     mAttackMinInterval = 9.0f;
     mAttackMaxInterval = 13.0f;
@@ -93,9 +93,9 @@ void Archer::Attack()
 
     Projectile* projectile = ProjectilePool::Get()->GetProjectile();
     projectile->SetHitCallback(mAttackZoneWallCallback);
-    projectile->SetActive(mPosition, outIntercept, rotation, 1200.0f, -mAttack);
+    projectile->SetActive("Arrow1.png", mPosition, outIntercept, rotation, 1200.0f, -mAttack);
 
-    mAttackInterval = (float)X::Random(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
+    mAttackInterval = X::RandomFloat(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
     mAttackTimer = mAttackInterval;
 }
 

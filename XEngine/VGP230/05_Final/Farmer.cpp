@@ -2,7 +2,7 @@
 
 void Farmer::Load()
 {
-    mImageID = X::LoadTexture("scv_12.png");
+    mImageID = X::LoadTexture("Farmer.png");
     mType = UnitEnum::FARMER;
     mAttackMinInterval = 8.0f;
     mAttackMaxInterval = 10.0f;

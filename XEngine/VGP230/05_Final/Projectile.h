@@ -13,7 +13,7 @@ public:
     void Unload() override;
 
     void SetHitCallback(std::function<void(int)> callback);
-    void SetActive(const X::Math::Vector2& position, const X::Math::Vector2 destination, float rotation, float speed, int damage);
+    void SetActive(std::string imageID, const X::Math::Vector2 & position, const X::Math::Vector2 destination, float rotation, float speed, int damage);
     bool IsActive() const;
 
 private:

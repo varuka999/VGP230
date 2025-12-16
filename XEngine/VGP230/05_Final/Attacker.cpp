@@ -36,6 +36,21 @@ void Attacker::Unload()
 
 }
 
+void Attacker::Render()
+{
+    if (IsActive())
+    {
+        X::DrawSprite(mImageID, mPosition);
+
+        std::string text = std::string(std::to_string(mHealth));
+        const float textSize = 15.0f;
+        float textOffset = X::GetTextWidth(text.c_str(), textSize) * 0.5;
+        float screenX = mPosition.x - textOffset;
+        float screenY = mPosition.y + 20.0f;
+        X::DrawScreenText(text.c_str(), screenX, screenY, textSize, X::Colors::Red);
+    }
+}
+
 void Attacker::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination)
 {
     mInAttackRange = false;
@@ -47,7 +62,7 @@ void Attacker::Attack()
 {
     mAttackZoneWallCallback(-mAttack);
 
-    mAttackInterval = (float)X::Random(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
+    mAttackInterval = X::RandomFloat(mAttackMinInterval, mAttackMaxInterval) / 10.0f;
     mAttackTimer = mAttackInterval;
 }
 

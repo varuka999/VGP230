@@ -2,7 +2,7 @@
 
 void ShieldInfantry::Load()
 {
-    mImageID = X::LoadTexture("scv_03.png");
+    mImageID = X::LoadTexture("ShieldInfantry.png");
     mType = UnitEnum::SHIELD;
     mAttackMinInterval = 12.0f;
     mAttackMaxInterval = 15.0f;
