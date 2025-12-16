@@ -90,35 +90,34 @@ Unit* UnitPool::GetUnit(UnitEnum type)
     //    return nullptr;
     //}
 
-    //// Start search from next index for circular behavior
     //int size = (int)mUnitsPool.size();
     //int start = mNextAvailableIndex;
     //for (int i = 0; i < size; ++i)
     //{
     //    int idx = (start + i) % size;
-    //    Unit* u = mUnitsPool[idx];
-    //    if (!u)
+    //    Unit* unit = mUnitsPool[idx];
+    //    if (!unit)
+    //    {
     //        continue;
+    //    }
 
-    //    // skip active units
-    //    if (u->IsActive())
+    //    if (unit->IsActive())
+    //    {
     //        continue;
+    //    }
 
-    //    // match requested concrete type by dynamic_cast
     //    switch (type)
     //    {
     //    case INFANTRY:
-    //        if (dynamic_cast<Infantry*>(u) != nullptr)
+    //        if (dynamic_cast<Infantry*>(unit) != nullptr)
     //        {
     //            mNextAvailableIndex = (idx + 1) % size;
-    //            return u;
+    //            return unit;
     //        }
     //        break;
     //    case ARCHER:
-    //        // add dynamic_cast<Archer*> check when Archer exists
     //        break;
     //    case RAM:
-    //        // add dynamic_cast<Ram*> check when Ram exists
     //        break;
     //    default:
     //        break;

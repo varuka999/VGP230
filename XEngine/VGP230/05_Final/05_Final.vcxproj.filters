@@ -91,5 +91,8 @@
     <ClInclude Include="UnitPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Archer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

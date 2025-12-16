@@ -175,11 +175,23 @@ void Castle::CastleUI()
 
     // Resource
     std::string resourceText = "Resource: " + std::to_string(mAttackerResource);
-    const float textSize2 = 35.0f;
+    const float textSize2 = 25.0f;
     float resourceTextWidth = X::GetTextWidth(resourceText.c_str(), textSize);
-    float resourceScreenX = X::GetScreenWidth() - resourceTextWidth - 25.0f;
-    float resourceScreenY = X::GetScreenHeight() * 0.5f;
+    float resourceScreenX = 50.0f;
+    float resourceScreenY = X::GetScreenHeight() * 0.9f;
     X::DrawScreenText(resourceText.c_str(), resourceScreenX, resourceScreenY, textSize2, X::Colors::OrangeRed);
+
+    // Attacker Types
+    std::string attackerTypeText = "Q:Infantry (" + std::to_string(INFANTRY) +
+        ")      W: Archer (" + std::to_string(ARCHER) +
+        ")      E: Shield Infantry (" + std::to_string(SHIELD) +
+        ")      R: Farmer (" + std::to_string(FARMER) +
+        ")      T: Ram (" + std::to_string(RAM) + ")";
+    const float textSize3 = 20.0f;
+    float attackerTypeTextWidth = X::GetTextWidth(attackerTypeText.c_str(), textSize3);
+    float attackerScreenX = 50.0f;
+    float attackerScreenY = X::GetScreenHeight() * 0.95f;
+    X::DrawScreenText(attackerTypeText.c_str(), attackerScreenX, attackerScreenY, textSize3, X::Colors::OrangeRed);
 }
 
 void Castle::Unload()

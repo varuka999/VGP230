@@ -148,6 +148,7 @@
     <None Include="xconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Archer.h" />
     <ClInclude Include="Attacker.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectilePool.h" />
