@@ -29,12 +29,13 @@ public:
     void SetActive(int castleHP);
 
     void SetAttackCastleCallback(std::function<void(int)> callback);
+    void SetDeductResourceCallback(std::function<void(int)> callback);
 
 private:
     X::TextureId mImageID;
     X::Math::Vector2 mPosition;
     WallState mState;
-    std::vector<Unit*> mAttackers;
+    //std::vector<Unit*> mAttackers;
     std::vector<Unit*> mDefenders;
     std::vector<Attacker*> mAttackersInRange;
     int mHealth;
@@ -46,4 +47,5 @@ private:
     int mZoneID;
 
     std::function<void(int)> mAttackCastleCallback;
+    std::function<void(int)> mDeductResourceCallback;
 };

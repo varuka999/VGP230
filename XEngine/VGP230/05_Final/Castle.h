@@ -16,7 +16,9 @@ public:
     void Unload() override;
 
     void UpdateHP(int value);
-    UnitEnum GetPrimedAttackerType() const;
+    void UpdateAttackerResource(int value);
+    UnitEnum GetPrimedAttackerType();
+    bool HasEnoughResourceForAttacker(UnitEnum unitType) const;
 
     void CastleUI();
 

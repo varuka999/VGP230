@@ -37,10 +37,10 @@ void Zone::Load()
 
 void Zone::Update(float deltaTime)
 {
-    for (Unit* attacker : mAttackers)
-    {
-        attacker->Update(deltaTime);
-    }
+    //for (Unit* attacker : mAttackers)
+    //{
+    //    attacker->Update(deltaTime);
+    //}
     for (Unit* defender : mDefenders)
     {
         defender->Update(deltaTime);
@@ -51,10 +51,10 @@ void Zone::Render()
 {
     X::DrawSprite(mImageID, mPosition);
 
-    for (Unit* attacker : mAttackers)
-    {
-        attacker->Render();
-    }
+    //for (Unit* attacker : mAttackers)
+    //{
+    //    attacker->Render();
+    //}
     for (Unit* defender : mDefenders)
     {
         defender->Render();
@@ -70,18 +70,16 @@ void Zone::Render()
 
 void Zone::Unload()
 {
-    for (Unit* attacker : mAttackers)
-    {
-        if (attacker)
-        {
-            attacker->Unload();
-            //delete attacker;
-            //attacker = nullptr;
-        }
-    }
+    //for (Unit* attacker : mAttackers)
+    //{
+    //    if (attacker)
+    //    {
+    //        attacker->Unload(); // Zone does not own attackers, UnitPool will delete them
+    //    }
+    //}
 
     mAttackersInRange.clear();
-    mAttackers.clear();
+    //mAttackers.clear();
 
     for (Unit* defender : mDefenders)
     {
@@ -101,63 +99,10 @@ void Zone::AddAttackerInRange(Attacker* attacker)
     mAttackersInRange.push_back(attacker);
 }
 
-static float LengthSq(const X::Math::Vector2& v) { return Dot(v, v); }
 
-static float Length(const X::Math::Vector2 &v) { return std::sqrt(LengthSq(v)); }
-
-X::Math::Vector2 firDir;
-float tHit = 0.0f;
 
 // Returns true if an intercept exists.
 // outIntercept is the point your projectile should aim at (mDestination).
-static bool ComputeInterceptPoint(
-    const X::Math::Vector2& shooterPos,
-    float projectileSpeed,
-    const X::Math::Vector2& targetPos,
-    const X::Math::Vector2& targetVel,
-    X::Math::Vector2& outIntercept)
-{
-    const float EPS = 1e-6f;
-
-    X::Math::Vector2 R = targetPos - shooterPos;
-
-    float s = projectileSpeed;
-    float s2 = s * s;
-
-    float v2 = LengthSq(targetVel);
-    float a = v2 - s2;
-    float b = 2.0f * Dot(R, targetVel);
-    float c = LengthSq(R);
-
-    float t = -1.0f;
-
-    if (std::fabs(a) < EPS)
-    {
-        // Linear: b t + c = 0
-        if (std::fabs(b) < EPS) return false;
-        t = -c / b;
-        if (t <= EPS) return false;
-    }
-    else
-    {
-        float disc = b * b - 4.0f * a * c;
-        if (disc < 0.0f) return false;
-
-        float sqrtDisc = std::sqrt(disc);
-        float t1 = (-b - sqrtDisc) / (2.0f * a);
-        float t2 = (-b + sqrtDisc) / (2.0f * a);
-
-        bool t1ok = t1 > EPS;
-        bool t2ok = t2 > EPS;
-
-        if (!t1ok && !t2ok) return false;
-        if (t1ok && t2ok) t = std::min(t1, t2);
-        else t = t1ok ? t1 : t2;
-    }
-
-    outIntercept = targetPos + targetVel * t;
-    return true;
-}
 
 void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
 {
@@ -165,16 +110,14 @@ void Zone::DefenderAttack(int value, X::Math::Vector2 startPosition)
 
     if (targetAttacker != nullptr)
     {
-        // spawn projectile
-        // calculate destination based on attacker movespeed and its destination and the defenders(start) position ('predictive' aiming, not using collidables so the projectile must pretend to hit the target)
-        // do ^ later, for now replaced with simple movement
-
+        // Calculate intercept point (not my own logic/function)
+        X::Math::Vector2 destination;
+        float tHit = 0.0f;
         X::Math::Vector2 attackerVel = X::Math::Normalize(targetAttacker->GetDestination() - targetAttacker->GetPosition()) * targetAttacker->GetMoveSpeed();
-        bool canHit = ComputeInterceptPoint(startPosition, 1000.0f, targetAttacker->GetPosition(), attackerVel, firDir);
+        bool canHit = X::Math::ComputeInterceptPoint(startPosition, 1000.0f, targetAttacker->GetPosition(), attackerVel, destination);
 
         Projectile* projectile = ProjectilePool::Get()->GetProjectile();
-        projectile->SetActive(startPosition, firDir, 0, 1000.0f);
-        //projectile->SetActive(startPosition, targetAttacker->GetPosition(), 0, 1000.0f);
+        projectile->SetActive(startPosition, destination, 0, 1000.0f);
         targetAttacker->UpdateHealth(value); // Replace with correct logic later, make this a callback in projectile when it becomes not active. attacker also needs a callback that removes it from attackers in range when dead
     }
 }
@@ -268,6 +211,7 @@ void Zone::SpawnAttacker(UnitEnum unitType)
         XLOG("Failed to spawn, invalid attacker");
         return;
     }
+    mDeductResourceCallback(-unitType);
     newAttacker->Load();
 
     // Callbacks
@@ -280,7 +224,7 @@ void Zone::SpawnAttacker(UnitEnum unitType)
     std::function<void(Attacker*)> outOfRangeCallback = std::bind(&Zone::RemoveAttackerFromInRange, this, std::placeholders::_1);
     newAttacker->SetOutOfRangeCallBack(outOfRangeCallback);
 
-    mAttackers.push_back(newAttacker);
+    //mAttackers.push_back(newAttacker);
 
     // Position
     X::Math::Vector2 attackerPosition = mPosition;
@@ -325,4 +269,9 @@ void Zone::SetActive(int castleHP)
 void Zone::SetAttackCastleCallback(std::function<void(int)> callback)
 {
     mAttackCastleCallback = callback;
+}
+
+void Zone::SetDeductResourceCallback(std::function<void(int)> callback)
+{
+    mDeductResourceCallback = callback;
 }

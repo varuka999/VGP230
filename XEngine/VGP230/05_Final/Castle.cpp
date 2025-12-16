@@ -1,6 +1,5 @@
 #include "Castle.h"
 #include "Zone.h"
-#include "Enum.h"
 
 Castle* Castle::mInstance = nullptr;
 
@@ -8,7 +7,10 @@ Castle::Castle()
     : Entity(),
     mHealth(0),
     mTotalZones(0),
-    mPrimedAttackerKey('n')
+    mPrimedAttackerKey('n'),
+    mAttackerResource(0),
+    mAttackerResourceCooldown(0.0f),
+    mAttackerResourceTimer(0.0f)
 {
 
 }
@@ -40,8 +42,14 @@ void Castle::Load()
         // Callback
         std::function<void(int)> attackCallback = std::bind(&Castle::UpdateHP, this, std::placeholders::_1);
         newZone->SetAttackCastleCallback(attackCallback);
+        std::function<void(int)> deductResourceCallback = std::bind(&Castle::UpdateAttackerResource, this, std::placeholders::_1);
+        newZone->SetDeductResourceCallback(deductResourceCallback);
         mZones.push_back(newZone);
     }
+
+    mAttackerResource = 5;
+    mAttackerResourceCooldown = 1.0f;
+    mAttackerResourceTimer = 0.0f;
 
     for (Zone* zone : mZones)
     {
@@ -51,6 +59,14 @@ void Castle::Load()
 
 void Castle::Update(float deltaTime)
 {
+    mAttackerResourceTimer += deltaTime;
+
+    if (mAttackerResourceTimer >= mAttackerResourceCooldown)
+    {
+        ++mAttackerResource;
+        mAttackerResourceTimer = 0.0f;
+    }
+
     if (X::IsKeyPressed(X::Keys::Q))
     {
         mPrimedAttackerKey = 'q';
@@ -95,22 +111,48 @@ void Castle::Update(float deltaTime)
     }
 }
 
-UnitEnum Castle::GetPrimedAttackerType() const
+UnitEnum Castle::GetPrimedAttackerType()
 {
     switch (mPrimedAttackerKey)
     {
-    case 'p':
-        return TESTING;
     case 'q':
-        return INFANTRY;
+        if (HasEnoughResourceForAttacker(INFANTRY)) // current resource - unit resource >= 0, return key, otherwise return default non-spawning key
+        {
+            return INFANTRY;
+        }
+        else
+        {
+            return INVALID;
+        }
     case 'w':
-        return ARCHER;
+        if (HasEnoughResourceForAttacker(ARCHER))
+        {
+            return ARCHER;
+        }
+        else
+        {
+            return INVALID;
+        }
     case 'e':
-        return RAM;
+        if (HasEnoughResourceForAttacker(RAM))
+        {
+            return RAM;
+        }
+        else
+        {
+            return INVALID;
+        }
     default:
         return INVALID;
     }
 }
+
+bool Castle::HasEnoughResourceForAttacker(UnitEnum unitType) const
+{
+    return mAttackerResource - unitType >= 0;
+}
+
+
 
 void Castle::Render()
 {
@@ -124,6 +166,7 @@ void Castle::Render()
 
 void Castle::CastleUI()
 {
+    // HP
     std::string healthText = std::string(std::to_string(mHealth));
     const float textSize = 45.0f;
     float textWidth = X::GetTextWidth(healthText.c_str(), textSize);
@@ -132,7 +175,13 @@ void Castle::CastleUI()
     X::DrawScreenText(healthText.c_str(), screenX, screenY, textSize, X::Colors::Yellow);
     X::DrawScreenText(std::to_string(mPrimedAttackerKey).c_str(), screenX, screenY + 40, textSize, X::Colors::Yellow);
 
-
+    // Resource
+    std::string resourceText = "Resource: " + std::to_string(mAttackerResource);
+    const float textSize2 = 35.0f;
+    float resourceTextWidth = X::GetTextWidth(resourceText.c_str(), textSize);
+    float resourceScreenX = X::GetScreenWidth() - resourceTextWidth - 25.0f;
+    float resourceScreenY = X::GetScreenHeight() * 0.5f;
+    X::DrawScreenText(resourceText.c_str(), resourceScreenX, resourceScreenY, textSize2, X::Colors::OrangeRed);
 }
 
 void Castle::Unload()
@@ -154,8 +203,13 @@ void Castle::UpdateHP(int value)
     if (mHealth <= 0)
     {
         mHealth = 0;
-        // Zone destroyed logic
+        // Castle destroyed logic
     }
 
     XLOG("Castle HP: %i", mHealth);
+}
+
+void Castle::UpdateAttackerResource(int value)
+{
+    mAttackerResource = X::Math::Max(0, mAttackerResource + value);
 }

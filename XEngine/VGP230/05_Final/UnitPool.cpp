@@ -30,9 +30,7 @@ UnitPool* UnitPool::Get()
 void UnitPool::Load()
 {
     // Infantry Pool
-    const int infantryPool = 25;
-    //mUnitsPool.reserve(poolSize);
-    //mInfantryPool.reserve(poolSize);
+    const int infantryPool = 2;
 
     for (int i = 0; i < infantryPool; ++i)
     {
@@ -48,17 +46,24 @@ void UnitPool::Load()
 
 void UnitPool::Update(float deltaTime)
 {
-    //for (Unit* u : mUnitsPool)
-    //{
-    //    if (u)
-    //    {
-    //        u->Update(deltaTime);
-    //    }
-    //}
+    for (Unit* u : mUnitsPool)
+    {
+        if (u)
+        {
+            u->Update(deltaTime);
+        }
+    }
 }
 
 void UnitPool::Render()
 {
+    for (Unit* u : mUnitsPool)
+    {
+        if (u)
+        {
+            u->Render();
+        }
+    }
 }
 
 void UnitPool::Unload()
@@ -128,22 +133,31 @@ std::vector<Unit*>& UnitPool::GetUnitsPool()
     return mUnitsPool;
 }
 
-// Not exactly the intented pooling behavior, but should avoid running out of units
 Infantry* UnitPool::GetInfantry()
 {
     Infantry* infantry = mInfantryPool[mNextAvailableIndex];
-    if (infantry->IsActive())
+
+    while (infantry->IsActive())
     {
-        Infantry* newInfantry = new Infantry();
-        newInfantry->Load();
+        if (mNextAvailableIndex != mInfantryPool.size() - 1)
+        {
+            ++mNextAvailableIndex;
+            infantry = mInfantryPool[mNextAvailableIndex];
+            continue;
+        }
+        else
+        {
+            Infantry* newInfantry = new Infantry();
+            newInfantry->Load();
 
-        mUnitsPool.push_back(newInfantry);
-        mInfantryPool.push_back(newInfantry);
+            mUnitsPool.push_back(newInfantry);
+            mInfantryPool.push_back(newInfantry);
 
-        infantry = newInfantry;
+            mNextAvailableIndex = 0;
+            return newInfantry;
+        }
     }
 
-    mNextAvailableIndex = (mNextAvailableIndex + 1) % mInfantryPool.size();
-
+    mNextAvailableIndex = 0;
     return infantry;
 }

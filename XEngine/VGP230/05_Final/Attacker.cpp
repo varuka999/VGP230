@@ -2,8 +2,7 @@
 
 Attacker::Attacker()
     : Unit(),
-    mInAttackRange(false),
-    mResourceCost(0)
+    mInAttackRange(false)
 {
 }
 
@@ -28,10 +27,6 @@ void Attacker::Update(float deltaTime)
 void Attacker::Load()
 {
     mImageID = X::LoadTexture("scv_09.png");
-    mHealth = 5;
-    mAttack = 5;
-    mMoveSpeed = 300.0f;
-    mResourceCost = 1;
 }
 
 void Attacker::Unload()
@@ -48,7 +43,7 @@ void Attacker::SetActive(const X::Math::Vector2 position, const X::Math::Vector2
 
 void Attacker::Attack()
 {
-    mAttackZoneWallCallback(-1);
+    mAttackZoneWallCallback(-mAttack);
 
     mAttackInterval = (float)X::Random(7, 10) / 10.0f; // 0.7-1.0s
     mAttackTimer = mAttackInterval;
@@ -62,6 +57,7 @@ void Attacker::UpdateHealth(int value)
     {
         mHealth = 0.0f;
         mOutOfRangeCallback(this);
+        Reset();
     }
 }
 

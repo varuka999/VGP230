@@ -4,7 +4,7 @@
 // #include "Archer.h"
 // #include "Ram.h"
 
-Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit) // Consider changing to enum
+Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit)
 {
     switch (unit)
     {
@@ -16,7 +16,7 @@ Attacker* UnitDatabase::ReturnAttackerUnit(UnitEnum unit) // Consider changing t
     case RAM:
         // return std::make_unique<Ram>();
         break;
-    case TESTING:
+    case INVALID:
         return nullptr;
     default:
         return nullptr;

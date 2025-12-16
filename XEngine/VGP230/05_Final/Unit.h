@@ -23,6 +23,7 @@ public:
     virtual void SetDestination(const X::Math::Vector2 destination);
     virtual void SetActive(const X::Math::Vector2 position, const X::Math::Vector2 destination);
     virtual bool IsActive() const;
+    virtual void Reset();
 
     virtual float GetMoveSpeed() const;
     virtual X::Math::Vector2 GetPosition() const;
@@ -37,6 +38,10 @@ protected:
     int mMoveSpeed;
     float mAttackInterval;
     float mAttackTimer;
+
+    //test
+    static int allID;
+    int id;
 
     std::function<void(int)> mAttackZoneWallCallback;
 };

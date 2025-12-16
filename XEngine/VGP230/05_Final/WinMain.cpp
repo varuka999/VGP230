@@ -13,8 +13,11 @@ void GameInit()
 bool GameUpdate(float deltaTime)
 {
     ProjectilePool::Get()->Update(deltaTime);
-    ProjectilePool::Get()->Render();
+    UnitPool::Get()->Update(deltaTime);
     Castle::Get()->Update(deltaTime);
+
+    ProjectilePool::Get()->Render();
+    UnitPool::Get()->Render();
     Castle::Get()->Render();
 
     return X::IsKeyPressed(X::Keys::ESCAPE);

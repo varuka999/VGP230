@@ -23,5 +23,4 @@ protected:
     std::function<void(Attacker*)> mAttackRangeCallback;
     std::function<void(Attacker*)> mOutOfRangeCallback;
     bool mInAttackRange;
-    int mResourceCost;
 };

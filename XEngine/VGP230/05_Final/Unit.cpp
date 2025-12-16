@@ -1,5 +1,7 @@
 #include "Unit.h"
 
+int Unit::allID = 0;
+
 Unit::Unit()
     : Entity(),
     mImageID(0),
@@ -9,8 +11,12 @@ Unit::Unit()
     mAttack(0),
     mMoveSpeed(0),
     mAttackInterval(0),
-    mAttackTimer(0)
+    mAttackTimer(0),
+    id(0)
 {
+    // Test
+    ++allID;
+    id = allID;
 }
 
 Unit::~Unit()
@@ -20,8 +26,6 @@ Unit::~Unit()
 void Unit::Load()
 {
     mImageID = X::LoadTexture("scv_03.png");
-    mAttackInterval = 0.5f;
-    mAttackTimer = 0.0f;
 }
 
 void Unit::Update(float deltaTime)
@@ -52,7 +56,7 @@ void Unit::Render()
     {
         X::DrawSprite(mImageID, mPosition);
 
-        std::string text = std::string(std::to_string(mHealth));
+        std::string text = std::string(std::to_string(id));
         const float textSize = 25.0f;
         float textWidth = X::GetTextWidth(text.c_str(), textSize);
         float screenX = mPosition.x - 8.0f;
@@ -88,6 +92,7 @@ void Unit::UpdateHealth(int value)
     if (mHealth <= 0.0f)
     {
         mHealth = 0.0f;
+        Reset();
     }
 }
 
@@ -105,9 +110,6 @@ void Unit::SetActive(const X::Math::Vector2 position, const X::Math::Vector2 des
 {
     mPosition = position;
     SetDestination(destination);
-    mHealth = 5;
-    mAttack = 5;
-    mMoveSpeed = 300.0f;
 }
 
 bool Unit::IsActive() const
@@ -128,4 +130,15 @@ X::Math::Vector2 Unit::GetPosition() const
 X::Math::Vector2 Unit::GetDestination() const
 {
     return mDestination;
+}
+
+void Unit::Reset()
+{
+    mPosition = X::Math::Vector2::Zero();
+    mDestination = X::Math::Vector2::Zero();
+    mHealth = 0;
+    mAttack = 0;
+    mMoveSpeed = 0;
+    mAttackInterval = 0.0f;
+    mAttackTimer = 0.0f;
 }
