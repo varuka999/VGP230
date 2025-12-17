@@ -63,7 +63,7 @@ void Castle::Load()
     }
 
     mAttackerResource = 0;
-    mAttackerResourceCooldown = 0.5f;
+    mAttackerResourceCooldown = 0.3f;
     mAttackerResourceTimer = 0.0f;
 
     for (Zone* zone : mZones)

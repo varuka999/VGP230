@@ -132,7 +132,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimSpriteManager.cpp" />
     <ClCompile Include="AnimSpriteSheet.cpp" />
     <ClCompile Include="Archer.cpp" />
     <ClCompile Include="Attacker.cpp" />
@@ -154,7 +153,6 @@
     <None Include="xconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimSpriteManager.h" />
     <ClInclude Include="AnimSpriteSheet.h" />
     <ClInclude Include="Archer.h" />
     <ClInclude Include="Attacker.h" />
