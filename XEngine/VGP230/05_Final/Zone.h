@@ -1,0 +1,51 @@
+#pragma once
+#include "Entity.h"
+#include "Enum.h"
+
+class Unit;
+class Attacker;
+class Defender;
+
+class Zone : public Entity
+{
+public:
+    Zone();
+    ~Zone();
+
+    void Load() override;
+    void Update(float deltaTime) override;
+    void Render() override;
+    void Unload() override;
+
+    void UpdateHP(int value);
+    void AddAttackerInRange(Attacker* attacker);
+    void DefenderAttack(int value, X::Math::Vector2 position);
+    Attacker* ReturnRandomAttackerInRange() const;
+    void RemoveAttackerFromInRange(Attacker* attacker);
+
+    void SpawnDefenders(int value);
+    void SpawnAttacker(UnitEnum unitType);
+
+    void SetActive(int castleHP);
+
+    void SetAttackCastleCallback(std::function<void(int)> callback);
+    void SetDeductResourceCallback(std::function<void(int)> callback);
+
+private:
+    X::TextureId mImageID;
+    X::Math::Vector2 mPosition;
+    WallState mState;
+    //std::vector<Unit*> mAttackers;
+    std::vector<Unit*> mDefenders;
+    std::vector<Attacker*> mAttackersInRange;
+    int mHealth;
+    int mAttackersInSpawnQueue;
+    float mAttackerSpawnTimer;
+    bool mSpawnAllAttackersInQueue;
+
+    static int mTotalZones;
+    int mZoneID;
+
+    std::function<void(int)> mAttackCastleCallback;
+    std::function<void(int)> mDeductResourceCallback;
+};

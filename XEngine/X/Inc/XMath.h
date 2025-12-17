@@ -510,6 +510,60 @@ inline Vector2 Lerp(const Vector2& v0, const Vector2& v1, float t)	{ return v0 +
 inline Vector3 Lerp(const Vector3& v0, const Vector3& v1, float t)	{ return v0 + ((v1 - v0) * t); }
 inline Quaternion Lerp(Quaternion q0, Quaternion q1, float t)		{ return q0 * (1.0f - t) + (q1 * t); }
 
+// Custom functions
+inline float LengthSq(const X::Math::Vector2& v) { return Dot(v, v); }
+inline float Length(const X::Math::Vector2& v) { return std::sqrt(LengthSq(v)); }
+
+inline bool ComputeInterceptPoint(
+	const X::Math::Vector2& shooterPos,
+	float projectileSpeed,
+	const X::Math::Vector2& targetPos,
+	const X::Math::Vector2& targetVel,
+	X::Math::Vector2& outIntercept)
+{
+	const float EPS = 1e-6f;
+
+	X::Math::Vector2 R = targetPos - shooterPos;
+
+	float s = projectileSpeed;
+	float s2 = s * s;
+
+	float v2 = LengthSq(targetVel);
+	float a = v2 - s2;
+	float b = 2.0f * Dot(R, targetVel);
+	float c = LengthSq(R);
+
+	float t = -1.0f;
+
+	if (std::fabs(a) < EPS)
+	{
+		// Linear: b t + c = 0
+		if (std::fabs(b) < EPS) return false;
+		t = -c / b;
+		if (t <= EPS) return false;
+	}
+	else
+	{
+		float disc = b * b - 4.0f * a * c;
+		if (disc < 0.0f) return false;
+
+		float sqrtDisc = std::sqrt(disc);
+		float t1 = (-b - sqrtDisc) / (2.0f * a);
+		float t2 = (-b + sqrtDisc) / (2.0f * a);
+
+		bool t1ok = t1 > EPS;
+		bool t2ok = t2 > EPS;
+
+		if (!t1ok && !t2ok) return false;
+		if (t1ok && t2ok) t = Min(t1, t2);
+		else t = t1ok ? t1 : t2;
+	}
+
+	outIntercept = targetPos + targetVel * t;
+	return true;
+}
+// Custom functions end
+
 inline Vector2 Rotate(const Vector2& v, float rad)
 {
 	const float kCosAngle = cos(rad);

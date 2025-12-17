@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 
-class Bullet; // Forward declare for the Pointer
+class Bullet;
 
 class BulletPool : public Entity
 {
