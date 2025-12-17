@@ -8,7 +8,8 @@ Projectile::Projectile()
     mRotation(0.0f),
     mMoveSpeed(0.0f),
     mDamage(0),
-    mActiveTarget(false)
+    mActiveTarget(false),
+    mHitEffect(nullptr)
 {
 }
 
@@ -19,6 +20,8 @@ Projectile::~Projectile()
 void Projectile::Load()
 {
     mImageID = X::LoadTexture("Arrow.png");
+    mHitEffect = new AnimSpriteSheet();
+    mHitEffect->Load();
 }
 
 void Projectile::Update(float deltaTime)
@@ -32,7 +35,10 @@ void Projectile::Update(float deltaTime)
     {
         mActiveTarget = false;
         mHitCallback(mDamage);
+        mHitEffect->SetActive(mPosition);
     }
+
+    mHitEffect->Update(deltaTime);
 }
 
 void Projectile::Render()
@@ -41,10 +47,15 @@ void Projectile::Render()
     {
         X::DrawSprite(mImageID, mPosition, mRotation);
     }
+
+    mHitEffect->Render();
 }
 
 void Projectile::Unload()
 {
+    mHitEffect->Unload();
+    delete mHitEffect;
+    mHitEffect = nullptr;
 }
 
 void Projectile::SetHitCallback(std::function<void(int)> callback)

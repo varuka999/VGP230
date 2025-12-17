@@ -88,7 +88,7 @@ void Archer::Attack()
     if (!X::Math::IsZero(direction)) // Avoid normalizing a zero vector
     {
         direction = X::Math::Normalize(direction);
-        rotation = std::atan2(direction.y, direction.x) - X::Math::kPiByTwo;
+        rotation = std::atan2(direction.y, direction.x) + X::Math::kPiByTwo;
     }
 
     Projectile* projectile = ProjectilePool::Get()->GetProjectile();

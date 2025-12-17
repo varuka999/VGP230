@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "AnimSpriteSheet.h"
 
 class Projectile : public Entity
 {
@@ -24,6 +25,7 @@ private:
     float mMoveSpeed;
     int mDamage;
     bool mActiveTarget;
+    AnimSpriteSheet* mHitEffect;
 
     std::function<void(int)> mHitCallback;
 
