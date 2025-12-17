@@ -44,4 +44,6 @@ private:
     X::Math::Rect mBarRect;
     X::Math::Vector2 mPosition;
     float mBarFullWidth;
+
+    X::SoundId mBGMusic;
 };

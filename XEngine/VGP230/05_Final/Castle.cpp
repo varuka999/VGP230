@@ -16,7 +16,8 @@ Castle::Castle()
     mBarID(0),
     mBarRect(),
     mPosition(0.0f, 0.0f),
-    mBarFullWidth(0.0f)
+    mBarFullWidth(0.0f),
+    mBGMusic(0)
 {
 
 }
@@ -37,6 +38,9 @@ Castle* Castle::Get()
 
 void Castle::Load()
 {
+    mBGMusic = X::LoadSound("2. Track 2.wav");
+    X::PlaySoundLoop(mBGMusic);
+
     mImageID = X::LoadTexture("Castle.png");
     mHealth = 1200;
     mTotalZones = 3;
