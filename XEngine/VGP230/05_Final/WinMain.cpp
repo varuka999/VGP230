@@ -23,7 +23,7 @@ bool GameUpdate(float deltaTime)
     UnitPool::Get()->Render();
     ProjectilePool::Get()->Render();
 
-    if (gGameTimer <= 300)
+    if (gGameTimer <= gGameDuration)
     {
         gGameTimer += deltaTime;
 
